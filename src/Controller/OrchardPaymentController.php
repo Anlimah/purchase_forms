@@ -12,7 +12,7 @@ if (isset($_SESSION['step1Done']) && isset($_SESSION['step2Done']) && isset($_SE
         //Payload for only debit/credit
         $form_price = $_SESSION["step6"]["amount"];
         $momo_number = $_SESSION["step7"]["momo_number"];
-        $callback_url = "https://admissions.rmuictonline.com/purchase/purchase_confirm.php";
+        $callback_url = "https://admissions.rmuictonline.com/purchase/confirm.php";
         $trans_id = time();
         $network = $_SESSION["step7"]["momo_agent"];
         $service_id = getenv('ORCHARD_SERVID');
