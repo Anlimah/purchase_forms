@@ -23,7 +23,7 @@ $expose = new ExposeDataController();
 
 <body class="fluid-container">
     <div class="flex">
-        <div style="background-color: #fff;padding: 10px 20px 30px 20px" class="card">
+        <div class="form_card card">
             <img src="assets/images/RMU-LOG.png" alt="RMU LOG">
             <h1 style="text-align: center">Step 6</h1>
             <form action="#" id="step1Form" method="post" enctype="multipart/form-data" style="margin: 0px 12%;">
