@@ -39,7 +39,7 @@ if (isset($_SESSION['step6Done']) && $_SESSION['step6Done'] == true) {
                 </div>
                 <button class="btn btn-primary" type="submit" style="padding: 10px 10px; width:100%">Pay</button>
                 <input class="form-control" type="hidden" name="_v7MomoToken" value="<?php echo $_SESSION["_step7MomoToken"]; ?>">
-                <input class="form-control" type="hidden" name="country" value="GH">
+                <!--<input class="form-control" type="hidden" name="country" value="GH">-->
             </form>
         </div>
     </div>
