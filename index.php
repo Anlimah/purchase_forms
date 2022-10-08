@@ -26,7 +26,7 @@ if (!isset($_SESSION["_step1Token"])) {
                     <label class="form-label" for="last_name">Last Name</label>
                     <input title="Provide your last name" class="form-control" type="text" name="last_name" id="last_name" placeholder="Type your last name" required>
                 </div>
-                <button class="btn btn-primary" type="submit" style="padding: 5px 10px; width:100%">Continue</button>
+                <button class="btn btn-primary" type="submit" style="padding: 10px 10px; width:100%">Continue</button>
                 <input type="hidden" name="_v1Token" value="<?= $_SESSION["_step1Token"]; ?>">
             </form>
         </div>

@@ -29,7 +29,7 @@ $expose = new ExposeDataController();
             <form action="#" id="step1Form" method="post" enctype="multipart/form-data" style="margin: 0px 12%;">
                 <div class="mb-4">
                     <label class="form-label" for="gender">Form type</label>
-                    <select class="form-select form-select-sm" name="form_type" id="form_type">
+                    <select title="Select the type of form you want to purchase." class="form-select form-select-sm" name="form_type" id="form_type">
                         <option value="select" hidden>Select</option>
                         <?php
                         $data = $expose->getFormTypes();
@@ -41,17 +41,17 @@ $expose = new ExposeDataController();
                 </div>
                 <div class="mb-4">
                     <label class="form-label" for="gender">Payment Method</label>
-                    <select class="form-select form-select-sm" name="pay_method" id="pay_method">
-                        <option value="select" hidden>Select</option>
+                    <select title="Select payment method" class="form-select form-select-sm" name="pay_method" id="pay_method">
+                        <option value="Mobile Money" selected>Mobile Money</option>
                         <?php
-                        $data = $expose->getPaymentMethods();
+                        /*$data = $expose->getPaymentMethods();
                         foreach ($data as $pm) {
                             echo '<option value="' . $pm['name'] . '">' . $pm['name'] . '</option>';
-                        }
+                        }*/
                         ?>
                     </select>
                 </div>
-                <button class="btn btn-primary" type="submit" style="padding: 5px 10px; width:100%">Continue</button>
+                <button class="btn btn-primary" type="submit" style="padding: 10px 10px; width:100%">Continue</button>
                 <input type="hidden" name="_v6Token" value="<?= $_SESSION["_step6Token"]; ?>">
             </form>
         </div>

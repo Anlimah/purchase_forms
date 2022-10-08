@@ -16,13 +16,12 @@ if (isset($_SESSION['step6Done']) && $_SESSION['step6Done'] == true) {
 
 <body class="fluid-container">
     <div class="flex">
-        <div class="form_card card">
+        <div class="form_card card" style="height: 500px !important;">
             <img src="assets/images/RMU-LOG.png" alt="RMU LOG">
             <h1 style="text-align: center">Step 7</h1>
             <form id="step7MoMoForm" method="post" enctype="multipart/form-data" style="margin: 0px 12%;">
                 <p class="mb-4" style="line-height: normal !important;">
-                    Forms for <b><span><?= $_SESSION["step6"]["form_type"] ?></span></b>
-                    cost <b> GHS<span><?= $_SESSION["step6"]["amount"] ?></span></b>. <br>
+                    <b><span><?= $_SESSION["step6"]["form_type"] ?></span></b> forms cost <b> GHS<span><?= $_SESSION["step6"]["amount"] ?></span></b>. <br>
                     <span>Make sure you have enough fund in you MoMo account.</span>
                 </p>
                 <p class="mb-4">
@@ -30,15 +29,15 @@ if (isset($_SESSION['step6Done']) && $_SESSION['step6Done'] == true) {
                 </p>
                 <div class="mb-4" style="display:flex !important; flex-direction:row !important; justify-content: space-between !important">
                     <label class="form-label" for="momo_agent">MoMo Network</label>
-                    <select class="form-select form-select-sm" name="momo_agent" id="momo_agent">
+                    <select title="Select your phone number network." class="form-select form-select-sm" name="momo_agent" id="momo_agent">
                         <option value="AIR">AIRTEL</option>
                         <option value="MTN" selected>MTN</option>
                         <option value="TIG">TIGO</option>
                         <option value="VOD">VODAFONE</option>
                     </select>
-                    <input style="display: none;" class="form-control" type="tel" name="momo_number" id="momo_number" value="<?= $_SESSION['step4']['phone_number'] ?>" readonly>
+                    <!--<input style="display: none;" class="form-control" type="tel" name="momo_number" id="momo_number" value="<?= $_SESSION['step4']['phone_number'] ?>" readonly>-->
                 </div>
-                <button class="btn btn-primary" type="submit" style="padding: 5px 10px; width:100%">Pay</button>
+                <button class="btn btn-primary" type="submit" style="padding: 10px 10px; width:100%">Pay</button>
                 <input class="form-control" type="hidden" name="_v7MomoToken" value="<?php echo $_SESSION["_step7MomoToken"]; ?>">
                 <input class="form-control" type="hidden" name="country" value="GH">
             </form>

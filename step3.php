@@ -32,8 +32,8 @@ if (isset($_SESSION['step2Done']) && $_SESSION['step2Done'] == true) {
                     <input class="form-control num" type="text" maxlength="1" style="width:35px; text-align:center; margin-left:5px" name="num[]" id="num5" placeholder="0" required>
                     <input class="form-control num" type="text" maxlength="1" style="width:35px; text-align:center; margin-left:5px" name="num[]" id="num6" placeholder="0" required>
                 </div>
-                <button class="btn btn-primary mb-4" type="submit" style="padding: 5px 10px; width:100%">Continue</button>
-                <input class="form-control" type="hidden" name="_v3Token" value="<?= $_SESSION["_step3Token"]; ?>">
+                <button class="btn btn-primary mb-4" type="submit" style="padding: 10px 10px; width:100%">Continue</button>
+                <input type="hidden" name="_v3Token" value="<?= $_SESSION["_step3Token"]; ?>">
                 <a href="step2.php">Change email address</a>
             </form>
         </div>

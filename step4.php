@@ -23,20 +23,20 @@ if (isset($_SESSION['step3Done']) && $_SESSION['step3Done'] == true) {
             <form action="#" id="step1Form" method="post" enctype="multipart/form-data" style="margin: 0px 12%;">
                 <div class="mb-4">
                     <p class="mb-4" style="color:#003262;">
-                        For your security, We'll send you an OTP message with a code that you'll need to enter on the next screen.
+                        For your security, We'll send you an OTP message with a code that you'll need to enter on the next screen.<br>
+                        <span class="text-danger"><b>Note:</b> We don't accept VoIP or Skype numbers.</span>
                     </p>
-                    <span class="text-danger"><b>Note:</b> We don't accept VoIP or Skype numbers.</span>
                 </div>
                 <div class="mb-4">
                     <label class="form-label" for="phone_number">Mobile Money Number</label>
                     <div style="display:flex !important; flex-direction:row !important; justify-content: space-between !important">
-                        <select class="form-select form-select-sm country-code" name="phone-number1-code" id="app-phone-number-code" style="margin-right: 10px; width: 45%">
+                        <select title="MoMo payment allowed for only Ghanaian applicants" class="form-select form-select-sm country-code" name="phone-number1-code" id="app-phone-number-code" style="margin-right: 10px; width: 45%">
                             <option value="233" selected>(+233) Ghana</option>
                         </select>
-                        <input class="form-control form-control-sm" style="width: 70%" type="tel" name="phone_number" id="phone_number" placeholder="0244123123" required>
+                        <input maxlength="10" title="Provide your Mobile Money Number" class="form-control form-control-sm" style="width: 70%" type="tel" name="phone_number" id="phone_number" placeholder="0244123123" required>
                     </div>
                 </div>
-                <button class="btn btn-primary" type="submit" style="padding: 5px 10px; width:100%">Verify</button>
+                <button class="btn btn-primary" type="submit" style="padding: 10px 10px; width:100%">Verify</button>
                 <input class="form-control" type="hidden" name="_v4Token" value="<?= $_SESSION["_step4Token"]; ?>">
             </form>
         </div>

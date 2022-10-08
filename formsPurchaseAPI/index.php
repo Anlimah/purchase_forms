@@ -149,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 		if (isset($_SESSION["_step7MomoToken"]) && !empty($_SESSION["_step7MomoToken"]) && isset($_POST["_v7MomoToken"]) && !empty($_POST["_v7MomoToken"]) && $_POST["_v7MomoToken"] == $_SESSION["_step7MomoToken"]) {
 			$_SESSION["step7"] = array(
 				"momo_agent" => $expose->validateInput($_POST["momo_agent"]),
-				"momo_number" => $expose->validatePhone($_POST["momo_number"])
+				"momo_number" => $expose->validatePhone($_SESSION['step4']['phone_number'])
 			);
 			$_SESSION['step7Done'] = true;
 			$data["success"] = true;
