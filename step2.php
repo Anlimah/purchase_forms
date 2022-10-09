@@ -19,7 +19,7 @@ if (isset($_SESSION['step1Done']) && $_SESSION['step1Done'] == true) {
     <div class="flex">
         <div class="form_card card">
             <img src="assets/images/RMU-LOG.png" alt="RMU LOG">
-            <h1 style="text-align: center">Step 2</h1>
+            <h1 style="text-align: center; color: #003262 !important; font-size:30px !important">Step 2</h1>
             <form action="#" id="step1Form" method="post" enctype="multipart/form-data" style="margin: 0px 12%;">
                 <div class="mb-4">
                     <label class="form-label" for="email_addr">Email Address</label>

@@ -19,7 +19,7 @@ if (isset($_SESSION['step2Done']) && $_SESSION['step2Done'] == true) {
     <div class="flex">
         <div class="form_card card">
             <img src="assets/images/RMU-LOG.png" alt="RMU LOG">
-            <h1 style="text-align: center">Step 3</h1>
+            <h1 style="text-align: center; color: #003262 !important; font-size:30px !important">Step 3</h1>
             <form action="#" id="step1Form" method="post" enctype="multipart/form-data" style="margin: 0px 12%;">
                 <p class="mb-4" style="color:#003262;">
                     A 6 digit code has been sent to the email <?= $_SESSION["step2"]["email_address"] ?>. Enter the code
@@ -67,8 +67,12 @@ if (isset($_SESSION['step2Done']) && $_SESSION['step2Done'] == true) {
 
             $(".num").on("keyup", function() {
                 if (this.value) {
-                    $(this).next(":input").focus();
+                    $(this).next(":input").focus().select(); //.val(''); and as well clesr
                 }
+            });
+
+            $("input[type='text']").on("click", function() {
+                $(this).select();
             });
         });
     </script>

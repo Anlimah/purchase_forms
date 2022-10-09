@@ -172,7 +172,7 @@ class VoucherPurchase
         if (!empty($data)) {
             $fn = $data['step1']['first_name'];
             $ln = $data['step1']['last_name'];
-            $cn = $data['step1']['country'];
+            $cn = 'Ghana';
             $ea = $data['step2']['email_address'];
             $pn = $data['step4']['phone_number'];
             $ft = $data['step6']['form_type'];

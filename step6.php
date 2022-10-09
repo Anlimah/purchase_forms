@@ -25,12 +25,12 @@ $expose = new ExposeDataController();
     <div class="flex">
         <div class="form_card card">
             <img src="assets/images/RMU-LOG.png" alt="RMU LOG">
-            <h1 style="text-align: center">Step 6</h1>
-            <form action="#" id="step1Form" method="post" enctype="multipart/form-data" style="margin: 0px 12%;">
+            <h1 style="text-align: center; color: #003262 !important; font-size:30px !important">Step 6</h1>
+            <form id="step1Form" method="post" enctype="multipart/form-data" style="margin: 0px 12%;">
                 <div class="mb-4">
                     <label class="form-label" for="gender">Form type</label>
-                    <select title="Select the type of form you want to purchase." class="form-select form-select-sm" name="form_type" id="form_type">
-                        <option value="select" hidden>Select</option>
+                    <select title="Select the type of form you want to purchase." class="form-select form-select-sm" name="form_type" id="form_type" required>
+                        <option selected disabled value="">Choose...</option>
                         <?php
                         $data = $expose->getFormTypes();
                         foreach ($data as $ft) {
@@ -41,7 +41,7 @@ $expose = new ExposeDataController();
                 </div>
                 <div class="mb-4">
                     <label class="form-label" for="gender">Payment Method</label>
-                    <select title="Select payment method" class="form-select form-select-sm" name="pay_method" id="pay_method">
+                    <select title="Select payment method" class="form-select form-select-sm" name="pay_method" id="pay_method" required>
                         <option value="Mobile Money" selected>Mobile Money</option>
                         <?php
                         /*$data = $expose->getPaymentMethods();

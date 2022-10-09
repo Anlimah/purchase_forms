@@ -19,11 +19,9 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true) {
     <div class="flex">
         <div class="form_card card">
             <img src="assets/images/RMU-LOG.png" alt="RMU LOG">
-            <h1 style="text-align: center">Step 5</h1>
+            <h1 style="text-align: center; color: #003262 !important; font-size:30px !important">Step 5</h1>
             <form action="#" id="step1Form" method="post" enctype="multipart/form-data" style="margin: 0px 12%;">
-                <p class="mb-4">
-                    Enter the OTP code sent to your number.
-                </p>
+                <p class="mb-4">Enter the verification code we sent to your phone.</p>
                 <div class="mb-4" style="display:flex !important; flex-direction:row !important; justify-content: space-around !important; align-items:baseline">
                     <label class="form-label" for="email_addr">RMU - </label>
                     <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center" name="code[]" id="num1" placeholder="0" required>

@@ -58,14 +58,51 @@ CREATE TABLE `payment_transctions` (
     `added_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
 );
 
+DROP TABLE IF EXISTS `vendor_details`;
+CREATE TABLE `vendor_details` (
+    `id` VARCHAR(22) PRIMARY KEY,
+    `type` VARCHAR(10) UNIQUE NOT NULL,
+    `name` VARCHAR(50) NOT NULL,
+    `tin` VARCHAR(15) NOT NULL,
+    `email` VARCHAR(100),
+    `phone` VARCHAR(13) NOT NULL,
+    `address` VARCHAR(50),
+    `added_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
+);
+INSERT INTO `vendor_details`(`type`,`name`, `tin`, `phone`) 
+VALUES ('ONLINE', 'RMU', 'RMU123', '0555351068'), ('RMU CAMPUS', 'RMU', 'RMU123', '0555351068');
+
+DROP TABLE IF EXISTS `vendor_login`;
+CREATE TABLE `vendor_login` (
+    `id` VARCHAR(22) AUTO_INCREMENT PRIMARY KEY,
+    `user_name` VARCHAR(20) UNIQUE NOT NULL,
+    `password` VARCHAR(50) NOT NULL,
+    
+    `vendor` VARCHAR(22) NOT NULL, -- added
+    CONSTRAINT `fk_vendor_login` FOREIGN KEY (`vendor`) 
+    REFERENCES `vendor_details`(`id`) ON UPDATE CASCADE,
+
+    `added_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
+);
+INSERT INTO `payment_method`(`name`) VALUES ("Credit Card"), ("Mobile Money"), ("Bank Deposit");
+
 DROP TABLE IF EXISTS `purchase_detail`; 
 CREATE TABLE `purchase_detail` (
     `id` INT(11) PRIMARY KEY,
     `first_name` VARCHAR(50) NOT NULL,
     `last_name` VARCHAR(50) NOT NULL,
-    `country` VARCHAR(50) NOT NULL,
+    -- `country` VARCHAR(50) NOT NULL, -- removed
     `email_address` VARCHAR(255) NOT NULL,
     `phone_number` VARCHAR(10) NOT NULL,
+
+    `status_code` VARCHAR(3) NOT NULL, -- added
+    `status_msg` VARCHAR(50), -- added
+    `device_info` VARCHAR(255), -- added
+    `ip_address` VARCHAR(15), -- added
+    
+    `vendor` VARCHAR(22) NOT NULL, -- added
+    CONSTRAINT `fk_purchase_vendor` FOREIGN KEY (`vendor`) 
+    REFERENCES `vendor_details`(`id`) ON UPDATE CASCADE,
 
     `form_type` INT NOT NULL,
     CONSTRAINT `fk_purchase_form_type` FOREIGN KEY (`form_type`) 

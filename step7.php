@@ -18,7 +18,7 @@ if (isset($_SESSION['step6Done']) && $_SESSION['step6Done'] == true) {
     <div class="flex">
         <div class="form_card card" style="height: 500px !important;">
             <img src="assets/images/RMU-LOG.png" alt="RMU LOG">
-            <h1 style="text-align: center">Step 7</h1>
+            <h1 style="text-align: center; color: #003262 !important; font-size:30px !important">Step 7</h1>
             <form id="step7MoMoForm" method="post" enctype="multipart/form-data" style="margin: 0px 12%;">
                 <p class="mb-4" style="line-height: normal !important;">
                     <b><span><?= $_SESSION["step6"]["form_type"] ?></span></b> forms cost <b> GHS<span><?= $_SESSION["step6"]["amount"] ?></span></b>. <br>
@@ -27,8 +27,8 @@ if (isset($_SESSION['step6Done']) && $_SESSION['step6Done'] == true) {
                 <p class="mb-4">
                     Choose your network to continue.
                 </p>
-                <div class="mb-4" style="display:flex !important; flex-direction:row !important; justify-content: space-between !important">
-                    <label class="form-label" for="momo_agent">MoMo Network</label>
+                <div class="mb-4" style="display:flex !important; flex-direction:row !important; justify-content: space-between !important; align-items:baseline">
+                    <label class="form-label" for="momo_agent" style="margin-right: 10px">Network</label>
                     <select title="Select your phone number network." class="form-select form-select-sm" name="momo_agent" id="momo_agent">
                         <option value="AIR">AIRTEL</option>
                         <option value="MTN" selected>MTN</option>

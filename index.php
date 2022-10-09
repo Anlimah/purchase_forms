@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+//echo $_SERVER["HTTP_USER_AGENT"];
 if (!isset($_SESSION["_step1Token"])) {
     $rstrong = true;
     $_SESSION["_step1Token"] = hash('sha256', bin2hex(openssl_random_pseudo_bytes(64, $rstrong)));
@@ -16,7 +16,7 @@ if (!isset($_SESSION["_step1Token"])) {
     <div class="flex">
         <div class="form_card card">
             <img src="assets/images/RMU-LOG.png" alt="RMU LOG">
-            <h1 style="text-align: center">Step 1</h1>
+            <h1 style="text-align: center; color: #003262 !important; font-size:30px !important">Step 1</h1>
             <form id="step1Form" method="post" enctype="multipart/form-data">
                 <div class="mb-4">
                     <label class="form-label" for="first_name">First Name</label>
@@ -53,12 +53,6 @@ if (!isset($_SESSION["_step1Token"])) {
                         } else {
                             alert(result.message);
                         }
-                        /*if (res["response"] == "success") {
-                            console.log(res['msg']);
-                            window.location.href = 'verify-code.php'
-                        } else {
-                            console.log(res['msg']);
-                        }*/
                     },
                     error: function(error) {
                         console.log(result);
