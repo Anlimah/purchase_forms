@@ -2,8 +2,6 @@
 session_start();
 
 require_once('bootstrap.php');
-require_once('src/Gateway/OrchardPaymentGateway.php');
-require_once('src/Controller/VoucherPurchase.php');
 
 use Src\Controller\OrchardPaymentGateway;
 use Src\Controller\VoucherPurchase;
