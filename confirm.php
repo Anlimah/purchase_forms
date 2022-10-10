@@ -17,7 +17,7 @@ if (isset($_GET['transaction_id']) && empty($_GET['transaction_id'])) header('Lo
         <div class="form_card card" style="height: 320px !important;">
             <img src="assets/images/RMU-LOG.png" alt="RMU LOG">
             <h1 style="text-align: center; color: #003262 !important; font-size:24px !important">Payment Confirmation</h1>
-            <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-center" style="margin: 0px 12%;">
                 <div class="pay-status" style="align-items: baseline;">
                     <div class="spinner-grow" role="status">
                         <span class="visually-hidden">Loading...</span>
