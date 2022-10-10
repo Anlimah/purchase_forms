@@ -68,7 +68,7 @@ class PaymentConfirmation
         if (!empty($step6) && !empty($step7)) {
             //Payload for only debit/credit
             echo "Start";
-            echo $step6["step6"]["amount"];
+            echo json_encode($step6);
             $form_price = $step6["step6"]["amount"];
             $momo_number = $step7["step7"]["momo_number"];
             $callback_url = "https://forms.purchase.rmuictonline.com/confirm.php";
