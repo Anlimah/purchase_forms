@@ -101,10 +101,9 @@ class PaymentConfirmation
 
             if ($response->resp_code == "015") {
                 header("Location: " . $callback_url . "?status=" . $response->resp_code . "&msg=" . $response->resp_desc . "&transaction_id=" . $trans_id);
-            } else {
-                echo $response->resp_desc;
-                return $response;
             }
+            //echo $response->resp_desc;
+            return $response;
         }
     }
 }
