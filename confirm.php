@@ -76,7 +76,7 @@ if (isset($_GET['status']) && !empty($_GET['status']) && isset($_GET['transactio
     }
 } else {
     //echo 'Payment processing failed!';
-    header('Location: purchase_step1.php?status=cancelled');
+    header('Location: index.php?status=cancelled');
 }
 
 //OrchardPaymentGateway::destroyAllSessions(); //Kill all sessions
