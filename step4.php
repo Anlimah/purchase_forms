@@ -23,12 +23,12 @@ if (isset($_SESSION['step3Done']) && $_SESSION['step3Done'] == true) {
             <form action="#" id="step1Form" method="post" enctype="multipart/form-data" style="margin: 0px 12%;">
                 <div class="mb-4">
                     <p class="mb-4" style="color:#003262;">
-                        Provide your <b>mobile money number</b>. We'll send you an OTP message with a code for verification on the next screen.<br>
+                        Provide your <b>number</b>. We'll send you an OTP message with a code for verification on the next screen.<br>
                         <span class="text-danger"><b>Note:</b> We don't accept VoIP or Skype numbers.</span>
                     </p>
                 </div>
                 <div class="mb-4">
-                    <label class="form-label" for="phone_number">Mobile Money Number</label>
+                    <label class="form-label" for="phone_number">Phone Number</label>
                     <div style="display:flex !important; flex-direction:row !important; justify-content: space-between !important">
                         <select title="MoMo payment allowed for only Ghanaian applicants" class="form-select form-select-sm country-code" name="phone-number1-code" id="app-phone-number-code" style="margin-right: 10px; width: 45%" required>
                             <option value="233" selected>(+233) Ghana</option>
