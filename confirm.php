@@ -71,9 +71,8 @@ if (isset($_GET['transaction_id']) && empty($_GET['transaction_id'])) header('Lo
                                         '<span style="color:red;"><b>Please do not close this page yet.</b></span><br><br>' +
                                         'An email and SMS with your <b>Application Number</b> and <b>PIN</b> to access application portal, has been sent to you!<br>' +
                                         'Please confirm and proceed to the <a href="../apply"><b>online applicatioin portal</b></a> to complete your application process.</p>' +
-                                        '<form id="step1Form" method="post" enctype="multipart/form-data">' +
-                                        '<div class="mb-4">' +
-                                        '<button class="btn btn-primary" type="submit" style="padding: 10px 10px; width:100%">Continue</button>' +
+                                        '<form action="endpoint/sms" method="post" enctype="multipart/form-data" style="display: flex;flex-direction:row;justify-content:space-between">' +
+                                        '<button class="btn btn-primary" type="submit" style="padding: 10px 10px; width:100%">Resend SMS</button>' +
                                         '<input type="hidden" name="_v1Token" value="' + getUrlVars()["transaction_id"] + '">' +
                                         '</form>'
                                     );
