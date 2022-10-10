@@ -151,7 +151,8 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 				"momo_agent" => $expose->validateInput($_POST["momo_agent"]),
 				"momo_number" => $expose->validatePhone($_SESSION['step4']['phone_number'])
 			);
-			$_SESSION['step7Done'] = true;
+
+			if (!empty($_SESSION["step7"])) $_SESSION['step7Done'] = true;
 
 			if (isset($_SESSION['step1Done']) && isset($_SESSION['step2Done']) && isset($_SESSION['step3Done']) && isset($_SESSION['step4Done']) && isset($_SESSION['step5Done']) && isset($_SESSION['step6Done']) && isset($_SESSION['step7Done'])) {
 				if ($_SESSION['step1Done'] == true && $_SESSION['step2Done'] == true && $_SESSION['step3Done'] == true && $_SESSION['step4Done'] == true && $_SESSION['step5Done'] == true && $_SESSION['step6Done'] == true && $_SESSION['step7Done'] == true) {

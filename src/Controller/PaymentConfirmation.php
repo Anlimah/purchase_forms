@@ -67,13 +67,12 @@ class PaymentConfirmation
     {
         if (!empty($step6) && !empty($step7)) {
             //Payload for only debit/credit
-            echo "Start";
-            echo json_encode($step6);
-            $form_price = $step6["step6"]["amount"];
-            $momo_number = $step7["step7"]["momo_number"];
+            //echo json_encode($step6);
+            $form_price = $step6["amount"];
+            $momo_number = $step7["momo_number"];
             $callback_url = "https://forms.purchase.rmuictonline.com/confirm.php";
             $trans_id = time();
-            $network = $step7["step7"]["momo_agent"];
+            $network = $step7["momo_agent"];
             $service_id = getenv('ORCHARD_SERVID');
 
             $payload = json_encode(array(
