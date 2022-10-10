@@ -49,21 +49,7 @@ if (isset($_GET['status']) && !empty($_GET['status']) && isset($_GET['transactio
             if ($response->resp_code == '084') {
                 echo 'Transaction is still pending. Complete payment process!<br>';
                 echo 'Process will be cancelled within 30 seconds.<br><br>';
-                sleep(5);
-                echo "Hello05<br>";
-                sleep(5);
-                echo "Hello10<br>";
-                sleep(5);
-                echo "Hello15<br>";
-                sleep(5);
-                echo "Hello20<br>";
-                sleep(5);
-                echo "Hello25<br>";
-                sleep(5);
-                echo "Hello30<br>";
                 $response = json_decode($pay->initiatePayment());
-                echo 1;
-                echo json_encode($response);
                 if (isset($response->trans_status)) {
                     if ($response->trans_status == '000/01') {
                         $voucher = new VoucherPurchase();
@@ -94,3 +80,33 @@ if (isset($_GET['status']) && !empty($_GET['status']) && isset($_GET['transactio
 }
 
 //OrchardPaymentGateway::destroyAllSessions(); //Kill all sessions
+
+
+?>
+<script src="js/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        //get variable(parameters) from url
+        function getUrlVars() {
+            var vars = {};
+            var parts = window.location.href.replace(
+                /[?&]+([^=&]+)=([^&]*)/gi,
+                function(m, key, value) {
+                    vars[key] = value;
+                }
+            );
+            return vars;
+        }
+
+        //Use a default value when param is missing
+        function getUrlParam(parameter, defaultvalue) {
+            var urlparameter = defaultvalue;
+            if (window.location.href.indexOf(parameter) > -1) {
+                urlparameter = getUrlVars()[parameter];
+            }
+            return urlparameter;
+        }
+
+        alert(getUrlVars()["status"]);
+    });
+</script>
