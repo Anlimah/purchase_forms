@@ -7,14 +7,12 @@ require_once('../bootstrap.php');
 use Src\System\DatabaseMethods;
 use Src\Controller\ExposeDataController;
 
-class VoucherPurchase
+class VoucherPurchase extends DatabaseMethods
 {
-    private $dm;
     private $expose;
 
     public function __construct()
     {
-        $this->dm = new DatabaseMethods();
         $this->expose = new ExposeDataController();
     }
 
@@ -26,7 +24,7 @@ class VoucherPurchase
 
     private function genAppNumber(int $type, int $year)
     {
-        $user_code = $this->expose->genCode(5);
+        $user_code = $this->genCode(5);
         $app_number = 'RMU-' . (($type * 10000000) + ($year * 100000) + $user_code);
         return $app_number;
     }
@@ -34,7 +32,7 @@ class VoucherPurchase
     private function doesCodeExists($code)
     {
         $sql = "SELECT `id` FROM `applicants_login` WHERE `app_number`=:p";
-        if ($this->dm->getID($sql, array(':p' => sha1($code)))) {
+        if ($this->getID($sql, array(':p' => sha1($code)))) {
             return 1;
         }
         return 0;
@@ -55,16 +53,17 @@ class VoucherPurchase
             ':pm' => $pm,
             ':ap' => $ap,
         );
-        if ($this->dm->inputData($sql, $params)) {
+        if ($this->inputData($sql, $params)) {
             return $pi;
         }
+        return 0;
     }
 
     private function registerApplicantPersI($user_id)
     {
         $sql1 = "INSERT INTO `personal_information` (`app_login`) VALUES(:a)";
         $params1 = array(':a' => $user_id);
-        if ($this->dm->inputData($sql1, $params1)) {
+        if ($this->inputData($sql1, $params1)) {
             return 1;
         }
         return 0;
@@ -74,7 +73,7 @@ class VoucherPurchase
     {
         $sql1 = "INSERT INTO `academic_background` (`app_login`) VALUES(:a)";
         $params1 = array(':a' => $user_id);
-        if ($this->dm->inputData($sql1, $params1)) {
+        if ($this->inputData($sql1, $params1)) {
             return 1;
         }
         return 0;
@@ -84,7 +83,7 @@ class VoucherPurchase
     {
         $sql1 = "INSERT INTO `program_info` (`app_login`) VALUES(:a)";
         $params1 = array(':a' => $user_id);
-        if ($this->dm->inputData($sql1, $params1)) {
+        if ($this->inputData($sql1, $params1)) {
             return 1;
         }
         return 0;
@@ -94,7 +93,7 @@ class VoucherPurchase
     {
         $sql1 = "INSERT INTO `previous_uni_records` (`app_login`) VALUES(:a)";
         $params1 = array(':a' => $user_id);
-        if ($this->dm->inputData($sql1, $params1)) {
+        if ($this->inputData($sql1, $params1)) {
             return 1;
         }
         return 0;
@@ -103,7 +102,7 @@ class VoucherPurchase
     private function getApplicantLoginID($app_number)
     {
         $sql = "SELECT `id` FROM `applicants_login` WHERE `app_number` = :a;";
-        return $this->dm->getID($sql, array(':a' => sha1($app_number)));
+        return $this->getID($sql, array(':a' => sha1($app_number)));
     }
 
     private function saveLoginDetails($app_number, $pin, $who)
@@ -112,7 +111,7 @@ class VoucherPurchase
         $sql = "INSERT INTO `applicants_login` (`app_number`, `pin`, `purchase_id`) VALUES(:a, :p, :b)";
         $params = array(':a' => sha1($app_number), ':p' => $hashed_pin, ':b' => $who);
 
-        if ($this->dm->inputData($sql, $params)) {
+        if ($this->inputData($sql, $params)) {
             $user_id = $this->getApplicantLoginID($app_number);
 
             //register in Personal information table in db
@@ -152,19 +151,19 @@ class VoucherPurchase
     private function getAdmissionPeriodID()
     {
         $sql = "SELECT `id` FROM `admission_period` WHERE `active` = 1;";
-        return $this->dm->getID($sql);
+        return $this->getID($sql);
     }
 
     private function getFormTypeID($form_type)
     {
         $sql = "SELECT `id` FROM `form_type` WHERE `name` LIKE '%$form_type%'";
-        return $this->dm->getID($sql);
+        return $this->getID($sql);
     }
 
     private function getPaymentMethodID($name)
     {
         $sql = "SELECT `id` FROM `payment_method` WHERE `name` LIKE '%$name%'";
-        return $this->dm->getID($sql);
+        return $this->getID($sql);
     }
 
     public function createApplicant($data)

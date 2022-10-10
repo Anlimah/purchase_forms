@@ -33,27 +33,25 @@ if (isset($_GET['transaction_id']) && empty($_GET['transaction_id'])) header('Lo
 
         if (getUrlVars()["status"] != "" || getUrlVars()["status"] != undefined) {
             if (getUrlVars()["transaction_id"] != "" || getUrlVars()["transaction_id"] != undefined) {
-                $("#step1Form").on("submit", function() {
-                    //window.location.href = "purchase_step2.php";
-                    $.ajax({
-                        type: "POST",
-                        url: "endpoint/confirm",
-                        data: {
-                            status: getUrlVars()["status"],
-                            transaction_id: getUrlVars()["status"],
-                        },
-                        success: function(result) {
-                            console.log(result);
-                            if (result.success) {
-                                window.location.href = 'step2.php';
-                            } else {
-                                alert(result.message);
-                            }
-                        },
-                        error: function(error) {
-                            console.log(result);
+                //window.location.href = "purchase_step2.php";
+                $.ajax({
+                    type: "POST",
+                    url: "endpoint/confirm",
+                    data: {
+                        status: getUrlVars()["status"],
+                        transaction_id: getUrlVars()["transaction_id"],
+                    },
+                    success: function(result) {
+                        console.log(result);
+                        if (result.success) {
+                            //window.location.href = 'step2.php';
+                        } else {
+                            alert(result.message);
                         }
-                    });
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
                 });
             }
         }

@@ -1,10 +1,7 @@
 <?php
 session_start();
 
-require_once('../../bootstrap.php');
-require_once('../Gateway/OrchardPaymentGateway.php');
-
-use Src\Controller\OrchardPaymentGateway;
+use Src\Gateway\OrchardPaymentGateway;
 
 if (isset($_SESSION['step1Done']) && isset($_SESSION['step2Done']) && isset($_SESSION['step3Done']) && isset($_SESSION['step4Done']) && isset($_SESSION['step5Done']) && isset($_SESSION['step6Done']) && isset($_SESSION['step7Done'])) {
     if ($_SESSION['step1Done'] == true && $_SESSION['step2Done'] == true && $_SESSION['step3Done'] == true && $_SESSION['step4Done'] == true && $_SESSION['step5Done'] == true && $_SESSION['step6Done'] == true && $_SESSION['step7Done'] == true) {

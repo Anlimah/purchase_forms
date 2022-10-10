@@ -2,28 +2,24 @@
 
 namespace Src\Controller;
 
+require_once('../src/Controller/PaymentConfirmation.php');
+
 use Twilio\Rest\Client;
 use Src\System\DatabaseMethods;
+use Src\Controller\PaymentConfirmation;
 
-class ExposeDataController
+class ExposeDataController extends DatabaseMethods
 {
-    private $dm;
-
-    public function __construct()
-    {
-        $this->dm = new DatabaseMethods();
-    }
-
     public function verifyEmailAddress($email, $code)
     {
         $sql = "SELECT `id` FROM `verify_email_address` WHERE `email_address`=:e AND `code`=:c";
-        return $this->dm->getID($sql, array(':e' => $email, ':c' => $code));
+        return $this->getID($sql, array(':e' => $email, ':c' => $code));
     }
 
     public function verifyPhoneNumber($number, $code)
     {
         $sql = "SELECT `id` FROM `verify_phone_number` WHERE `phone_number`=:p AND `code`=:c";
-        return $this->dm->getID($sql, array(':p' => $number, ':c' => $code));
+        return $this->getID($sql, array(':p' => $number, ':c' => $code));
     }
 
     public function validateEmail($input)
@@ -175,42 +171,36 @@ class ExposeDataController
 
     public function getFormPrice(string $form_type)
     {
-        return $this->dm->getData("SELECT `amount` FROM `form_type` WHERE `name` LIKE '%$form_type%'");
+        return $this->getData("SELECT `amount` FROM `form_type` WHERE `name` LIKE '%$form_type%'");
     }
 
     public function getAdminYearCode()
     {
         $sql = "SELECT EXTRACT(YEAR FROM (SELECT `start_date` FROM admission_period)) AS 'year'";
-        $year = (string) $this->dm->getData($sql)[0]['year'];
+        $year = (string) $this->getData($sql)[0]['year'];
         return (int) substr($year, 2, 2);
     }
 
     public function getFormTypes()
     {
-        return $this->dm->getData("SELECT * FROM `form_type`");
+        return $this->getData("SELECT * FROM `form_type`");
     }
 
     public function getPaymentMethods()
     {
-        return $this->dm->getData("SELECT * FROM `payment_method`");
+        return $this->getData("SELECT * FROM `payment_method`");
     }
 
     public function getPrograms($type)
     {
         $sql = "SELECT * FROM `programs` WHERE `type` = :t";
         $param = array(":t" => $type);
-        return $this->dm->getData($sql, $param);
+        return $this->getData($sql, $param);
     }
 
     public function getHalls()
     {
-        return $this->dm->getData("SELECT * FROM `halls`");
-    }
-
-    public function genCode($length = 6)
-    {
-        $digits = $length;
-        return rand(pow(10, $digits - 1), pow(10, $digits) - 1);
+        return $this->getData("SELECT * FROM `halls`");
     }
 
     public function sendEmail($recipient_email, $user_id)
@@ -256,5 +246,13 @@ class ExposeDataController
         $otp_code = $this->genCode(4);
         $message = 'Your OTP verification code is';
         return $this->sendSMS($phone_number, $otp_code, $message);
+    }
+    /**
+     * @param int transaction_id //transaction_id
+     */
+    public function confirmPurchase(int $transaction_id)
+    {
+        $payConfirm = new PaymentConfirmation();
+        return $payConfirm->processTransaction($transaction_id);
     }
 }
