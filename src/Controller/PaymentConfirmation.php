@@ -51,7 +51,7 @@ class PaymentConfirmation
 
             if (isset($response->resp_code)) {
                 if ($response->resp_code == '084') {
-                    return array("success" => true, "message" => "Payment pending! Might be due to inssuficient fund in your account or your payment session expired. " . $response->resp_code);
+                    return array("success" => false, "message" => "Payment pending! Might be due to inssuficient fund in your account or your payment session expired. " . $response->resp_code);
                 } else {
                     return array("success" => false, "message" => "Payment process failed!3 " . $response->resp_code);
                 }

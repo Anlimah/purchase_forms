@@ -44,7 +44,7 @@ if (isset($_GET['transaction_id']) && empty($_GET['transaction_id'])) header('Lo
                     success: function(result) {
                         console.log(result);
                         if (result.success) {
-                            //window.location.href = 'step2.php';
+                            alert(result.message);
                         } else {
                             alert(result.message);
                         }
