@@ -94,7 +94,7 @@ class PaymentConfirmation
             $secretKey = $client_id . ":" . $signature;
             $payUrl = "https://orchard-api.anmgw.com/sendRequest";
             $request_verb = 'POST';
-            echo 1;
+
             $pay = new OrchardPaymentGateway($secretKey, $payUrl, $request_verb, $payload);
             $response = json_decode($pay->initiatePayment());
 
@@ -103,7 +103,6 @@ class PaymentConfirmation
             } else {
                 echo $response->resp_desc;
             }
-            echo 2;
         }
     }
 }
