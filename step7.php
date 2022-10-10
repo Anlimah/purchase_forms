@@ -59,7 +59,7 @@ if (isset($_SESSION['step6Done']) && $_SESSION['step6Done'] == true) {
                     success: function(result) {
                         console.log(result);
                         if (result.success) {
-                            //window.location.href = "src/Controller/OrchardPaymentController.php";
+                            window.location.href = "confirm.php" + result.message;
                         } else {
                             alert(result.message)
                         }
