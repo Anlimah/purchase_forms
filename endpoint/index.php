@@ -152,7 +152,12 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 				"momo_number" => $expose->validatePhone($_SESSION['step4']['phone_number'])
 			);
 			$_SESSION['step7Done'] = true;
-			$data["success"] = true;
+
+			if (isset($_SESSION['step1Done']) && isset($_SESSION['step2Done']) && isset($_SESSION['step3Done']) && isset($_SESSION['step4Done']) && isset($_SESSION['step5Done']) && isset($_SESSION['step6Done']) && isset($_SESSION['step7Done'])) {
+				if ($_SESSION['step1Done'] == true && $_SESSION['step2Done'] == true && $_SESSION['step3Done'] == true && $_SESSION['step4Done'] == true && $_SESSION['step5Done'] == true && $_SESSION['step6Done'] == true && $_SESSION['step7Done'] == true) {
+					$data = $expose->callOrchardGateway($_SESSION["step1"], $_SESSION["step2"], $_SESSION["step4"], $_SESSION["step6"], $_SESSION["step7"]);
+				}
+			}
 		} else {
 			$data["success"] = false;
 			$data["message"] = "Invalid request!";
