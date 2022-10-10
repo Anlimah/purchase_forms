@@ -64,7 +64,9 @@ if (isset($_SESSION['step6Done']) && $_SESSION['step6Done'] == true) {
                             alert(result.message)
                         }
                     },
-                    error: function(error) {}
+                    error: function(error) {
+                        console.log(error);
+                    }
                 });
             });
         });

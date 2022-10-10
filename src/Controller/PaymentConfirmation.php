@@ -99,11 +99,11 @@ class PaymentConfirmation
             $pay = new OrchardPaymentGateway($secretKey, $payUrl, $request_verb, $payload);
             $response = json_decode($pay->initiatePayment());
 
-            //if ($response->resp_code == "015") {
-            return array("success" => true, "message" => "?status=" . $response->resp_code . "&transaction_id=" . $trans_id);
-            //}
+            if ($response->resp_code == "015") {
+                return array("success" => true, "message" => "?status=" . $response->resp_code . "&transaction_id=" . $trans_id);
+            }
             //echo $response->resp_desc;
-            //return array("status" => false, "message" => $response->resp_desc);
+            return array("status" => false, "message" => $response->resp_desc);
         }
     }
 }
