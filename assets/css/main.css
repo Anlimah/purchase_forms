@@ -256,12 +256,6 @@ form {
 	margin: 0px 12% !important;
 }
 
-@media (max-width: 768) {
-	body {
-		overflow: hidden;
-	}
-}
-
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
 	.flex > div {
@@ -271,6 +265,9 @@ form {
 
 	.form_card {
 		padding: 10px 20px 10px 20px !important;
+	}
+	body {
+		overflow: none;
 	}
 }
 
@@ -295,6 +292,9 @@ form {
 		font-size: 14px !important;
 		font-weight: bolder !important;
 	}
+	body {
+		overflow: none;
+	}
 }
 
 @media only screen and (max-width: 768px) {
@@ -312,5 +312,8 @@ form {
 		font-size: 30px !important;
 		padding-bottom: 15px !important;
 		font-weight: 700 !important;
+	}
+	body {
+		overflow: none;
 	}
 }
