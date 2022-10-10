@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 	// verify applicant provided details
 	if ($_GET["url"] == "verifyStep1") {
 		if (isset($_SESSION["_step1Token"]) && !empty($_SESSION["_step1Token"]) && isset($_POST["_v1Token"]) && !empty($_POST["_v1Token"]) && $_POST["_v1Token"] == $_SESSION["_step1Token"]) {
-			$_SESSION["step1"] = array(
+			$_SESSION["payData"] = array(
 				"first_name" => $expose->validateInput($_POST["first_name"]),
 				"last_name" => $expose->validateInput($_POST["last_name"])
 			);
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 		die(json_encode($data));
 	} else if ($_GET["url"] == "verifyStep2") {
 		if (isset($_SESSION["_step2Token"]) && !empty($_SESSION["_step2Token"]) && isset($_POST["_v2Token"]) && !empty($_POST["_v2Token"]) && $_POST["_v2Token"] == $_SESSION["_step2Token"]) {
-			$_SESSION["step2"] = array(
+			$_SESSION["payData"] = array(
 				"email_address" => $expose->validateInput($_POST["email_address"])
 			);
 			$_SESSION['step2Done'] = true;
@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 	} elseif ($_GET["url"] == "verifyStep4") {
 		if (isset($_SESSION["_step4Token"]) && !empty($_SESSION["_step4Token"]) && isset($_POST["_v4Token"]) && !empty($_POST["_v4Token"]) && $_POST["_v4Token"] == $_SESSION["_step4Token"]) {
 			$phone_number = $expose->validateInput($_POST["phone_number"]);
-			$_SESSION["step4"] = array("phone_number" => $phone_number);
+			$_SESSION["payData"] = array("phone_number" => $phone_number);
 			if ($expose->sendOTP($phone_number)) {
 				$_SESSION['step4Done'] = true;
 				$data["success"] = true;
@@ -126,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 			$app_year = $expose->getAdminYearCode();
 
 			if ($amount) {
-				$_SESSION["step6"] = array(
+				$_SESSION["payData"] = array(
 					'user' => microtime(true),
 					"form_type" => $form_type,
 					"pay_method" => $pay_method,
@@ -147,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 		die(json_encode($data));
 	} elseif ($_GET["url"] == "verifyStep7Momo") {
 		if (isset($_SESSION["_step7MomoToken"]) && !empty($_SESSION["_step7MomoToken"]) && isset($_POST["_v7MomoToken"]) && !empty($_POST["_v7MomoToken"]) && $_POST["_v7MomoToken"] == $_SESSION["_step7MomoToken"]) {
-			$_SESSION["step7"] = array(
+			$_SESSION["payData"] = array(
 				"momo_agent" => $expose->validateInput($_POST["momo_agent"]),
 				"momo_number" => $expose->validatePhone($_SESSION['step4']['phone_number'])
 			);
@@ -156,7 +156,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
 			if (isset($_SESSION['step1Done']) && isset($_SESSION['step2Done']) && isset($_SESSION['step3Done']) && isset($_SESSION['step4Done']) && isset($_SESSION['step5Done']) && isset($_SESSION['step6Done']) && isset($_SESSION['step7Done'])) {
 				if ($_SESSION['step1Done'] == true && $_SESSION['step2Done'] == true && $_SESSION['step3Done'] == true && $_SESSION['step4Done'] == true && $_SESSION['step5Done'] == true && $_SESSION['step6Done'] == true && $_SESSION['step7Done'] == true) {
-					$data = $expose->callOrchardGateway($_SESSION["step6"], $_SESSION["step7"]);
+					$data = $expose->callOrchardGateway($_SESSION["payData"]);
 				}
 			}
 		} else {
