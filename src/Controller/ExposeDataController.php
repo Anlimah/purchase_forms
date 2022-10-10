@@ -2,8 +2,6 @@
 
 namespace Src\Controller;
 
-require_once('../src/Controller/PaymentConfirmation.php');
-
 use Twilio\Rest\Client;
 use Src\System\DatabaseMethods;
 use Src\Controller\PaymentConfirmation;
