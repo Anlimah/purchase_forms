@@ -162,11 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 		if (isset($_POST["status"]) && !empty($_POST["status"]) && isset($_POST["transaction_id"]) && !empty($_POST["transaction_id"])) {
 			$status = $expose->validateInput($_POST["status"]);
 			$transaction_id = $expose->validatePhone($_POST["transaction_id"]);
-
-			echo json_encode($expose->confirmPurchase($transaction_id));
-
-			$data["success"] = true;
-			$data["message"] = $_POST["status"] . ":" . $_POST["transaction_id"];
+			$data = $expose->confirmPurchase($transaction_id);
 		} else {
 			$data["success"] = false;
 			$data["message"] = "Invalid request!";
