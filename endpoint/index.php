@@ -116,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 			$form_type = $expose->validateInput($_POST["form_type"]);
 			$pay_method = $expose->validateInput($_POST["pay_method"]);
 			$amount = $expose->getFormPrice($form_type)[0]["amount"];
-			echo json_encode($amount);
+
 			if ($form_type == 'Undergraduate' || $form_type == 'Short courses') {
 				$app_type = 1;
 			} else if ($form_type == 'Postgraduate') {
