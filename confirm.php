@@ -17,13 +17,13 @@ if (isset($_GET['transaction_id']) && empty($_GET['transaction_id'])) header('Lo
         <div class="form_card card" style="height: 320px !important;">
             <img src="assets/images/RMU-LOG.png" alt="RMU LOG">
             <h1 style="text-align: center; color: #003262 !important; font-size:24px !important">Payment Confirmation</h1>
-            <div class="d-flex justify-content-center" style="margin: 0px 10%;">
-                <div class="pay-status" style="align-items: baseline;">
+            <div class="pay-status" style="margin: 0px 10%;" style="align-items: baseline;">
+                <div class="d-flex justify-content-center">
                     <div class="spinner-grow" role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div>
+                    <p style="margin-left: 10px; margin-top:3px"> Processing payment...</p>
                 </div>
-                <p style="margin-left: 10px; margin-top:3px"> Processing payment...</p>
             </div>
         </div>
     </div>
@@ -77,9 +77,9 @@ if (isset($_GET['transaction_id']) && empty($_GET['transaction_id'])) header('Lo
                                         '<input type="hidden" name="_v1Token" value="' + getUrlVars()["transaction_id"] + '">' +
                                         '</form>'
                                     );
-                                    $(".d-flex").html("").append(result.message + '<br><div><a href="/">Try again</a></div>');
+                                    $(".pay-status").html("").append(result.message + '<br><div><a href="/">Try again</a></div>');
                                 } else {
-                                    $(".d-flex").html("").append(result.message + '<br><div><a href="/">Try again</a></div>');
+                                    $(".pay-status").html("").append(result.message + '<br><div><a href="/">Try again</a></div>');
                                 }
                             },
                             error: function(error) {
@@ -92,10 +92,10 @@ if (isset($_GET['transaction_id']) && empty($_GET['transaction_id'])) header('Lo
 
             $(document).on({
                 ajaxStart: function() {
-                    $(".d-flex").removeClass("hide");
+                    $(".pay-status").removeClass("hide");
                 },
                 ajaxStop: function() {
-                    $(".d-flex").removeClass("hide");
+                    $(".pay-status").removeClass("hide");
                 }
             });
 
