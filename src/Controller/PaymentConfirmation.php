@@ -103,7 +103,7 @@ class PaymentConfirmation
                 header("Location: " . $callback_url . "?status=" . $response->resp_code . "&msg=" . $response->resp_desc . "&transaction_id=" . $trans_id);
             }
             //echo $response->resp_desc;
-            return $response;
+            return array("status" => false, "message" => $response->resp_desc);
         }
     }
 }
