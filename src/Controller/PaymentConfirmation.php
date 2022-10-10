@@ -100,7 +100,7 @@ class PaymentConfirmation
             $response = json_decode($pay->initiatePayment());
 
             //if ($response->resp_code == "015") {
-            header("Location: " . $callback_url . "?status=" . $response->resp_code . "&msg=" . $response->resp_desc . "&transaction_id=" . $trans_id);
+            return array("status" => true, "message" => "?status=" . $response->resp_code . "&transaction_id=" . $trans_id);
             //}
             //echo $response->resp_desc;
             //return array("status" => false, "message" => $response->resp_desc);
