@@ -194,12 +194,19 @@ class VoucherPurchase extends DatabaseMethods
                     $key = 'APPLICATION NUMBER: ' . $login_details['app_number'] . '    PIN: ' . $login_details['pin_number'];
                     $message = 'Your RMU Online Application login details ';
                     if ($this->expose->sendSMS($pn,  $key, $message)) {
-                        return 1;
+                        //return 1;
+                        return array("success" => true, "message" =>  "Forms purchase completed!");
+                    } else {
+                        return array("success" => false, "message" =>  "Failed to send SMS!");
                     }
+                } else {
+                    return array("success" => false, "message" =>  "Failed to generate login information!");
                 }
-            }/**/
+            } else {
+                return array("success" => false, "message" =>  "Failed to log purchase information!");
+            }
+        } else {
+            return array("success" => false, "message" =>  "Invalid request!");
         }
-
-        return 0;
     }
 }

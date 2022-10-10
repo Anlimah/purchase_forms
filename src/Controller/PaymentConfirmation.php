@@ -43,11 +43,7 @@ class PaymentConfirmation
             if (isset($response->trans_status)) {
                 if ($response->trans_status == '000/01') {
                     $voucher = new VoucherPurchase();
-                    if ($voucher->createApplicant($_SESSION)) {
-                        return array("success" => true, "message" => "Payment successful!");
-                    } else {
-                        return array("success" => false, "message" => "Server error!");
-                    }
+                    return $voucher->createApplicant($_SESSION);
                 } else {
                     return array("success" => false, "message" => "Payment failed!4 " . $response->trans_status);
                 }
