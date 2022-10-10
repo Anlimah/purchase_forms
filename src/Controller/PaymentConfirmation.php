@@ -45,19 +45,21 @@ class PaymentConfirmation
                     $voucher = new VoucherPurchase();
                     return $voucher->createApplicant($_SESSION);
                 } else {
-                    return array("success" => false, "message" => "Payment failed!4 " . $response->trans_status);
+                    return array("success" => false, "message" => "Payment failed! Code: " . $response->trans_status);
                 }
             }
 
             if (isset($response->resp_code)) {
                 if ($response->resp_code == '084') {
-                    return array("success" => false, "message" => "Payment pending! Might be due to inssuficient fund in your account or your payment session expired. " . $response->resp_code);
+                    return array(
+                        "success" => false,
+                        "message" => "Payment pending! Might be due to inssuficient fund in your account or your payment session expired. Code: " . $response->resp_code
+                    );
                 } else {
-                    return array("success" => false, "message" => "Payment process failed!3 " . $response->resp_code);
+                    return array("success" => false, "message" => "Payment process failed! Code: " . $response->resp_code);
                 }
             }
-            return array("success" => false, "message" => "Payment failed!2");
         }
-        return array("success" => false, "message" => "Payment failed!1");
+        return array("success" => false, "message" => "Payment failed! Code: 0");
     }
 }

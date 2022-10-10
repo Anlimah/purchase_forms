@@ -77,9 +77,9 @@ if (isset($_GET['transaction_id']) && empty($_GET['transaction_id'])) header('Lo
                                         '<input type="hidden" name="_v1Token" value="' + getUrlVars()["transaction_id"] + '">' +
                                         '</form>'
                                     );
-                                    $(".d-flex").html("").append(result.message);
+                                    $(".d-flex").html("").append(result.message + '<div><a href="/">Try again</a></div>');
                                 } else {
-                                    $(".d-flex").html("").append(result.message);
+                                    $(".d-flex").html("").append(result.message + '<div><a href="/">Try again</a></div>');
                                 }
                             },
                             error: function(error) {
