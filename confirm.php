@@ -1,9 +1,9 @@
 <?php
 session_start();
 
-if (!isset($_GET['status']) || !isset($_GET['transaction_id'])) header('Location: index.php?status=cancelled');
-if (isset($_GET['status']) && !empty($_GET['status'])) header('Location: index.php?status=cancelled');
-if (isset($_GET['transaction_id']) && !empty($_GET['transaction_id'])) header('Location: index.php?status=cancelled');
+if (!isset($_GET['status']) || !isset($_GET['transaction_id'])) header('Location: index.php?status=1');
+if (isset($_GET['status']) && empty($_GET['status'])) header('Location: index.php?status=2');
+if (isset($_GET['transaction_id']) && empty($_GET['transaction_id'])) header('Location: index.php?status=3');
 //OrchardPaymentGateway::destroyAllSessions(); //Kill all sessions
 
 ?>
