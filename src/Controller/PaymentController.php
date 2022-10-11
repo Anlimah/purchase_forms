@@ -101,7 +101,8 @@ class PaymentController
                     "landing_page" => $landing_page,
                     "ts" => date("Y-m-d H:i:s"),
                     "payment_mode" => "CRM",
-                    "currency_val" => "233"
+                    "currency_code" => "GHS",
+                    "currency_val" => $amount
                 ));
                 $payUrl = "https://payments.anmgw.com/third_party_request";
             }
