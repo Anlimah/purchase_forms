@@ -104,7 +104,7 @@ class PaymentController
                     "currency_code" => "GHS",
                     "currency_val" => "233"
                 ));
-                $payUrl = "https://orchard-api.anmgw.com/third_party_request";
+                $payUrl = "https://payments.anmgw.com/third_party_request";
             }
 
             $client_id = getenv('ORCHARD_CLIENT');
