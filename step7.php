@@ -21,7 +21,7 @@ if (isset($_SESSION['step6Done']) && $_SESSION['step6Done'] == true) {
             <h1 style="text-align: center; color: #003262 !important; font-size:30px !important">Step 7</h1>
             <form id="step7MoMoForm" method="post" enctype="multipart/form-data" style="margin: 0px 12%;">
                 <p class="mb-4" style="line-height: normal !important;">
-                    <b><span><?= $_SESSION["step6"]["form_type"] ?></span></b> forms cost <b> GHS<span><?= $_SESSION["step6"]["amount"] ?></span></b>. <br>
+                    <b><span><?= $_SESSION["step6"]["form_type"] ?></span></b> forms cost <b> GHS<span><?= $_SESSION["payData"]["amount"] ?></span></b>. <br>
                     <span>Make sure you have enough fund in you MoMo account.</span>
                 </p>
                 <p class="mb-4">
