@@ -73,6 +73,8 @@ class PaymentController
             $landing_page = "https://forms.purchase.rmuictonline.com/confirm.php";
 
             $payload = array();
+            $payUrl = "";
+
             if ($method == "Mobile Money") {
                 $payload = json_encode(array(
                     "customer_number" => $number,
@@ -86,6 +88,7 @@ class PaymentController
                     "ts" => date("Y-m-d H:i:s"),
                     "nickname" => "RMU Admissions"
                 ));
+                $payUrl = "https://orchard-api.anmgw.com/sendRequest";
             } else if ($method == "Credit Card") {
                 $payload = json_encode(array(
                     "amount" => $amount,
@@ -94,7 +97,6 @@ class PaymentController
                     "reference" => "Pay for RMU admissions form",
                     "service_id" => $service_id,
                     "trans_type" => "CTM",
-                    "nw" => $network,
                     "nickname" => "RMU",
                     "landing_page" => $landing_page,
                     "ts" => date("Y-m-d H:i:s"),
@@ -102,6 +104,7 @@ class PaymentController
                     "currency_code" => "GHS",
                     "currency_val" => "233"
                 ));
+                $payUrl = "https://orchard-api.anmgw.com/third_party_request";
             }
 
             $client_id = getenv('ORCHARD_CLIENT');
@@ -109,7 +112,6 @@ class PaymentController
             $signature = hash_hmac("sha256", $payload, $client_secret);
 
             $secretKey = $client_id . ":" . $signature;
-            $payUrl = "https://orchard-api.anmgw.com/sendRequest";
             $request_verb = 'POST';
 
             $pay = new OrchardPaymentGateway($secretKey, $payUrl, $request_verb, $payload);
