@@ -63,25 +63,45 @@ class PaymentController
         return array("success" => false, "message" => "Payment failed! Code: 0");
     }
 
-    public function orchardPaymentController($amount, $network, $number)
+    public function orchardPaymentController($amount, $number, $method, $network = "MTN")
     {
         if (!empty($payData)) {
             $callback_url = "https://forms.purchase.rmuictonline.com/confirm.php";
             $trans_id = time();
             $service_id = getenv('ORCHARD_SERVID');
 
-            $payload = json_encode(array(
-                "customer_number" => $number,
-                "amount" => $amount,
-                "exttrid" => $trans_id,
-                "reference" => "Test payment",
-                "trans_type" => "CTM",
-                "nw" => $network,
-                "callback_url" => "$callback_url",
-                "service_id" => $service_id,
-                "ts" => date("Y-m-d H:i:s"),
-                "nickname" => "RMU Admissions"
-            ));
+            $landing_page = "https://forms.purchase.rmuictonline.com/confirm.php";
+
+            $payload = array();
+            if ($method == "Mobile Money") {
+                $payload = json_encode(array(
+                    "customer_number" => $number,
+                    "amount" => $amount,
+                    "exttrid" => $trans_id,
+                    "reference" => "Test payment",
+                    "trans_type" => "CTM",
+                    "nw" => $network,
+                    "callback_url" => "$callback_url",
+                    "service_id" => $service_id,
+                    "ts" => date("Y-m-d H:i:s"),
+                    "nickname" => "RMU Admissions"
+                ));
+            } else if ($method == "Credit Card") {
+                $payload = json_encode(array(
+                    "amount" => $amount,
+                    "callback_url" => $callback_url,
+                    "exttrid" => $trans_id,
+                    "reference" => "Pay for RMU admissions form",
+                    "service_id" => $service_id,
+                    "trans_type" => "CTM",
+                    "nickname" => "RMU",
+                    "landing_page" => $landing_page,
+                    "ts" => date("Y-m-d H:i:s"),
+                    "payment_mode" => "CRD",
+                    "currency_code" => "GHS",
+                    "currency_val" => "233"
+                ));
+            }
 
             $client_id = getenv('ORCHARD_CLIENT');
             $client_secret = getenv('ORCHARD_SECRET');
@@ -100,5 +120,13 @@ class PaymentController
             //echo $response->resp_desc;
             return array("status" => false, "message" => $response->resp_desc);
         }
+    }
+
+    public function orchardIndirectIntegration($amount, $network, $number)
+    {
+        $callback_url = "https://forms.purchase.rmuictonline.com/confirm.php";
+        $landing_page = "https://forms.purchase.rmuictonline.com/confirm.php";
+        $trans_id = time();
+        $service_id = getenv('ORCHARD_SERVID');
     }
 }
