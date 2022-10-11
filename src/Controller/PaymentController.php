@@ -100,7 +100,8 @@ class PaymentController
                     "nickname" => "RMU",
                     "landing_page" => $landing_page,
                     "ts" => date("Y-m-d H:i:s"),
-                    "payment_mode" => "CRM"
+                    "payment_mode" => "CRM",
+                    "currency_val" => "233"
                 ));
                 $payUrl = "https://payments.anmgw.com/third_party_request";
             }
