@@ -94,7 +94,7 @@ class PaymentController
                     "amount" => $amount,
                     "callback_url" => $callback_url,
                     "exttrid" => $trans_id,
-                    "reference" => "RMU",
+                    "reference" => "RMU Forms Purchase",
                     "service_id" => $service_id,
                     "trans_type" => "CTM",
                     "nickname" => "RMU",
