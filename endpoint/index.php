@@ -135,7 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 					"app_year" => $app_year,
 				);
 				$_SESSION['step6Done'] = true;
-				/*$data["success"] = true;*/
+				$data["success"] = true;
 			} else {
 				$data["success"] = false;
 				$data["message"] = "Error occured while processing selected amount!";
