@@ -96,11 +96,11 @@ class PaymentController
                     "exttrid" => $trans_id,
                     "reference" => "Pay for RMU admissions form",
                     "service_id" => $service_id,
-                    "trans_type" => "CRM",
+                    "trans_type" => "CTM",
                     "nickname" => "RMU",
                     "landing_page" => $landing_page,
                     "ts" => date("Y-m-d H:i:s"),
-                    "payment_mode" => "MOM",
+                    "payment_mode" => "CRM",
                     "currency_code" => "GHS",
                     "currency_val" => "233"
                 ));
