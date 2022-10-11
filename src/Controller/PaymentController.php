@@ -96,7 +96,7 @@ class PaymentController
                     "exttrid" => $trans_id,
                     "reference" => "Pay for RMU admissions form",
                     "service_id" => $service_id,
-                    "trans_type" => "CTM",
+                    "trans_type" => "CRM",
                     "nickname" => "RMU",
                     "landing_page" => $landing_page,
                     "ts" => date("Y-m-d H:i:s"),
