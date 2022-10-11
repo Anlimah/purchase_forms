@@ -65,7 +65,7 @@ class PaymentController
 
     public function orchardPaymentController($amount, $number, $method, $network = "MTN")
     {
-        if (!empty($payData)) {
+        if (!empty($amount) && !empty($number) && !empty($method) && !empty($network)) {
             $callback_url = "https://forms.purchase.rmuictonline.com/confirm.php";
             $trans_id = time();
             $service_id = getenv('ORCHARD_SERVID');
