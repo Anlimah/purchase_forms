@@ -63,21 +63,16 @@ class PaymentConfirmation
         return array("success" => false, "message" => "Payment failed! Code: 0");
     }
 
-    public function orchardPaymentController($payData)
+    public function orchardPaymentController($amount, $network, $number)
     {
         if (!empty($payData)) {
-            //Payload for only debit/credit
-            //echo json_encode($payData);
-            $form_price = $payData["amount"];
-            $momo_number = $payData["momo_number"];
             $callback_url = "https://forms.purchase.rmuictonline.com/confirm.php";
             $trans_id = time();
-            $network = $payData["momo_agent"];
             $service_id = getenv('ORCHARD_SERVID');
 
             $payload = json_encode(array(
-                "customer_number" => $momo_number,
-                "amount" => $form_price,
+                "customer_number" => $number,
+                "amount" => $amount,
                 "exttrid" => $trans_id,
                 "reference" => "Test payment",
                 "trans_type" => "CTM",
