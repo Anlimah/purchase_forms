@@ -4,7 +4,7 @@ namespace Src\Controller;
 
 use Twilio\Rest\Client;
 use Src\System\DatabaseMethods;
-use Src\Controller\PaymentConfirmation;
+use Src\Controller\PaymentController;
 
 class ExposeDataController extends DatabaseMethods
 {
@@ -250,7 +250,7 @@ class ExposeDataController extends DatabaseMethods
      */
     public function callOrchardGateway($amount, $network, $number)
     {
-        $payConfirm = new PaymentConfirmation();
+        $payConfirm = new PaymentController();
         return $payConfirm->orchardPaymentController($amount, $network, $number);
     }
 
@@ -259,7 +259,7 @@ class ExposeDataController extends DatabaseMethods
      */
     public function confirmPurchase(int $transaction_id)
     {
-        $payConfirm = new PaymentConfirmation();
+        $payConfirm = new PaymentController();
         return $payConfirm->processTransaction($transaction_id);
     }
 }

@@ -5,7 +5,7 @@ namespace Src\Controller;
 use Src\Gateway\OrchardPaymentGateway;
 use Src\Controller\VoucherPurchase;
 
-class PaymentConfirmation
+class PaymentController
 {
     /**
      * @param int transaction_id //transaction_id
