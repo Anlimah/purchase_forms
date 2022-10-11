@@ -91,7 +91,7 @@ class PaymentController
                 $payUrl = "https://orchard-api.anmgw.com/sendRequest";
             } else if ($method == "Credit Card") {
                 $payload = json_encode(array(
-                    "amount" => $amount,
+                    //"amount" => $amount,
                     "callback_url" => $callback_url,
                     "exttrid" => $trans_id,
                     "reference" => "RMU Form Purchase",
@@ -102,7 +102,7 @@ class PaymentController
                     "ts" => date("Y-m-d H:i:s"),
                     "payment_mode" => "CRM",
                     "currency_code" => "GHS",
-                    "currency_val" => "233"
+                    "currency_val" => $amount
                 ));
                 $payUrl = "https://payments.anmgw.com/third_party_request";
             }
