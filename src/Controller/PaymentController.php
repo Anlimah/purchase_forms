@@ -117,19 +117,18 @@ class PaymentController
             $pay = new OrchardPaymentGateway($secretKey, $payUrl, $request_verb, $payload);
             $response = json_decode($pay->initiatePayment());
 
-            if ($response->resp_code == "015") {
-                return array("success" => true, "message" => "?status=" . $response->resp_code . "&transaction_id=" . $trans_id);
+            if ($method == "Mobile Money") {
+                if ($response->resp_code == "015") {
+                    return array("success" => true, "message" => "?status=" . $response->resp_code . "&transaction_id=" . $trans_id);
+                }
+            } else if ($method == "Credit Card") {
+                if ($response->resp_code == "000" && $response->resp_desc == "Passed") {
+                    return array("success" => true, "message" => $response->redirect_url);
+                }
             }
-            //echo $response->resp_desc;
-            return array("success" => false, "message" => $response);
-        }
-    }
 
-    public function orchardIndirectIntegration($amount, $network, $number)
-    {
-        $callback_url = "https://forms.purchase.rmuictonline.com/confirm.php";
-        $landing_page = "https://forms.purchase.rmuictonline.com/confirm.php";
-        $trans_id = time();
-        $service_id = getenv('ORCHARD_SERVID');
+            //echo $response->resp_desc;
+            return array("success" => false, "message" => $response->resp_desc);
+        }
     }
 }
