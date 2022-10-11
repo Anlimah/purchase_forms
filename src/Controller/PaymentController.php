@@ -121,7 +121,7 @@ class PaymentController
                 return array("success" => true, "message" => "?status=" . $response->resp_code . "&transaction_id=" . $trans_id);
             }
             //echo $response->resp_desc;
-            return array("success" => false, "status" => $response->resp_code, "message" => $response->resp_desc);
+            return array("success" => false, "message" => $response);
         }
     }
 
