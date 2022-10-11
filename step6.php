@@ -34,19 +34,22 @@ $expose = new ExposeDataController();
                         <?php
                         $data = $expose->getFormTypes();
                         foreach ($data as $ft) {
-                            echo '<option value="' . $ft['name'] . '">' . $ft['name'] . '</option>';
+                        ?>
+                            <option value="<?= $ft['name'] ?>"><?= $ft['name'] ?></option>
+                        <?php
                         }
                         ?>
                     </select>
                 </div>
-                <div class="mb-4">
+                <div class=" mb-4">
                     <label class="form-label" for="gender">Payment Method</label>
                     <select title="Select payment method" class="form-select form-select-sm" name="pay_method" id="pay_method" required>
+                        <option selected disabled value="">Choose...</option>
                         <?php
                         $data = $expose->getPaymentMethods();
                         foreach ($data as $pm) {
                         ?>
-                            <option value="<?= $pm['name'] ?>" <?php $pm["name"] == "Mobile Money" ? "selected" : ""  ?>><?= $pm['name'] ?></option>';
+                            <option value="<?= $pm['name'] ?>"><?= $pm['name'] ?></option>';
                         <?php
                         }
                         ?>
