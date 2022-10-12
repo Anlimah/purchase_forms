@@ -161,7 +161,6 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
 			if ($amount) {
 				$_SESSION["step6"] = array(
-					'user' => time(),
 					"form_type" => $form_type,
 					"amount" => $amount,
 					"app_type" => $app_type,

@@ -96,8 +96,6 @@ class PaymentController
             $request_verb = 'POST';
             $payUrl = "https://payments.anmgw.com/third_party_request";
 
-            return $_SESSION;
-
             $pay = new OrchardPaymentGateway($secretKey, $payUrl, $request_verb, $payload);
             $response = json_decode($pay->initiatePayment());
 

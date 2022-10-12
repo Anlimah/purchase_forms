@@ -167,6 +167,11 @@ class ExposeDataController extends DatabaseMethods
         return $ip;
     }
 
+    public function getDeciveInfo()
+    {
+        return $_SERVER['HTTP_USER_AGENT'];
+    }
+
     public function getFormPrice(string $form_type)
     {
         return $this->getData("SELECT `amount` FROM `form_type` WHERE `name` LIKE '%$form_type%'");

@@ -61,7 +61,8 @@ INSERT INTO `payment_method`(`name`) VALUES ("Credit Card"), ("Mobile Money"), (
 
 DROP TABLE IF EXISTS `payment_process_info`;
 CREATE TABLE `payment_process_info` (
-    `id` INT(11) AUTO_INCREMENT PRIMARY KEY,
+    `id` INT(11) PRIMARY KEY,
+
     `first_name` VARCHAR(50) NOT NULL,
     `last_name` VARCHAR(50) NOT NULL,
     `email_address` VARCHAR(100) NOT NULL,
@@ -69,24 +70,20 @@ CREATE TABLE `payment_process_info` (
     `country_code` VARCHAR(30) NOT NULL,
     `phone_number` VARCHAR(15) NOT NULL,
     `amount` DECIMAL(6,2) NOT NULL,
+    `form_type` INT NOT NULL,
     `trans_id` INT UNIQUE NOT NULL,
 
     `status_code` VARCHAR(3), -- added
     `status_msg` VARCHAR(50), -- added
     `device_info` VARCHAR(255), -- added
     `ip_address` VARCHAR(15), -- added
-
     `vendor` VARCHAR(22) NOT NULL, -- added
+
     CONSTRAINT `fk_purchase_vendor_details` FOREIGN KEY (`vendor`) 
     REFERENCES `vendor_details`(`id`) ON UPDATE CASCADE,
     
-    `form_type` INT NOT NULL,
     CONSTRAINT `fk_purchase_form_type` FOREIGN KEY (`form_type`) 
     REFERENCES `form_type`(`id`) ON UPDATE CASCADE,
-
-    `admission_period` INT NOT NULL,
-    CONSTRAINT `fk_purchase_admission_period` FOREIGN KEY (`admission_period`) 
-    REFERENCES `admission_period`(`id`) ON UPDATE CASCADE,
 
     `added_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
 );

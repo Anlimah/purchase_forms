@@ -207,4 +207,36 @@ class VoucherPurchase extends DatabaseMethods
             return array("success" => false, "message" =>  "Invalid request!");
         }
     }
+
+    public function SaveFormPurchaseData($data, $transaction_id)
+    {
+        if (!empty($data) && !empty($transaction_id)) {
+            $fn = $data['step1']['first_name'];
+            $ln = $data['step1']['last_name'];
+            $ea = $data['step2']['email_address'];
+            $cn = $data['step4']['country_name'];
+            $cc = $data['step4']['country_code'];
+            $pn = $data['step4']['phone_number'];
+            $am = $data['step6']['amount'];
+            $pi = $transaction_id;
+            $ft = $data['step6']['form_type'];
+            $ft = $data['step6']['form_type'];
+
+            $pm = "Third Party"; //$data['step6']['pay_method'];
+            $at = $data['step6']['app_type'];
+            $ay = $data['step6']['app_year'];
+
+            $ap_id = $this->getAdmissionPeriodID();
+            $ft_id = $this->getFormTypeID($ft);
+            $pm_id = $this->getPaymentMethodID($pm);
+
+            $purchase_id = $this->savePurchaseDetails($pi, $ft_id, $pm_id, $ap_id, $fn, $ln, $cn, $ea, $pn);
+            if ($purchase_id) {
+            } else {
+                return array("success" => false, "message" =>  "Failed to log purchase information!");
+            }
+        } else {
+            return array("success" => false, "message" =>  "Invalid request!");
+        }
+    }
 }
