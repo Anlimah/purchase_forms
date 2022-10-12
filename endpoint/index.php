@@ -161,7 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
 			if ($amount) {
 				$_SESSION["step6"] = array(
-					'user' => microtime(true),
+					'user' => time(),
 					"form_type" => $form_type,
 					"amount" => $amount,
 					"app_type" => $app_type,
@@ -212,12 +212,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 		if (isset($_POST["status"]) && !empty($_POST["status"]) && isset($_POST["exttrid"]) && !empty($_POST["exttrid"])) {
 			$status = $expose->validateInput($_POST["status"]);
 			$transaction_id = $expose->validatePhone($_POST["exttrid"]);
-			//if ($status == "") {
 			$data = $expose->confirmPurchase($transaction_id);
-			/*} else {
-				$data["success"] = false;
-				$data["message"] = "Payment failed!";
-			}*/
 		} else {
 			$data["success"] = false;
 			$data["message"] = "Invalid request! 1";

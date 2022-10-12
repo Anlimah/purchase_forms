@@ -96,10 +96,14 @@ class PaymentController
             $request_verb = 'POST';
             $payUrl = "https://payments.anmgw.com/third_party_request";
 
+            return $_SESSION;
+
             $pay = new OrchardPaymentGateway($secretKey, $payUrl, $request_verb, $payload);
             $response = json_decode($pay->initiatePayment());
 
             if ($response->resp_code == "000" && $response->resp_desc == "Passed") {
+                //Save user data
+
                 return array("success" => true, "status" => $response->resp_code, "message" => $response->redirect_url);
             }
             //echo $response->resp_desc;
