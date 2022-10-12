@@ -205,7 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 			}*/
 		} else {
 			$data["success"] = false;
-			$data["message"] = "Invalid request!";
+			$data["message"] = "Invalid request! 1";
 		}
 		die(json_encode($data));
 	}
