@@ -39,7 +39,7 @@ class ExposeDataController extends DatabaseMethods
             die("Invalid input!");
         }
         $user_input = htmlentities(htmlspecialchars($input));
-        $validated_input = (bool) preg_match('/^[A-Za-z0-9]/', $user_input);
+        $validated_input = (bool) preg_match('/^[A-Za-z0-9()+]/', $user_input);
         if ($validated_input) {
             return $user_input;
         }
@@ -217,7 +217,7 @@ class ExposeDataController extends DatabaseMethods
         return 0;
     }
 
-    public function sendSMS($recipient_number, $otp_code, $message, $ISD = '+233')
+    public function sendSMS($recipient_number, $otp_code, $message, $ISD)
     {
         $sid = getenv('TWILIO_SID');
         $token = getenv('TWILIO_TKN');
@@ -239,11 +239,11 @@ class ExposeDataController extends DatabaseMethods
         }
     }
 
-    public function sendOTP($phone_number)
+    public function sendOTP($phone_number, $country_code)
     {
         $otp_code = $this->genCode(4);
         $message = 'Your OTP verification code is';
-        return $this->sendSMS($phone_number, $otp_code, $message);
+        return $this->sendSMS($phone_number, $otp_code, $message, $country_code);
     }
     /**
      * @param int transaction_id //transaction_id

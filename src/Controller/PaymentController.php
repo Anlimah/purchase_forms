@@ -100,10 +100,10 @@ class PaymentController
             $response = json_decode($pay->initiatePayment());
 
             if ($response->resp_code == "000" && $response->resp_desc == "Passed") {
-                return array("success" => true, "message" => $response->redirect_url);
+                return array("success" => true, "status" => $response->resp_code, "message" => $response->redirect_url);
             }
             //echo $response->resp_desc;
-            return array("success" => false, "message" => $response->resp_desc);
+            return array("success" => false, "status" => $response->resp_code, "message" => $response->resp_desc);
         }
     }
 }

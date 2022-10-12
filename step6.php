@@ -66,10 +66,10 @@ $expose = new ExposeDataController();
                     processData: false,
                     success: function(result) {
                         console.log(result);
-                        if (result) {
-                            window.location.href = "step7.php";
+                        if (result.success) {
+                            //window.location.href = result.message;
                         } else {
-                            alert(result.message);
+                            alert(result.message)
                         }
                     },
                     error: function(error) {}

@@ -92,18 +92,36 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 		die(json_encode($data));
 	} elseif ($_GET["url"] == "verifyStep4") {
 		if (isset($_SESSION["_step4Token"]) && !empty($_SESSION["_step4Token"]) && isset($_POST["_v4Token"]) && !empty($_POST["_v4Token"]) && $_POST["_v4Token"] == $_SESSION["_step4Token"]) {
-			$phone_number = $expose->validateInput($_POST["phone_number"]);
-			$_SESSION["step4"] = array("phone_number" => $phone_number);
-			if ($expose->sendOTP($phone_number)) {
-				$_SESSION['step4Done'] = true;
-				$data["success"] = true;
+			if (isset($_POST["country"]) && !empty($_POST["country"]) && isset($_POST["phone_number"]) && !empty($_POST["phone_number"])) {
+
+				$country = $expose->validateInput($_POST["country"]);
+				$charPos = strpos($country, ")");
+
+				$country_name = substr($country, ($charPos + 2));
+				$country_code = substr($country, 1, ($charPos - 1));
+
+				$phone_number = $expose->validateInput($_POST["phone_number"]);
+
+				$_SESSION["step4"] = array(
+					"country_name" => $country_name,
+					"country_code" => $country_code,
+					"phone_number" => $phone_number,
+				);
+
+				if ($expose->sendOTP($phone_number, $country_code)) {
+					$_SESSION['step4Done'] = true;
+					$data["success"] = true;
+				} else {
+					$data["success"] = false;
+					$data["message"] = "Error occured while sending OTP!";
+				}
 			} else {
 				$data["success"] = false;
-				$data["message"] = "Error occured while sending OTP!";
+				$data["message"] = "Invalid request! 2";
 			}
 		} else {
 			$data["success"] = false;
-			$data["message"] = "Invalid request!";
+			$data["message"] = "Invalid request! 1";
 		}
 		die(json_encode($data));
 	} elseif ($_GET["url"] == "verifyStep5") {
@@ -145,7 +163,6 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 				$_SESSION["step6"] = array(
 					'user' => microtime(true),
 					"form_type" => $form_type,
-					//"pay_method" => $pay_method,
 					"amount" => $amount,
 					"app_type" => $app_type,
 					"app_year" => $app_year,
@@ -154,11 +171,9 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
 				if (isset($_SESSION['step1Done']) && isset($_SESSION['step2Done']) && isset($_SESSION['step3Done']) && isset($_SESSION['step4Done']) && isset($_SESSION['step5Done']) && isset($_SESSION['step6Done'])) {
 					if ($_SESSION['step1Done'] == true && $_SESSION['step2Done'] == true && $_SESSION['step3Done'] == true && $_SESSION['step4Done'] == true && $_SESSION['step5Done'] == true && $_SESSION['step6Done'] == true) {
-						$data = $expose->callOrchardGateway($_SESSION["step6"]["amount"]);
+						$data = $expose->callOrchardGateway($amount);
 					}
 				}
-
-				$data["success"] = true;
 			} else {
 				$data["success"] = false;
 				$data["message"] = "Error occured while processing selected amount!";
@@ -171,7 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 	}
 
 	//Step for mobile money
-	elseif ($_GET["url"] == "verifyStep7Momo") {
+	/*elseif ($_GET["url"] == "verifyStep7Momo") {
 		if (isset($_SESSION["_step7MomoToken"]) && !empty($_SESSION["_step7MomoToken"]) && isset($_POST["_v7MomoToken"]) && !empty($_POST["_v7MomoToken"]) && $_POST["_v7MomoToken"] == $_SESSION["_step7MomoToken"]) {
 			$_SESSION["step7"] = array(
 				"momo_agent" => $expose->validateInput($_POST["momo_agent"]),
@@ -190,7 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 			$data["message"] = "Invalid request!";
 		}
 		die(json_encode($data));
-	}
+	}*/
 
 	//Payment confirmation
 	elseif ($_GET["url"] == "confirm") {

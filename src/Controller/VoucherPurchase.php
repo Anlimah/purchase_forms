@@ -171,17 +171,15 @@ class VoucherPurchase extends DatabaseMethods
         if (!empty($data)) {
             $fn = $data['step1']['first_name'];
             $ln = $data['step1']['last_name'];
-            $cn = 'Ghana';
             $ea = $data['step2']['email_address'];
+            $cn = $data['step4']['country_name'];
+            $cc = $data['step4']['country_code'];
             $pn = $data['step4']['phone_number'];
             $ft = $data['step6']['form_type'];
-            $pm = $data['step6']['pay_method'];
+            $pm = "Third Party"; //$data['step6']['pay_method'];
             $at = $data['step6']['app_type'];
             $ay = $data['step6']['app_year'];
             $pi = (int) $data['step6']['user'];
-
-            $ma = $data['step7']['momo_agent'];
-            $mn = $data['step7']['momo_number'];
 
             $ap_id = $this->getAdmissionPeriodID();
             $ft_id = $this->getFormTypeID($ft);
@@ -193,7 +191,7 @@ class VoucherPurchase extends DatabaseMethods
                 if (!empty($login_details)) {
                     $key = 'APPLICATION NUMBER: ' . $login_details['app_number'] . '    PIN: ' . $login_details['pin_number'];
                     $message = 'Your RMU Online Application login details ';
-                    if ($this->expose->sendSMS($pn,  $key, $message)) {
+                    if ($this->expose->sendSMS($pn,  $key, $message, $cc)) {
                         //return 1;
                         return array("success" => true, "message" =>  "Forms purchase completed!");
                     } else {

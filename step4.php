@@ -10,6 +10,9 @@ if (isset($_SESSION['step3Done']) && $_SESSION['step3Done'] == true) {
 }
 
 ?>
+<?php
+require_once('inc/page-data.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -28,15 +31,20 @@ if (isset($_SESSION['step3Done']) && $_SESSION['step3Done'] == true) {
                     </p>
                 </div>
                 <div class="mb-4">
-                    <label class="form-label" for="phone_number">Phone Number</label>
+                    <label class="form-label" for="phone-number">Phone Number</label>
                     <div style="display:flex !important; flex-direction:row !important; justify-content: space-between !important">
-                        <select title="MoMo payment allowed for only Ghanaian applicants" class="form-select form-select-sm country-code" name="phone-number1-code" id="app-phone-number-code" style="margin-right: 10px; width: 45%" required>
-                            <option value="233" selected>(+233) Ghana</option>
+                        <select title="Choose country and country code" class="form-select form-select-sm country-code" name="country" id="country" style="margin-right: 10px; width: 45%" required>
+                            <option selected disabled value="">Choose...</option>
+                            <?php
+                            foreach (COUNTRIES as $cn) {
+                                echo '<option value="(' . $cn["code"] . ') ' . $cn["name"] . '">(' . $cn["code"] . ') ' . $cn["name"] . '</option>';
+                            }
+                            ?>
                         </select>
-                        <input maxlength="10" title="Provide your Mobile Money Number" class="form-control form-control-sm" style="width: 70%" type="tel" name="phone_number" id="phone_number" placeholder="0244123123" required>
+                        <input maxlength="10" title="Provide your Provide Number" class="form-control form-control-sm" style="width: 70%" type="tel" name="phone_number" id="phone_number" placeholder="0244123123" required>
                     </div>
                 </div>
-                <button class="btn btn-primary" type="submit" style="padding: 10px 10px; width:100%">Verify</button>
+                <button class="btn btn-primary" type="submit" style="padding: 10px 10px; width:100%">Continue</button>
                 <input class="form-control" type="hidden" name="_v4Token" value="<?= $_SESSION["_step4Token"]; ?>">
             </form>
         </div>
@@ -57,7 +65,7 @@ if (isset($_SESSION['step3Done']) && $_SESSION['step3Done'] == true) {
                     success: function(result) {
                         console.log(result);
                         if (result) {
-                            window.location.href = 'step5.php';
+                            //window.location.href = 'step5.php';
                         } else {
                             alert(result.message);
                         }
