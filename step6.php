@@ -67,7 +67,7 @@ $expose = new ExposeDataController();
                     success: function(result) {
                         console.log(result);
                         if (result.success) {
-                            //window.location.href = result.message;
+                            window.location.href = result.message;
                         } else {
                             alert(result.message)
                         }
