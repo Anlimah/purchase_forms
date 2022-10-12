@@ -64,8 +64,8 @@ require_once('inc/page-data.php');
                     processData: false,
                     success: function(result) {
                         console.log(result);
-                        if (result) {
-                            //window.location.href = 'step5.php';
+                        if (result.success) {
+                            window.location.href = 'step5.php';
                         } else {
                             alert(result.message);
                         }

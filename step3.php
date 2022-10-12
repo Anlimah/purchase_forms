@@ -53,7 +53,7 @@ if (isset($_SESSION['step2Done']) && $_SESSION['step2Done'] == true) {
                     processData: false,
                     success: function(result) {
                         console.log(result);
-                        if (result) {
+                        if (result.success) {
                             window.location.href = 'step4.php';
                         } else {
                             alert(result.message);
