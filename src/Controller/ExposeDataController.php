@@ -248,10 +248,10 @@ class ExposeDataController extends DatabaseMethods
     /**
      * @param int transaction_id //transaction_id
      */
-    public function callOrchardGateway($amount, $number, $method, $network)
+    public function callOrchardGateway($amount)
     {
         $payConfirm = new PaymentController();
-        return $payConfirm->orchardPaymentController($amount, $number, $method, $network);
+        return $payConfirm->orchardPaymentController($amount);
     }
 
     /**

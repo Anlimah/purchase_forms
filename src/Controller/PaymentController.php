@@ -7,6 +7,9 @@ use Src\Controller\VoucherPurchase;
 
 class PaymentController
 {
+    private function prepareTransaction($secretKey, $payUrl, $payload)
+    {
+    }
     /**
      * @param int transaction_id //transaction_id
      */
@@ -37,7 +40,6 @@ class PaymentController
 
     public function processTransaction(int $transaction_id)
     {
-
         $response = json_decode($this->getTransactionStatus($transaction_id));
         if (!empty($response)) {
             if (isset($response->trans_status)) {
@@ -63,49 +65,28 @@ class PaymentController
         return array("success" => false, "message" => "Payment failed! Code: 0");
     }
 
-    public function orchardPaymentController($amount, $number, $method, $network = "MTN")
+    public function orchardPaymentController($amount)
     {
-        if (!empty($amount) && !empty($number) && !empty($method) && !empty($network)) {
+        if (!empty($amount)) {
             $callback_url = "https://forms.purchase.rmuictonline.com/confirm.php";
+            $landing_page = "https://forms.purchase.rmuictonline.com/confirm.php";
             $trans_id = time();
             $service_id = getenv('ORCHARD_SERVID');
 
-            $landing_page = "https://forms.purchase.rmuictonline.com/confirm.php";
-
-            $payload = array();
-            $payUrl = "";
-
-            if ($method == "Mobile Money") {
-                $payload = json_encode(array(
-                    "customer_number" => $number,
-                    "amount" => $amount,
-                    "exttrid" => $trans_id,
-                    "reference" => "Test payment",
-                    "trans_type" => "CTM",
-                    "nw" => $network,
-                    "callback_url" => "$callback_url",
-                    "service_id" => $service_id,
-                    "ts" => date("Y-m-d H:i:s"),
-                    "nickname" => "RMU Admissions"
-                ));
-                $payUrl = "https://orchard-api.anmgw.com/sendRequest";
-            } else if ($method == "Credit Card") {
-                $payload = json_encode(array(
-                    "amount" => $amount,
-                    "callback_url" => $callback_url,
-                    "exttrid" => $trans_id,
-                    "reference" => "RMU Forms Purchase",
-                    "service_id" => $service_id,
-                    "trans_type" => "CTM",
-                    "nickname" => "RMU",
-                    "landing_page" => $landing_page,
-                    "ts" => date("Y-m-d H:i:s"),
-                    "payment_mode" => "CRM",
-                    "currency_code" => "GHS",
-                    "currency_val" => $amount
-                ));
-                $payUrl = "https://payments.anmgw.com/third_party_request";
-            }
+            $payload = json_encode(array(
+                "amount" => $amount,
+                "callback_url" => $callback_url,
+                "exttrid" => $trans_id,
+                "reference" => "RMU Forms Purchase",
+                "service_id" => $service_id,
+                "trans_type" => "CTM",
+                "nickname" => "RMU",
+                "landing_page" => $landing_page,
+                "ts" => date("Y-m-d H:i:s"),
+                "payment_mode" => "CRM",
+                "currency_code" => "GHS",
+                "currency_val" => $amount
+            ));
 
             $client_id = getenv('ORCHARD_CLIENT');
             $client_secret = getenv('ORCHARD_SECRET');
@@ -113,20 +94,14 @@ class PaymentController
 
             $secretKey = $client_id . ":" . $signature;
             $request_verb = 'POST';
+            $payUrl = "https://payments.anmgw.com/third_party_request";
 
             $pay = new OrchardPaymentGateway($secretKey, $payUrl, $request_verb, $payload);
             $response = json_decode($pay->initiatePayment());
 
-            if ($method == "Mobile Money") {
-                if ($response->resp_code == "015") {
-                    return array("success" => true, "message" => "?status=" . $response->resp_code . "&transaction_id=" . $trans_id);
-                }
-            } else if ($method == "Credit Card") {
-                if ($response->resp_code == "000" && $response->resp_desc == "Passed") {
-                    return array("success" => true, "message" => $response->redirect_url);
-                }
+            if ($response->resp_code == "000" && $response->resp_desc == "Passed") {
+                return array("success" => true, "message" => $response->redirect_url);
             }
-
             //echo $response->resp_desc;
             return array("success" => false, "message" => $response->resp_desc);
         }

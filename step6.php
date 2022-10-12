@@ -41,21 +41,12 @@ $expose = new ExposeDataController();
                         ?>
                     </select>
                 </div>
-                <div class=" mb-4">
-                    <label class="form-label" for="gender">Payment Method</label>
-                    <select title="Select payment method" class="form-select form-select-sm" name="pay_method" id="pay_method" required>
-                        <option selected disabled value="">Choose...</option>
-                        <?php
-                        $data = $expose->getPaymentMethods();
-                        foreach ($data as $pm) {
-                        ?>
-                            <option value="<?= $pm['name'] ?>"><?= $pm['name'] ?></option>';
-                        <?php
-                        }
-                        ?>
-                    </select>
+                <div class=" mb-4 hide" id="form-cost-display">
+                    <p style="line-height: normal !important;">
+                        <b><span id="form-type"></span></b> forms cost <b> GHS<span id="form-cost"></span></b>.
+                    </p>
                 </div>
-                <button class="btn btn-primary" type="submit" style="padding: 10px 10px; width:100%">Continue</button>
+                <button class="btn btn-primary" type="submit" style="padding: 10px 10px; width:100%" disabled>Pay</button>
                 <input type="hidden" name="_v6Token" value="<?= $_SESSION["_step6Token"]; ?>">
             </form>
         </div>
@@ -82,6 +73,28 @@ $expose = new ExposeDataController();
                         }
                     },
                     error: function(error) {}
+                });
+            });
+
+            $(".form-select").change("blur", function() {
+                $.ajax({
+                    type: "GET",
+                    url: "endpoint/formInfo",
+                    data: {
+                        form_type: this.value,
+                    },
+                    success: function(result) {
+                        console.log(result);
+                        if (result.success) {
+                            $("#form-cost-display").removeClass("hide");
+                            $("#form-type").text($("#form_type").val());
+                            $("#form-cost").text(result.message);
+                            $(':input[type="submit"]').prop('disabled', false);
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
                 });
             });
         });
