@@ -2,8 +2,6 @@
 
 namespace Src\Controller;
 
-require_once('../bootstrap.php');
-
 use Src\System\DatabaseMethods;
 use Src\Controller\ExposeDataController;
 

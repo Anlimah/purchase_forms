@@ -267,7 +267,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 							);
 
 							$vendorPhone = $expose->getVendorPhone($_SESSION["vendor_id"]);
-
+							echo $vendorPhone;
 							if (!empty($vendorPhone)) {
 								if ($expose->sendOTP($vendorPhone[0]["phone"], $vendorPhone[0]["country_code"])) {
 									$_SESSION['vendorSMSCode'] = true;
@@ -278,7 +278,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 								}
 							} else {
 								$data["success"] = false;
-								$data["message"] = "Error occured while vendor Phone Number!";
+								$data["message"] = "Error occured while verifying vendor Phone Number!";
 							}
 						}
 					} else {

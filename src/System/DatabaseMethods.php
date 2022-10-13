@@ -2,8 +2,6 @@
 
 namespace Src\System;
 
-require_once("DatabaseConnector.php");
-
 use Src\System\DatabaseConnector;
 
 class DatabaseMethods
