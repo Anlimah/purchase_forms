@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 		if (isset($_SESSION["_step4Token"]) && !empty($_SESSION["_step4Token"]) && isset($_POST["_v4Token"]) && !empty($_POST["_v4Token"]) && $_POST["_v4Token"] == $_SESSION["_step4Token"]) {
 			if (isset($_POST["country"]) && !empty($_POST["country"]) && isset($_POST["phone_number"]) && !empty($_POST["phone_number"])) {
 
-				$country = $expose->validateInput($_POST["country"]);
+				$country = $expose->validateCountryCode($_POST["country"]);
 				$charPos = strpos($country, ")");
 
 				$country_name = substr($country, ($charPos + 2));
@@ -151,7 +151,8 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 			//$pay_method = $expose->validateInput($_POST["pay_method"]);
 			$amount = $expose->getFormPrice($form_type)[0]["amount"];
 
-			if ($form_type == 'Undergraduate' || $form_type == 'Short courses') {
+			$app_type = 0;
+			if ($form_type == 'Undergraduate (Degree)' || $form_type == 'Undergraduate (Diploma)' || $form_type == 'Short courses') {
 				$app_type = 1;
 			} else if ($form_type == 'Postgraduate') {
 				$app_type = 2;
@@ -159,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
 			$app_year = $expose->getAdminYearCode();
 
-			if ($amount) {
+			if (!empty($amount) && $app_type != 0) {
 				$_SESSION["step6"] = array(
 					"form_type" => $form_type,
 					"amount" => $amount,
@@ -267,7 +268,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 							);
 
 							$vendorPhone = $expose->getVendorPhone($_SESSION["vendor_id"]);
-							echo $vendorPhone;
+							//echo $_SESSION["vendor_id"];
 							if (!empty($vendorPhone)) {
 								if ($expose->sendOTP($vendorPhone[0]["phone"], $vendorPhone[0]["country_code"])) {
 									$_SESSION['vendorSMSCode'] = true;
@@ -295,7 +296,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 			}
 		} else {
 			$data["success"] = false;
-			$data["message"] = "Invalid request!";
+			$data["message"] = "Invalid request!1";
 		}
 		die(json_encode($data));
 	}

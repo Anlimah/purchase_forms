@@ -12,12 +12,14 @@ class PaymentController
     {
         if (!empty($data)) {
             $voucher = new VoucherPurchase();
-            if ($voucher->vendorExist($data["vendor_id"])) {
-                /*$trans_id = str_replace(".", "", microtime(true));
-                return $voucher->SaveFormPurchaseData($data, $trans_id);*/
+            $data = $voucher->vendorExist($data["vendor_id"]);
+            echo $data;
+            /*if ($voucher->vendorExist($data["vendor_id"])) {
+                $trans_id = str_replace(".", "", microtime(true));
+                return $voucher->SaveFormPurchaseData($data, $trans_id);
             } else {
                 return array("success" => false, "message" =>  "Invalid user request!");
-            }
+            }*/
         }
     }
 
