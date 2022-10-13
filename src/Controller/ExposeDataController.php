@@ -22,52 +22,70 @@ class ExposeDataController extends DatabaseMethods
 
     public function validateEmail($input)
     {
-        if (empty($input)) {
-            die("Invalid email address!");
-        }
+        if (empty($input)) die("Input required!");
+
         $user_email = htmlentities(htmlspecialchars($input));
         $sanitized_email = filter_var($user_email, FILTER_SANITIZE_EMAIL);
-        if (!filter_var($sanitized_email, FILTER_VALIDATE_EMAIL)) {
-            die("Invalid email address!" . $sanitized_email);
-        }
+
+        if (!filter_var($sanitized_email, FILTER_VALIDATE_EMAIL)) die("Invalid email address!" . $sanitized_email);
+
         return $user_email;
     }
 
     public function validateInput($input)
     {
-        if (empty($input)) {
-            die("Invalid input!");
-        }
+        if (empty($input)) die("Input required!");
+
+        $user_input = htmlentities(htmlspecialchars($input));
+        $validated_input = (bool) preg_match('/^[A-Za-z0-9]/', $user_input);
+
+        if ($validated_input) return $user_input;
+
+        die("Invalid input!");
+    }
+
+    public function validateCountryCode($input)
+    {
+        if (empty($input)) die("Input required!");
+
         $user_input = htmlentities(htmlspecialchars($input));
         $validated_input = (bool) preg_match('/^[A-Za-z0-9()+]/', $user_input);
-        if ($validated_input) {
-            return $user_input;
-        }
+
+        if ($validated_input) return $user_input;
+
         die("Invalid input!");
     }
 
     public function validatePhone($input)
     {
-        if (empty($input)) {
-            die("Provide a phone number!");
-        }
+        if (empty($input)) die("Input required!");
+
         $user_input = htmlentities(htmlspecialchars($input));
         $validated_input = (bool) preg_match('/^[0-9]/', $user_input);
-        if ($validated_input) {
-            return $user_input;
-        }
-        die("Invalid phone number!");
+
+        if ($validated_input) return $user_input;
+
+        die("Invalid input!");
+    }
+
+    public function validateText($input)
+    {
+        if (empty($input)) die("Input required!");
+
+        $user_input = htmlentities(htmlspecialchars($input));
+        $validated_input = (bool) preg_match('/^[A-Za-z]/', $user_input);
+
+        if ($validated_input) return $user_input;
+        die("Invalid Input!");
     }
 
     public function validateDate($date)
     {
-        if (strtotime($date) === false) {
-            die("Invalid date!");
-        }
+        if (strtotime($date) === false) die("Invalid date!");
+
         list($year, $month, $day) = explode('-', $date);
-        if (checkdate($month, $day, $year)) {
-            return $date;
-        }
+
+        if (checkdate($month, $day, $year)) return $date;
     }
 
     public function validateImage($files)
@@ -250,6 +268,12 @@ class ExposeDataController extends DatabaseMethods
         $message = 'Your OTP verification code is';
         return $this->sendSMS($phone_number, $otp_code, $message, $country_code);
     }
+
+    public function getVendorPhone($vendor_id)
+    {
+        $sql = "SELECT `country_code`, `phone` FROM `vendor_details` WHERE `id`=:i";
+        return $this->getData($sql, array(':i' => $vendor_id));
+    }
     /**
      * @param int transaction_id //transaction_id
      */
@@ -266,5 +290,11 @@ class ExposeDataController extends DatabaseMethods
     {
         $payConfirm = new PaymentController();
         return $payConfirm->processTransaction($transaction_id);
+    }
+
+    public function processVendorPay($data)
+    {
+        $payConfirm = new PaymentController();
+        return $payConfirm->vendorPaymentProcess($data);
     }
 }

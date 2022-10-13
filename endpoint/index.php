@@ -206,7 +206,125 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 		die(json_encode($data));
 	}*/
 
-	//Payment confirmation
+	//Vendor endpoint
+	elseif ($_GET["url"] == "vendor") {
+		if (isset($_SESSION["_vendor1Token"]) && !empty($_SESSION["_vendor1Token"]) && isset($_POST["_v1Token"]) && !empty($_POST["_v1Token"]) && $_POST["_v1Token"] == $_SESSION["_vendor1Token"]) {
+			if (isset($_POST["form_type"]) && isset($_POST["first_name"]) && isset($_POST["last_name"]) && isset($_POST["country"]) && isset($_POST["phone_number"])) {
+				if (!empty($_POST["form_type"]) && !empty($_POST["first_name"]) && !empty($_POST["last_name"]) && !empty($_POST["country"]) && !empty($_POST["phone_number"])) {
+
+					$first_name = $expose->validateText($_POST["first_name"]);
+					$last_name = $expose->validateText($_POST["last_name"]);
+					$phone_number = $expose->validatePhone($_POST["phone_number"]);
+					$country = $expose->validateCountryCode($_POST["country"]);
+
+					$charPos = strpos($country, ")");
+					$country_name = substr($country, ($charPos + 2));
+					$country_code = substr($country, 1, ($charPos - 1));
+
+					$form_type = $expose->validateInput($_POST["form_type"]);
+					//$pay_method = $expose->validateInput($_POST["pay_method"]);
+					$amount = $expose->getFormPrice($form_type)[0]["amount"];
+
+					$app_type = 0;
+					if ($form_type == 'Undergraduate (Degree)' || $form_type == 'Undergraduate (Diploma)' || $form_type == 'Short courses') {
+						$app_type = 1;
+					} else if ($form_type == 'Postgraduate') {
+						$app_type = 2;
+					}
+
+					$app_year = $expose->getAdminYearCode();
+
+					if (!empty($amount) && $app_type != 0) {
+						if ($_SESSION["vendor_id"] === 1665605341) {
+							$vendorData = array(
+								"first_name" => $country_name,
+								"last_name" => $country_code,
+								"country_name" => $country_name,
+								"country_code" => $country_code,
+								"phone_number" => $phone_number,
+								"form_type" => $form_type,
+								"amount" => $amount,
+								"vendor_id" => $_SESSION["vendor_id"],
+								"app_type" => $app_type,
+								"app_year" => $app_year
+							);
+
+							if (!empty($vendorData)) {
+								$data = $expose->processVendorPay($vendorData);
+							}
+						} else {
+							$_SESSION["vendorData"] = array(
+								"first_name" => $first_name,
+								"last_name" => $last_name,
+								"country_name" => $country_name,
+								"country_code" => $country_code,
+								"phone_number" => $phone_number,
+								"form_type" => $form_type,
+								"amount" => $amount,
+								"vendor_id" => $_SESSION["vendor_id"],
+								"app_type" => $app_type,
+								"app_year" => $app_year
+							);
+
+							$vendorPhone = $expose->getVendorPhone($_SESSION["vendor_id"]);
+
+							if (!empty($vendorPhone)) {
+								if ($expose->sendOTP($vendorPhone[0]["phone"], $vendorPhone[0]["country_code"])) {
+									$_SESSION['vendorSMSCode'] = true;
+									$data["success"] = true;
+								} else {
+									$data["success"] = false;
+									$data["message"] = "Error occured while sending OTP!";
+								}
+							} else {
+								$data["success"] = false;
+								$data["message"] = "Error occured while vendor Phone Number!";
+							}
+						}
+					} else {
+						$data["success"] = false;
+						$data["message"] = "Unset data values!";
+					}
+				} else {
+					$data["success"] = false;
+					$data["message"] = "Some required fields might be empty!";
+				}
+			} else {
+				$data["success"] = false;
+				$data["message"] = "Invalid inputs!";
+			}
+		} else {
+			$data["success"] = false;
+			$data["message"] = "Invalid request!";
+		}
+		die(json_encode($data));
+	}
+
+	//Online Payment confirmation
+	elseif ($_GET["url"] == "verifyVendor") {
+		if (isset($_SESSION["_verifySMSToken"]) && !empty($_SESSION["_verifySMSToken"]) && isset($_POST["_vSMSToken"]) && !empty($_POST["_vSMSToken"]) && $_POST["_vSMSToken"] == $_SESSION["_verifySMSToken"]) {
+			if ($_POST["code"]) {
+				$otp = "";
+				foreach ($_POST["code"] as $code) {
+					$otp .= $code;
+				}
+				if ($otp == $_SESSION['sms_code']) {
+					if (isset($_SESSION["vendorData"]) && !empty($_SESSION["vendorData"]) && isset($_SESSION['vendorSMSCode']) && $_SESSION['vendorSMSCode'] == true) {
+						$data = $expose->processVendorPay($_SESSION["vendorData"]);
+					}
+				} else {
+					$data["success"] = false;
+					$data["message"] = "OTP code provided is incorrect!";
+				}
+			}
+		} else {
+			$data["success"] = false;
+			$data["message"] = "Invalid request!";
+		}
+		die(json_encode($data));
+	}
+
+	//Online Payment confirmation
 	elseif ($_GET["url"] == "confirm") {
 		if (isset($_POST["status"]) && !empty($_POST["status"]) && isset($_POST["exttrid"]) && !empty($_POST["exttrid"])) {
 			$status = $expose->validateInput($_POST["status"]);

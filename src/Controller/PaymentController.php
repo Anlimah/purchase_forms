@@ -7,6 +7,20 @@ use Src\Controller\VoucherPurchase;
 
 class PaymentController
 {
+
+    public function vendorPaymentProcess($data)
+    {
+        if (!empty($data)) {
+            $voucher = new VoucherPurchase();
+            if ($voucher->vendorExist($data["vendor_id"])) {
+                /*$trans_id = str_replace(".", "", microtime(true));
+                return $voucher->SaveFormPurchaseData($data, $trans_id);*/
+            } else {
+                return array("success" => false, "message" =>  "Invalid user request!");
+            }
+        }
+    }
+
     private function prepareTransaction($secretKey, $payUrl, $payload)
     {
     }
@@ -70,7 +84,7 @@ class PaymentController
         if (!empty($amount)) {
             $callback_url = "https://forms.purchase.rmuictonline.com/confirm.php";
             $landing_page = "https://forms.purchase.rmuictonline.com/confirm.php";
-            $trans_id = time();
+            $trans_id = str_replace(".", "", microtime(true));
             $service_id = getenv('ORCHARD_SERVID');
 
             $payload = json_encode(array(

@@ -33,8 +33,8 @@ INSERT INTO `payment_method`(`name`) VALUES ("Credit Card"), ("Mobile Money"), (
 
 DROP TABLE IF EXISTS `vendor_details`;
 CREATE TABLE `vendor_details` (
-    `id` VARCHAR(22) PRIMARY KEY,
-    `type` VARCHAR(10) UNIQUE NOT NULL,
+    `id` INT(11) PRIMARY KEY,
+    `type` VARCHAR(10) NOT NULL,
     `name` VARCHAR(50) NOT NULL,
     `tin` VARCHAR(15) NOT NULL,
     `email` VARCHAR(100),
@@ -42,16 +42,18 @@ CREATE TABLE `vendor_details` (
     `address` VARCHAR(50),
     `added_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
 );
-INSERT INTO `vendor_details`(`type`,`name`, `tin`, `phone`) 
-VALUES ('ONLINE', 'RMU', 'RMUONLINE', '0555351068'), ('RMU CAMPUS', 'RMU', 'RMU123', '0555351068');
+INSERT INTO `vendor_details`(`id`, `type`,`name`, `tin`, `phone`) VALUES 
+(1665605087, 'ONLINE', 'RMU ONLINE', 'RMU123', '0555351068'), 
+(1665605341, 'VENDOR', 'RMU CAMPUS', 'RMU123', '0555351068'), 
+(1665605866, 'VENDOR', 'MAXIM CAMPUS RETAIL', 'T14529045', '0555351068');
 
 DROP TABLE IF EXISTS `vendor_login`;
 CREATE TABLE `vendor_login` (
-    `id` VARCHAR(22) AUTO_INCREMENT PRIMARY KEY,
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
     `user_name` VARCHAR(20) UNIQUE NOT NULL,
     `password` VARCHAR(50) NOT NULL,
     
-    `vendor` VARCHAR(22) NOT NULL, -- added
+    `vendor` INT(11) NOT NULL, -- added
     CONSTRAINT `fk_vendor_login` FOREIGN KEY (`vendor`) 
     REFERENCES `vendor_details`(`id`) ON UPDATE CASCADE,
 
@@ -59,65 +61,32 @@ CREATE TABLE `vendor_login` (
 );
 INSERT INTO `payment_method`(`name`) VALUES ("Credit Card"), ("Mobile Money"), ("Bank Deposit");
 
-DROP TABLE IF EXISTS `payment_process_info`;
-CREATE TABLE `payment_process_info` (
-    `id` INT(11) PRIMARY KEY,
-
-    `first_name` VARCHAR(50) NOT NULL,
-    `last_name` VARCHAR(50) NOT NULL,
-    `email_address` VARCHAR(100) NOT NULL,
-    `country_name` VARCHAR(30) NOT NULL,
-    `country_code` VARCHAR(30) NOT NULL,
-    `phone_number` VARCHAR(15) NOT NULL,
-    `amount` DECIMAL(6,2) NOT NULL,
-    `form_type` INT NOT NULL,
-    `trans_id` INT UNIQUE NOT NULL,
-
-    `status_code` VARCHAR(3), -- added
-    `status_msg` VARCHAR(50), -- added
-    `device_info` VARCHAR(255), -- added
-    `ip_address` VARCHAR(15), -- added
-    `vendor` VARCHAR(22) NOT NULL, -- added
-
-    CONSTRAINT `fk_purchase_vendor_details` FOREIGN KEY (`vendor`) 
-    REFERENCES `vendor_details`(`id`) ON UPDATE CASCADE,
-    
-    CONSTRAINT `fk_purchase_form_type` FOREIGN KEY (`form_type`) 
-    REFERENCES `form_type`(`id`) ON UPDATE CASCADE,
-
-    `added_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
-);
-
 DROP TABLE IF EXISTS `purchase_detail`; 
 CREATE TABLE `purchase_detail` (
     `id` INT(11) PRIMARY KEY,
+
     `first_name` VARCHAR(50) NOT NULL,
     `last_name` VARCHAR(50) NOT NULL,
-    `email_address` VARCHAR(100) NOT NULL,
+    `email_address` VARCHAR(100),
     `country_name` VARCHAR(30) NOT NULL,
     `country_code` VARCHAR(30) NOT NULL,
     `phone_number` VARCHAR(15) NOT NULL,
     `amount` DECIMAL(6,2) NOT NULL,
-    `trans_id` INT UNIQUE NOT NULL,
 
     `status_code` VARCHAR(3), -- added
-    `status_msg` VARCHAR(50), -- added
-    `device_info` VARCHAR(255), -- added
+    `device_info` VARCHAR(200), -- added
     `ip_address` VARCHAR(15), -- added
-
-    `vendor` VARCHAR(22) NOT NULL, -- added
-    CONSTRAINT `fk_purchase_vendor_details` FOREIGN KEY (`vendor`) 
-    REFERENCES `vendor_details`(`id`) ON UPDATE CASCADE,
+    `added_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
     
+    `vendor` INT(11) NOT NULL, -- added
     `form_type` INT NOT NULL,
-    CONSTRAINT `fk_purchase_form_type` FOREIGN KEY (`form_type`) 
-    REFERENCES `form_type`(`id`) ON UPDATE CASCADE,
+    `admission_period` INT(11) NOT NULL, -- added
+    `payment_method` VARCHAR(20),
 
-    `admission_period` INT NOT NULL,
-    CONSTRAINT `fk_purchase_admission_period` FOREIGN KEY (`admission_period`) 
-    REFERENCES `admission_period`(`id`) ON UPDATE CASCADE,
+    CONSTRAINT `fk_purchase_vendor_details` FOREIGN KEY (`vendor`) REFERENCES `vendor_details`(`id`) ON UPDATE CASCADE,
+    CONSTRAINT `fk_purchase_form_type` FOREIGN KEY (`form_type`) REFERENCES `form_type`(`id`) ON UPDATE CASCADE,
+    CONSTRAINT `fk_purchase_admission_period` FOREIGN KEY (`admission_period`) REFERENCES `admission_period`(`id`) ON UPDATE CASCADE
 
-    `added_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
 );
 
 DROP TABLE IF EXISTS `applicants_login`;
@@ -128,8 +97,7 @@ CREATE TABLE `applicants_login` (
     `added_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
     
     `purchase_id` INT NOT NULL,
-    CONSTRAINT `fk_purchase_id` FOREIGN KEY (`purchase_id`) 
-    REFERENCES `purchase_detail`(`id`) ON UPDATE CASCADE
+    CONSTRAINT `fk_purchase_id` FOREIGN KEY (`purchase_id`) REFERENCES `purchase_detail`(`id`) ON UPDATE CASCADE
 );
 
 /*
@@ -413,10 +381,3 @@ CREATE TABLE `section_questions` (
     `section` INT NOT NULL,
     CONSTRAINT `fk_section_question` FOREIGN KEY (`section`) REFERENCES `page_sections`(`id`) ON UPDATE CASCADE
 );
-INSERT INTO `section_questions`(`question`, `type`, `place_holder`) VALUES
-('Do you agree to the terms outlined?', 'dropdown', 'Select', 1),                             
-('Legal Name', 2),('Personal Details', 2),('Place of Birth', 2),('Language', 2),('Address', 2),('Contact', 2),('Parent/Guardian', 2),
-('Education', 3),('Programmes', 4),('Passport Picture', 5),('Certificates', 5),('Transcripts', 5);
-
-
-

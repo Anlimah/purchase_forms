@@ -40,7 +40,7 @@ class VoucherPurchase extends DatabaseMethods
 
     private function savePurchaseDetails(int $pi, int $ft, int $pm, int $ap, $fn, $ln, $cn, $ea, $pn)
     {
-        $sql = "INSERT INTO `purchase_detail`(`id`, `first_name`, `last_name`, `country`, `email_address`, `phone_number`, `form_type`, `payment_method`, `admission_period`) 
+        $sql = "INSERT INTO `purchase_detail` (`id`, `first_name`, `last_name`, `country`, `email_address`, `phone_number`, `form_type`, `payment_method`, `admission_period`) 
                 VALUES(:ui, :fn, :ln, :cn, :ea, :pn, :ft, :pm, :ap)";
         $params = array(
             ':ui' => $pi,
@@ -55,6 +55,20 @@ class VoucherPurchase extends DatabaseMethods
         );
         if ($this->inputData($sql, $params)) {
             return $pi;
+        }
+        return 0;
+    }
+
+    private function saveVendorPurchaseData(int $ti, int $vd, int $ft, int $ap, $pm, float $am, $fn, $ln, $cn, $cc, $pn)
+    {
+        $sql = "INSERT INTO `purchase_detail` (`id`, `vendor`, `form_type`, `admission_period`, `payment_method`, `first_name`, `last_name`, `country_name`, `country_code`, `phone_number`, `amount`) 
+                VALUES(:ti, :vd, :ft, :ap, :pm, :fn, :ln, :cn, :cc, :pn, :am)";
+        $params = array(
+            ':ti' => $ti, ':vd' => $vd, ':ft' => $ft, ':pm' => $pm, ':ap' => $ap,
+            ':fn' => $fn, ':ln' => $ln, ':cn' => $cn, ':cc' => $cc, ':pn' => $pn, ':am' => $am,
+        );
+        if ($this->inputData($sql, $params)) {
+            return $ti;
         }
         return 0;
     }
@@ -208,35 +222,53 @@ class VoucherPurchase extends DatabaseMethods
         }
     }
 
-    public function SaveFormPurchaseData($data, $transaction_id)
+    public function SaveFormPurchaseData($data, $trans_id)
     {
-        if (!empty($data) && !empty($transaction_id)) {
-            $fn = $data['step1']['first_name'];
-            $ln = $data['step1']['last_name'];
-            $ea = $data['step2']['email_address'];
-            $cn = $data['step4']['country_name'];
-            $cc = $data['step4']['country_code'];
-            $pn = $data['step4']['phone_number'];
-            $am = $data['step6']['amount'];
-            $pi = $transaction_id;
-            $ft = $data['step6']['form_type'];
-            $ft = $data['step6']['form_type'];
+        if (!empty($data) && !empty($trans_id)) {
+            $fn = $data['first_name'];
+            $ln = $data['last_name'];
+            //$ea = $data['email_address'];
+            $cn = $data['country_name'];
+            $cc = $data['country_code'];
+            $pn = $data['phone_number'];
+            $am = $data['amount'];
+            $ft = $data['form_type'];
+            $vd = $data['vendor_id'];
 
-            $pm = "Third Party"; //$data['step6']['pay_method'];
-            $at = $data['step6']['app_type'];
-            $ay = $data['step6']['app_year'];
+            $pm = $data['pay_method'];
+            $at = $data['app_type'];
+            $ay = $data['app_year'];
 
             $ap_id = $this->getAdmissionPeriodID();
             $ft_id = $this->getFormTypeID($ft);
-            $pm_id = $this->getPaymentMethodID($pm);
+            //$pm_id = $this->getPaymentMethodID($pm);
 
-            $purchase_id = $this->savePurchaseDetails($pi, $ft_id, $pm_id, $ap_id, $fn, $ln, $cn, $ea, $pn);
+            $purchase_id = $this->saveVendorPurchaseData($trans_id, $vd, $ft_id, $pm, $ap_id, $am, $fn, $ln, $cn, $cc, $pn);
             if ($purchase_id) {
+                $login_details = $this->genLoginDetails($purchase_id, $at, $ay);
+                if (!empty($login_details)) {
+                    $key = 'APPLICATION NUMBER: ' . $login_details['app_number'] . '    PIN: ' . $login_details['pin_number'];
+                    $message = 'Your RMU Online Application login details ';
+                    if ($this->expose->sendSMS($pn,  $key, $message, $cc)) {
+                        //return 1;
+                        return array("success" => true, "message" =>  "confirm.php?status=000&transaction_id=" . $trans_id);
+                    } else {
+                        return array("success" => false, "message" =>  "Failed to send SMS!");
+                    }
+                } else {
+                    return array("success" => false, "message" =>  "Failed to generate login information!");
+                }
             } else {
                 return array("success" => false, "message" =>  "Failed to log purchase information!");
             }
         } else {
             return array("success" => false, "message" =>  "Invalid request!");
         }
+    }
+
+    public function vendorExist($vendorID)
+    {
+        $str = "SELECT `id` FROM `vendor_details` WHERE `id` = :i";
+        return $this->getData($str, array(':i' => $vendorID));
     }
 }
