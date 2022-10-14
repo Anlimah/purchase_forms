@@ -67,7 +67,7 @@ require_once('../inc/page-data.php');
                         <input name="phone_number" id="phone_number" maxlength="10" title="Provide your Provide Number" class="form-control form-control-sm" style="width: 70%" type="tel" placeholder="0244123123" required>
                     </div>
                 </div>
-                <button class="btn btn-primary" type="submit" style="padding: 10px 10px; width:100%">Submit</button>
+                <button class="btn btn-primary" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%">Submit</button>
                 <input type="hidden" name="_v1Token" value="<?= $_SESSION["_vendor1Token"]; ?>">
             </form>
         </div>
@@ -102,6 +102,15 @@ require_once('../inc/page-data.php');
                     });
                 }
                 e.preventDefault();
+            });
+
+            $(document).on({
+                ajaxStart: function() {
+                    $("#submitBtn").prop("disabled", true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
+                },
+                ajaxStop: function() {
+                    $("#submitBtn").prop("disabled", false).html('Submit');
+                }
             });
 
             $("input[type='text']").on("click", function() {

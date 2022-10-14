@@ -48,7 +48,7 @@ if (isset($_SESSION['step5Done']) && $_SESSION['step5Done'] == true) {
                         <b><span id="form-type"></span></b> forms cost <b> GHS<span id="form-cost"></span></b>.
                     </p>
                 </div>
-                <button class="btn btn-primary" type="submit" style="padding: 10px 10px; width:100%" disabled>Pay</button>
+                <button class="btn btn-primary" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%" disabled>Pay</button>
                 <input type="hidden" name="_v6Token" value="<?= $_SESSION["_step6Token"]; ?>">
             </form>
         </div>
@@ -76,6 +76,15 @@ if (isset($_SESSION['step5Done']) && $_SESSION['step5Done'] == true) {
                     },
                     error: function(error) {}
                 });
+            });
+
+            $(document).on({
+                ajaxStart: function() {
+                    $("#submitBtn").prop("disabled", true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
+                },
+                ajaxStop: function() {
+                    $("#submitBtn").prop("disabled", false).html('Pay');
+                }
             });
 
             $(".form-select").change("blur", function() {

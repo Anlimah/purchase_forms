@@ -207,6 +207,19 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 		die(json_encode($data));
 	}*/
 
+	//Online Payment confirmation
+	elseif ($_GET["url"] == "confirm") {
+		if (isset($_POST["status"]) && !empty($_POST["status"]) && isset($_POST["exttrid"]) && !empty($_POST["exttrid"])) {
+			$status = $expose->validateInput($_POST["status"]);
+			$transaction_id = $expose->validatePhone($_POST["exttrid"]);
+			$data = $expose->confirmPurchase($transaction_id);
+		} else {
+			$data["success"] = false;
+			$data["message"] = "Invalid request! 1";
+		}
+		die(json_encode($data));
+	}
+
 	//Vendor endpoint
 	elseif ($_GET["url"] == "vendor") {
 		if (isset($_SESSION["_vendor1Token"]) && !empty($_SESSION["_vendor1Token"]) && isset($_POST["_v1Token"]) && !empty($_POST["_v1Token"]) && $_POST["_v1Token"] == $_SESSION["_vendor1Token"]) {
@@ -244,6 +257,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 								"country_code" => $country_code,
 								"phone_number" => $phone_number,
 								"form_type" => $form_type,
+								"pay_method" => "CASH",
 								"amount" => $amount,
 								"vendor_id" => $_SESSION["vendor_id"],
 								"app_type" => $app_type,
@@ -261,6 +275,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 								"country_code" => $country_code,
 								"phone_number" => $phone_number,
 								"form_type" => $form_type,
+								"pay_method" => "CASH",
 								"amount" => $amount,
 								"vendor_id" => $_SESSION["vendor_id"],
 								"app_type" => $app_type,
@@ -270,7 +285,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 							$vendorPhone = $expose->getVendorPhone($_SESSION["vendor_id"]);
 							//echo $_SESSION["vendor_id"];
 							if (!empty($vendorPhone)) {
-								if ($expose->sendOTP($vendorPhone[0]["phone"], $vendorPhone[0]["country_code"])) {
+								if ($expose->sendOTP($vendorPhone[0]["phone_number"], $vendorPhone[0]["country_code"])) {
 									$_SESSION['vendorSMSCode'] = true;
 									$data["success"] = true;
 								} else {
@@ -311,7 +326,9 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 				}
 				if ($otp == $_SESSION['sms_code']) {
 					if (isset($_SESSION["vendorData"]) && !empty($_SESSION["vendorData"]) && isset($_SESSION['vendorSMSCode']) && $_SESSION['vendorSMSCode'] == true) {
-						$data = $expose->processVendorPay($_SESSION["vendorData"]);
+						if ($expose->vendorExist($_SESSION["vendorData"]["vendor_id"])) {
+							$data = $expose->processVendorPay($_SESSION["vendorData"]);
+						}
 					}
 				} else {
 					$data["success"] = false;
@@ -325,12 +342,12 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 		die(json_encode($data));
 	}
 
-	//Online Payment confirmation
-	elseif ($_GET["url"] == "confirm") {
+	//Vendor Payment confirmation
+	elseif ($_GET["url"] == "vendor-confirm") {
 		if (isset($_POST["status"]) && !empty($_POST["status"]) && isset($_POST["exttrid"]) && !empty($_POST["exttrid"])) {
-			$status = $expose->validateInput($_POST["status"]);
+			$status = $expose->validatePhone($_POST["status"]);
 			$transaction_id = $expose->validatePhone($_POST["exttrid"]);
-			$data = $expose->confirmPurchase($transaction_id);
+			$data = $expose->confirmVendorPurchase($_SESSION["vendor_id"], $transaction_id);
 		} else {
 			$data["success"] = false;
 			$data["message"] = "Invalid request! 1";

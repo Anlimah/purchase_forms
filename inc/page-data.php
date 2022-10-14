@@ -1,5 +1,13 @@
 <?php
 
+$status_codes = array(
+    array("status" => "000", "description" => "Successfully purchased application forms"),
+    array("status" => "001", "description" => "Failed to send SMS to recipient!"),
+    array("status" => "002", "description" => "Failed to generate login information for applicant"),
+    array("status" => "003", "description" => "Failed to log purchase information to system"),
+    array("status" => "004", "description" => "Received invalid request data")
+);
+
 $countries = array(
     array("name" => "Afghanistan",  "code" => "+93"),
     array("name" => "Aland Islands",  "code" => "+358"),
@@ -250,6 +258,7 @@ $countries = array(
 );
 
 define('COUNTRIES', $countries);
+define('APPLICATION_STATUS', $status_codes);
 
 function countries($country)
 {

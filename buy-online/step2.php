@@ -25,7 +25,7 @@ if (isset($_SESSION['step1Done']) && $_SESSION['step1Done'] == true) {
                     <label class="form-label" for="email_addr">Email Address</label>
                     <input title="Provide your email address" class="form-control" type="email" name="email_address" id="email_address" placeholder="surname@gmail.com" required>
                 </div>
-                <button class="btn btn-primary" type="submit" style="padding: 10px 10px; width:100%">Continue</button>
+                <button class="btn btn-primary" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%">Continue</button>
                 <input class="form-control" type="hidden" name="_v2Token" value="<?= $_SESSION["_step2Token"]; ?>">
             </form>
         </div>
@@ -59,6 +59,15 @@ if (isset($_SESSION['step1Done']) && $_SESSION['step1Done'] == true) {
                     },
                     error: function(error) {}
                 });
+            });
+
+            $(document).on({
+                ajaxStart: function() {
+                    $("#submitBtn").prop("disabled", true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
+                },
+                ajaxStop: function() {
+                    $("#submitBtn").prop("disabled", false).html('Continue');
+                }
             });
         });
     </script>

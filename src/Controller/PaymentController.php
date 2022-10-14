@@ -7,19 +7,22 @@ use Src\Controller\VoucherPurchase;
 
 class PaymentController
 {
+    private $voucher;
+
+    public function __construct()
+    {
+        $this->voucher = new VoucherPurchase();
+    }
 
     public function vendorPaymentProcess($data)
     {
         if (!empty($data)) {
-            $voucher = new VoucherPurchase();
-            $data = $voucher->vendorExist($data["vendor_id"]);
-            echo $data;
-            /*if ($voucher->vendorExist($data["vendor_id"])) {
-                $trans_id = str_replace(".", "", microtime(true));
-                return $voucher->SaveFormPurchaseData($data, $trans_id);
+            $trans_id = time();
+            if ($trans_id) {
+                return $this->voucher->SaveFormPurchaseData($data, $trans_id);
             } else {
-                return array("success" => false, "message" =>  "Invalid user request!");
-            }*/
+                return array("success" => true, "message" => "Transaction ID failed!");
+            }
         }
     }
 
@@ -54,9 +57,13 @@ class PaymentController
         }
     }
 
+    public function verifyVendorPurchase(int $vendor_id, int $transaction_id)
+    {
+    }
+
     public function processTransaction(int $transaction_id)
     {
-        $response = json_decode($this->getTransactionStatus($transaction_id));
+        /*$response = json_decode($this->getTransactionStatus($transaction_id));
         if (!empty($response)) {
             if (isset($response->trans_status)) {
                 if ($response->trans_status == '000/01') {
@@ -78,7 +85,7 @@ class PaymentController
                 }
             }
         }
-        return array("success" => false, "message" => "Payment failed! Code: 0");
+        return array("success" => false, "message" => "Payment failed! Code: 0");*/
     }
 
     public function orchardPaymentController($amount)
@@ -86,7 +93,7 @@ class PaymentController
         if (!empty($amount)) {
             $callback_url = "https://forms.purchase.rmuictonline.com/confirm.php";
             $landing_page = "https://forms.purchase.rmuictonline.com/confirm.php";
-            $trans_id = str_replace(".", "", microtime(true));
+            $trans_id = time();
             $service_id = getenv('ORCHARD_SERVID');
 
             $payload = json_encode(array(

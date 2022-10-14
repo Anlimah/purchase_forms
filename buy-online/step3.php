@@ -32,7 +32,7 @@ if (isset($_SESSION['step2Done']) && $_SESSION['step2Done'] == true) {
                     <input class="form-control num" type="text" maxlength="1" style="width:35px; text-align:center; margin-left:5px" name="num[]" id="num5" placeholder="0" required>
                     <input class="form-control num" type="text" maxlength="1" style="width:35px; text-align:center; margin-left:5px" name="num[]" id="num6" placeholder="0" required>
                 </div>
-                <button class="btn btn-primary mb-4" type="submit" style="padding: 10px 10px; width:100%">Continue</button>
+                <button class="btn btn-primary mb-4" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%">Verify</button>
                 <input type="hidden" name="_v3Token" value="<?= $_SESSION["_step3Token"]; ?>">
                 <a href="step2.php">Change email address</a>
             </form>
@@ -61,6 +61,15 @@ if (isset($_SESSION['step2Done']) && $_SESSION['step2Done'] == true) {
                     },
                     error: function(error) {}
                 });
+            });
+
+            $(document).on({
+                ajaxStart: function() {
+                    $("#submitBtn").prop("disabled", true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
+                },
+                ajaxStop: function() {
+                    $("#submitBtn").prop("disabled", false).html('Verify');
+                }
             });
 
             $("#num1").focus();

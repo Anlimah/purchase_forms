@@ -44,7 +44,7 @@ require_once('../inc/page-data.php');
                         <input maxlength="10" title="Provide your Provide Number" class="form-control form-control-sm" style="width: 70%" type="tel" name="phone_number" id="phone_number" placeholder="0244123123" required>
                     </div>
                 </div>
-                <button class="btn btn-primary" type="submit" style="padding: 10px 10px; width:100%">Continue</button>
+                <button class="btn btn-primary" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%">Continue</button>
                 <input class="form-control" type="hidden" name="_v4Token" value="<?= $_SESSION["_step4Token"]; ?>">
             </form>
         </div>
@@ -78,6 +78,15 @@ require_once('../inc/page-data.php');
                     },
                     error: function(error) {}
                 });
+            });
+
+            $(document).on({
+                ajaxStart: function() {
+                    $("#submitBtn").prop("disabled", true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
+                },
+                ajaxStop: function() {
+                    $("#submitBtn").prop("disabled", false).html('Continue');
+                }
             });
 
             $("#phone_number").focus();

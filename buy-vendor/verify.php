@@ -1,5 +1,6 @@
 <?php
 session_start();
+echo $_SESSION["sms_code"];
 if (isset($_SESSION['vendorSMSCode']) && $_SESSION['vendorSMSCode'] == true) {
     if (!isset($_SESSION["_verifySMSToken"])) {
         $rstrong = true;
@@ -29,7 +30,9 @@ if (isset($_SESSION['vendorSMSCode']) && $_SESSION['vendorSMSCode'] == true) {
                     <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center" name="code[]" id="num3" placeholder="0" required>
                     <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center" name="code[]" id="num4" placeholder="0" required>
                 </div>
-                <button class="btn btn-primary mb-4" type="submit" style="padding: 10px 10px; width:100%">Verify</button>
+                <button class="btn btn-primary mb-4" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%">
+                    Verify
+                </button>
                 <input class="form-control" type="hidden" name="_vSMSToken" value="<?= $_SESSION["_verifySMSToken"]; ?>">
                 <a href="step4.php">Change number</a>
             </form>
@@ -41,6 +44,7 @@ if (isset($_SESSION['vendorSMSCode']) && $_SESSION['vendorSMSCode'] == true) {
         $(document).ready(function() {
             $("#step1Form").on("submit", function(e) {
                 e.preventDefault();
+
                 $.ajax({
                     type: "POST",
                     url: "../endpoint/verifyVendor",
@@ -58,6 +62,15 @@ if (isset($_SESSION['vendorSMSCode']) && $_SESSION['vendorSMSCode'] == true) {
                     },
                     error: function(error) {}
                 });
+            });
+
+            $(document).on({
+                ajaxStart: function() {
+                    $("#submitBtn").prop("disabled", true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
+                },
+                ajaxStop: function() {
+                    $("#submitBtn").prop("disabled", false).html('Verify');
+                }
             });
 
             $("#num1").focus();

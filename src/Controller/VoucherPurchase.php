@@ -5,13 +5,15 @@ namespace Src\Controller;
 use Src\System\DatabaseMethods;
 use Src\Controller\ExposeDataController;
 
-class VoucherPurchase extends DatabaseMethods
+class VoucherPurchase
 {
     private $expose;
+    private $dm;
 
     public function __construct()
     {
         $this->expose = new ExposeDataController();
+        $this->dm = new DatabaseMethods();
     }
 
     private function genPin(int $length_pin = 9)
@@ -22,7 +24,7 @@ class VoucherPurchase extends DatabaseMethods
 
     private function genAppNumber(int $type, int $year)
     {
-        $user_code = $this->genCode(5);
+        $user_code = $this->dm->genCode(5);
         $app_number = 'RMU-' . (($type * 10000000) + ($year * 100000) + $user_code);
         return $app_number;
     }
@@ -30,7 +32,7 @@ class VoucherPurchase extends DatabaseMethods
     private function doesCodeExists($code)
     {
         $sql = "SELECT `id` FROM `applicants_login` WHERE `app_number`=:p";
-        if ($this->getID($sql, array(':p' => sha1($code)))) {
+        if ($this->dm->getID($sql, array(':p' => sha1($code)))) {
             return 1;
         }
         return 0;
@@ -51,7 +53,7 @@ class VoucherPurchase extends DatabaseMethods
             ':pm' => $pm,
             ':ap' => $ap,
         );
-        if ($this->inputData($sql, $params)) {
+        if ($this->dm->inputData($sql, $params)) {
             return $pi;
         }
         return 0;
@@ -65,7 +67,7 @@ class VoucherPurchase extends DatabaseMethods
             ':ti' => $ti, ':vd' => $vd, ':ft' => $ft, ':pm' => $pm, ':ap' => $ap,
             ':fn' => $fn, ':ln' => $ln, ':cn' => $cn, ':cc' => $cc, ':pn' => $pn, ':am' => $am,
         );
-        if ($this->inputData($sql, $params)) {
+        if ($this->dm->inputData($sql, $params)) {
             return $ti;
         }
         return 0;
@@ -75,7 +77,7 @@ class VoucherPurchase extends DatabaseMethods
     {
         $sql1 = "INSERT INTO `personal_information` (`app_login`) VALUES(:a)";
         $params1 = array(':a' => $user_id);
-        if ($this->inputData($sql1, $params1)) {
+        if ($this->dm->inputData($sql1, $params1)) {
             return 1;
         }
         return 0;
@@ -85,7 +87,7 @@ class VoucherPurchase extends DatabaseMethods
     {
         $sql1 = "INSERT INTO `academic_background` (`app_login`) VALUES(:a)";
         $params1 = array(':a' => $user_id);
-        if ($this->inputData($sql1, $params1)) {
+        if ($this->dm->inputData($sql1, $params1)) {
             return 1;
         }
         return 0;
@@ -95,7 +97,7 @@ class VoucherPurchase extends DatabaseMethods
     {
         $sql1 = "INSERT INTO `program_info` (`app_login`) VALUES(:a)";
         $params1 = array(':a' => $user_id);
-        if ($this->inputData($sql1, $params1)) {
+        if ($this->dm->inputData($sql1, $params1)) {
             return 1;
         }
         return 0;
@@ -105,7 +107,7 @@ class VoucherPurchase extends DatabaseMethods
     {
         $sql1 = "INSERT INTO `previous_uni_records` (`app_login`) VALUES(:a)";
         $params1 = array(':a' => $user_id);
-        if ($this->inputData($sql1, $params1)) {
+        if ($this->dm->inputData($sql1, $params1)) {
             return 1;
         }
         return 0;
@@ -114,7 +116,7 @@ class VoucherPurchase extends DatabaseMethods
     private function getApplicantLoginID($app_number)
     {
         $sql = "SELECT `id` FROM `applicants_login` WHERE `app_number` = :a;";
-        return $this->getID($sql, array(':a' => sha1($app_number)));
+        return $this->dm->getID($sql, array(':a' => sha1($app_number)));
     }
 
     private function saveLoginDetails($app_number, $pin, $who)
@@ -123,7 +125,7 @@ class VoucherPurchase extends DatabaseMethods
         $sql = "INSERT INTO `applicants_login` (`app_number`, `pin`, `purchase_id`) VALUES(:a, :p, :b)";
         $params = array(':a' => sha1($app_number), ':p' => $hashed_pin, ':b' => $who);
 
-        if ($this->inputData($sql, $params)) {
+        if ($this->dm->inputData($sql, $params)) {
             $user_id = $this->getApplicantLoginID($app_number);
 
             //register in Personal information table in db
@@ -163,19 +165,19 @@ class VoucherPurchase extends DatabaseMethods
     private function getAdmissionPeriodID()
     {
         $sql = "SELECT `id` FROM `admission_period` WHERE `active` = 1;";
-        return $this->getID($sql);
+        return $this->dm->getID($sql);
     }
 
     private function getFormTypeID($form_type)
     {
         $sql = "SELECT `id` FROM `form_type` WHERE `name` LIKE '%$form_type%'";
-        return $this->getID($sql);
+        return $this->dm->getID($sql);
     }
 
     private function getPaymentMethodID($name)
     {
         $sql = "SELECT `id` FROM `payment_method` WHERE `name` LIKE '%$name%'";
-        return $this->getID($sql);
+        return $this->dm->getID($sql);
     }
 
     public function createApplicant($data)
@@ -241,7 +243,7 @@ class VoucherPurchase extends DatabaseMethods
             $ft_id = $this->getFormTypeID($ft);
             //$pm_id = $this->getPaymentMethodID($pm);
 
-            $purchase_id = $this->saveVendorPurchaseData($trans_id, $vd, $ft_id, $pm, $ap_id, $am, $fn, $ln, $cn, $cc, $pn);
+            $purchase_id = $this->saveVendorPurchaseData($trans_id, $vd, $ft_id, $ap_id, $pm, $am, $fn, $ln, $cn, $cc, $pn);
             if ($purchase_id) {
                 $login_details = $this->genLoginDetails($purchase_id, $at, $ay);
                 if (!empty($login_details)) {
@@ -249,24 +251,18 @@ class VoucherPurchase extends DatabaseMethods
                     $message = 'Your RMU Online Application login details ';
                     if ($this->expose->sendSMS($pn,  $key, $message, $cc)) {
                         //return 1;
-                        return array("success" => true, "message" =>  "confirm.php?status=000&transaction_id=" . $trans_id);
+                        return array("success" => true, "message" =>  "confirm.php?status=000&exttrid=" . $trans_id);
                     } else {
-                        return array("success" => false, "message" =>  "Failed to send SMS!");
+                        return array("success" => false, "message" =>  "confirm.php?status=001&exttrid=" . $trans_id);
                     }
                 } else {
-                    return array("success" => false, "message" =>  "Failed to generate login information!");
+                    return array("success" => false, "message" =>  "confirm.php?status=002&exttrid=" . $trans_id);
                 }
             } else {
-                return array("success" => false, "message" =>  "Failed to log purchase information!");
+                return array("success" => false, "message" => "confirm.php?status=003&exttrid=" . $trans_id);
             }
         } else {
-            return array("success" => false, "message" =>  "Invalid request!");
+            return array("success" => false, "message" => "confirm.php?status=004&exttrid=" . $trans_id);
         }
-    }
-
-    public function vendorExist($vendorID)
-    {
-        $str = "SELECT `id` FROM `vendor_details` WHERE `id` = :i";
-        return $this->getData($str, array(':i' => $vendorID));
     }
 }

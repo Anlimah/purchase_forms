@@ -8,18 +8,6 @@ use Src\Controller\PaymentController;
 
 class ExposeDataController extends DatabaseMethods
 {
-    public function verifyEmailAddress($email, $code)
-    {
-        $sql = "SELECT `id` FROM `verify_email_address` WHERE `email_address`=:e AND `code`=:c";
-        return $this->getID($sql, array(':e' => $email, ':c' => $code));
-    }
-
-    public function verifyPhoneNumber($number, $code)
-    {
-        $sql = "SELECT `id` FROM `verify_phone_number` WHERE `phone_number`=:p AND `code`=:c";
-        return $this->getID($sql, array(':p' => $number, ':c' => $code));
-    }
-
     public function validateEmail($input)
     {
         if (empty($input)) die("Input required!");
@@ -271,7 +259,7 @@ class ExposeDataController extends DatabaseMethods
 
     public function getVendorPhone($vendor_id)
     {
-        $sql = "SELECT `country_code`, `phone` FROM `vendor_details` WHERE `id`=:i";
+        $sql = "SELECT `country_code`, `phone_number` FROM `vendor_details` WHERE `id`=:i";
         return $this->getData($sql, array(':i' => $vendor_id));
     }
     /**
@@ -296,5 +284,17 @@ class ExposeDataController extends DatabaseMethods
     {
         $payConfirm = new PaymentController();
         return $payConfirm->vendorPaymentProcess($data);
+    }
+
+    public function vendorExist($vendor_id)
+    {
+        $str = "SELECT `id` FROM `vendor_details` WHERE `id`=:i";
+        return $this->getID($str, array(':i' => $vendor_id));
+    }
+
+    public function confirmVendorPurchase(int $vendor_id, int $transaction_id)
+    {
+        $payConfirm = new PaymentController();
+        return $payConfirm->verifyVendorPurchase($vendor_id, $transaction_id);
     }
 }

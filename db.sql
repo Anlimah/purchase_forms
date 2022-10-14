@@ -35,17 +35,19 @@ DROP TABLE IF EXISTS `vendor_details`;
 CREATE TABLE `vendor_details` (
     `id` INT(11) PRIMARY KEY,
     `type` VARCHAR(10) NOT NULL,
-    `name` VARCHAR(50) NOT NULL,
+    `vendor_name` VARCHAR(50) NOT NULL,
     `tin` VARCHAR(15) NOT NULL,
-    `email` VARCHAR(100),
-    `phone` VARCHAR(13) NOT NULL,
+    `email_address` VARCHAR(100),
+    `country_name` VARCHAR(30),
+    `country_code` VARCHAR(30) NOT NULL,
+    `phone_number` VARCHAR(13) NOT NULL,
     `address` VARCHAR(50),
     `added_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
 );
-INSERT INTO `vendor_details`(`id`, `type`,`name`, `tin`, `phone`) VALUES 
-(1665605087, 'ONLINE', 'RMU ONLINE', 'RMU123', '0555351068'), 
-(1665605341, 'VENDOR', 'RMU CAMPUS', 'RMU123', '0555351068'), 
-(1665605866, 'VENDOR', 'MAXIM CAMPUS RETAIL', 'T14529045', '0555351068');
+INSERT INTO `vendor_details`(`id`, `type`,`vendor_name`, `tin`, `country_code`, `phone_number`) VALUES 
+(1665605087, 'ONLINE', 'RMU ONLINE', 'RMU123', '+233', '0555351068'), 
+(1665605341, 'VENDOR', 'RMU CAMPUS', 'RMU123', '+233', '0555351068'), 
+(1665605866, 'VENDOR', 'MAXIM RETAIL', 'T14529045', '+233', '0555351068');
 
 DROP TABLE IF EXISTS `vendor_login`;
 CREATE TABLE `vendor_login` (
@@ -88,6 +90,8 @@ CREATE TABLE `purchase_detail` (
     CONSTRAINT `fk_purchase_admission_period` FOREIGN KEY (`admission_period`) REFERENCES `admission_period`(`id`) ON UPDATE CASCADE
 
 );
+
+
 
 DROP TABLE IF EXISTS `applicants_login`;
 CREATE TABLE `applicants_login` (

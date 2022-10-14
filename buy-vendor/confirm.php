@@ -16,7 +16,7 @@ if (isset($_GET['exttrid']) && empty($_GET['exttrid'])) header('Location: index.
     <div class="flex">
         <div class="form_card card" style="height: 320px !important;">
             <img src="assets/images/RMU-LOG.png" alt="RMU LOG">
-            <h1 style="text-align: center; color: #003262 !important; font-size:24px !important">Payment Confirmation</h1>
+            <h1 style="text-align: center; color: #003262 !important; font-size:24px !important">Confirmation</h1>
             <div class="pay-status" style="margin: 0px 10%;" style="align-items: baseline;">
                 <div class="d-flex justify-content-center">
                     <div class="spinner-grow" role="status">
@@ -56,7 +56,7 @@ if (isset($_GET['exttrid']) && empty($_GET['exttrid'])) header('Location: index.
                 if (getUrlVars()["exttrid"] != "" || getUrlVars()["exttrid"] != undefined) {
                     $.ajax({
                         type: "POST",
-                        url: "../endpoint/confirm",
+                        url: "../endpoint/vendor-confirm",
                         data: {
                             status: getUrlVars()["status"],
                             exttrid: getUrlVars()["exttrid"],
