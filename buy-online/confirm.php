@@ -19,10 +19,10 @@ if (isset($_GET['exttrid']) && empty($_GET['exttrid'])) header('Location: index.
             <h1 style="text-align: center; color: #003262 !important; font-size:24px !important">Payment Confirmation</h1>
             <div class="pay-status" style="margin: 0px 10%;" style="align-items: baseline;">
                 <div class="d-flex justify-content-center">
-                    <div class="spinner-grow" role="status">
+                    <div class="spinner-border" role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div>
-                    <p style="margin-left: 10px; margin-top:3px"> Processing payment...</p>
+                    <p style="margin-left: 10px; margin-top:3px" id="status-out"> Connecting...</p>
                 </div>
             </div>
         </div>
@@ -54,41 +54,45 @@ if (isset($_GET['exttrid']) && empty($_GET['exttrid'])) header('Location: index.
 
             if (getUrlVars()["status"] != "" || getUrlVars()["status"] != undefined) {
                 if (getUrlVars()["exttrid"] != "" || getUrlVars()["exttrid"] != undefined) {
-                    $.ajax({
-                        type: "POST",
-                        url: "../endpoint/confirm",
-                        data: {
-                            status: getUrlVars()["status"],
-                            exttrid: getUrlVars()["exttrid"],
-                        },
-                        success: function(result) {
-                            console.log(result);
-                            if (result.success) {
-                                $(".pay-status").html("").append(
-                                    '<p class="mb-4"><b style="color: #003262">' + result.message + '</b><br>' +
-                                    '<span style="color:red;"><b>Please do not close this page yet.</b></span><br><br>' +
-                                    'An email and SMS with your <b>Application Number</b> and <b>PIN</b> to access application portal, has been sent to you!<br>' +
-                                    'Please confirm and proceed to the <a href="../apply"><b>online applicatioin portal</b></a> to complete your application process.</p>' +
-                                    '<form action="endpoint/sms" method="post" enctype="multipart/form-data" style="display: flex;flex-direction:row;justify-content:space-between">' +
-                                    '<button class="btn btn-primary" type="submit" style="padding: 10px 10px; width:100%">Resend SMS</button>' +
-                                    '<input type="hidden" name="_v1Token" value="' + getUrlVars()["exttrid"] + '">' +
-                                    '</form>'
-                                );
-                                $(".pay-status").html("").append(result.message + '<br><div><a href="/">Try again</a></div>');
-                            } else {
-                                $(".pay-status").html("").append(result.message + '<br><div><a href="/">Try again</a></div>');
+                    $delay = 30000;
+                    setTimeout(function() {
+                        $.ajax({
+                            type: "POST",
+                            url: "../endpoint/confirm",
+                            data: {
+                                status: getUrlVars()["status"],
+                                exttrid: getUrlVars()["exttrid"],
+                            },
+                            success: function(result) {
+                                console.log(result);
+                                if (result.success) {
+                                    $(".pay-status").html("").append(
+                                        '<p class="mb-4"><b style="color: #003262">' + result.message + '</b><br>' +
+                                        '<span style="color:red;"><b>Please do not close this page yet.</b></span><br><br>' +
+                                        'An email and SMS with your <b>Application Number</b> and <b>PIN</b> to access application portal, has been sent to you!<br>' +
+                                        'Please confirm and proceed to the <a href="../apply"><b>online applicatioin portal</b></a> to complete your application process.</p>' +
+                                        '<form action="endpoint/sms" method="post" enctype="multipart/form-data" style="display: flex;flex-direction:row;justify-content:space-between">' +
+                                        '<button class="btn btn-primary" type="submit" style="padding: 10px 10px; width:100%">Resend SMS</button>' +
+                                        '<input type="hidden" name="_v1Token" value="' + getUrlVars()["exttrid"] + '">' +
+                                        '</form>'
+                                    );
+                                    $(".pay-status").html("").append(result.message + '<br><div><a href="/">Try again</a></div>');
+                                } else {
+                                    $(".pay-status").html("").append(result.message + '<br><div><a href="/">Try again</a></div>');
+                                }
+                            },
+                            error: function(error) {
+                                console.log(error);
                             }
-                        },
-                        error: function(error) {
-                            console.log(error);
-                        }
-                    });
+                        });
+                    }, $delay);
                 }
             }
 
             $(document).on({
                 ajaxStart: function() {
-                    $(".pay-status").removeClass("hide");
+                    //$(".pay-status").removeClass("hide");
+                    $("#status-out").text("Processing...");
                 },
                 ajaxStop: function() {
                     $(".pay-status").removeClass("hide");
