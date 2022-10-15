@@ -6,7 +6,7 @@ require_once('../bootstrap.php');
 $expose = new ExposeDataController();
 
 session_start();
-if (isset($_SESSION['step5Done']) && $_SESSION['step5Done'] == true) {
+if (isset($_SESSION['step5Done']) && $_SESSION['step5Done'] == true && isset($_SESSION["vendor_id"]) && !empty($_SESSION["vendor_id"]) && $_SESSION["vendor_type"] == "ONLINE") {
     if (!isset($_SESSION["_step6Token"])) {
         $rstrong = true;
         $_SESSION["_step6Token"] = hash('sha256', bin2hex(openssl_random_pseudo_bytes(64, $rstrong)));

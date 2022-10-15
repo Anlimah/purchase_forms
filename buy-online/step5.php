@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true) {
+if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_SESSION["vendor_id"]) && !empty($_SESSION["vendor_id"]) && $_SESSION["vendor_type"] == "ONLINE") {
     if (!isset($_SESSION["_step5Token"])) {
         $rstrong = true;
         $_SESSION["_step5Token"] = hash('sha256', bin2hex(openssl_random_pseudo_bytes(64, $rstrong)));

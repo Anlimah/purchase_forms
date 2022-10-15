@@ -164,6 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 				$_SESSION["step6"] = array(
 					"form_type" => $form_type,
 					"amount" => $amount,
+					"pay_method" => "ONLINE",
 					"app_type" => $app_type,
 					"app_year" => $app_year,
 				);

@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (isset($_SESSION['step6Done']) && $_SESSION['step6Done'] == true) {
+if (isset($_SESSION['step6Done']) && $_SESSION['step6Done'] == true && isset($_SESSION["vendor_id"]) && !empty($_SESSION["vendor_id"]) && $_SESSION["vendor_type"] == "ONLINE") {
     if (!isset($_SESSION["_step7MomoToken"])) {
         $rstrong = true;
         $_SESSION["_step7MomoToken"] = hash('sha256', bin2hex(openssl_random_pseudo_bytes(64, $rstrong)));

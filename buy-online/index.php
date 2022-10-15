@@ -5,7 +5,7 @@ if (!isset($_SESSION["_step1Token"])) {
     $rstrong = true;
     $_SESSION["_step1Token"] = hash('sha256', bin2hex(openssl_random_pseudo_bytes(64, $rstrong)));
     $_SESSION["vendor_type"] = "ONLINE";
-    $_SESSION["vendor_id"] = "1665619720508722";
+    $_SESSION["vendor_id"] = "1665605087";
 }
 ?>
 <!DOCTYPE html>
