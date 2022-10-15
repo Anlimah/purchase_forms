@@ -14,15 +14,31 @@ if (isset($_GET['exttrid']) && empty($_GET['exttrid'])) header('Location: index.
 
 <body class="fluid-container">
     <div class="flex">
-        <div class="form_card card" style="height: 320px !important;">
-            <img src="assets/images/RMU-LOG.png" alt="RMU LOG">
+        <div class="form_card card" style="height: 400px !important;">
+            <img src="../assets/images/RMU-LOG.png" alt="RMU LOGO">
             <h1 style="text-align: center; color: #003262 !important; font-size:24px !important">Confirmation</h1>
             <div class="pay-status" style="margin: 0px 10%;" style="align-items: baseline;">
                 <div class="d-flex justify-content-center">
                     <div class="spinner-grow" role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div>
-                    <p style="margin-left: 10px; margin-top:3px"> Processing payment...</p>
+                    <p style="margin-left: 10px; margin-top:3px"> Loading...</p>
+                </div>
+                <div>
+                    <table>
+                        <tr>
+                            <td>VENDOR: </td>
+                        </tr>
+                        <tr>
+                            <td>PRICE: </td>
+                        </tr>
+                        <tr>
+                            <td>APPLICATION NO: </td>
+                        </tr>
+                        <tr>
+                            <td>PIN NO: </td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
@@ -56,7 +72,7 @@ if (isset($_GET['exttrid']) && empty($_GET['exttrid'])) header('Location: index.
                 if (getUrlVars()["exttrid"] != "" || getUrlVars()["exttrid"] != undefined) {
                     $.ajax({
                         type: "POST",
-                        url: "../endpoint/vendor-confirm",
+                        url: "../endpoint/vendorConfirm",
                         data: {
                             status: getUrlVars()["status"],
                             exttrid: getUrlVars()["exttrid"],

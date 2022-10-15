@@ -220,6 +220,76 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 		die(json_encode($data));
 	}
 
+	//vendor login
+	elseif ($_GET["url"] == "loginVendor") {
+		if (isset($_SESSION["_loginToken"]) && !empty($_SESSION["_loginToken"]) && isset($_POST["_vlToken"]) && !empty($_POST["_vlToken"]) && $_POST["_vlToken"] == $_SESSION["_loginToken"]) {
+			if (isset($_POST["username"]) && !empty($_POST["username"])) {
+				if (isset($_POST["password"]) && !empty($_POST["password"])) {
+					//Francis N394YAZ6P
+					//Agnes N394YAZ6P
+
+					$username = $expose->validateText($_POST["username"]);
+					$password = $expose->validatePassword($_POST["password"]);
+
+					$data = $expose->verifyVendorLogin($username, $password);
+
+					if ($data["success"]) {
+						$_SESSION["vendor_id"] = $data["message"];
+						$vendorPhone = $expose->getVendorPhone($_SESSION["vendor_id"]);
+						if (!empty($vendorPhone)) {
+							if ($expose->sendOTP($vendorPhone[0]["phone_number"], $vendorPhone[0]["country_code"])) {
+								$_SESSION['verifySMSCode'] = true;
+								$data["success"] = true;
+								$data["message"] = "Login successfull!";
+							} else {
+								$data["success"] = false;
+								$data["message"] = "Error occured while sending OTP!";
+							}
+						} else {
+							$data["success"] = false;
+							$data["message"] = "No phone number entry found for this user!";
+						}
+					}
+				} else {
+					$data["success"] = false;
+					$data["message"] = "Password field is required!";
+				}
+			} else {
+				$data["success"] = false;
+				$data["message"] = "Username field is required!";
+			}
+		}
+		die(json_encode($data));
+	}
+
+	//After a successfull login, verify vendor mobile phone before redirection to home page
+	elseif ($_GET["url"] == "verifyVendor") {
+		if (isset($_SESSION["_verifySMSToken"]) && !empty($_SESSION["_verifySMSToken"]) && isset($_POST["_vSMSToken"]) && !empty($_POST["_vSMSToken"]) && $_POST["_vSMSToken"] == $_SESSION["_verifySMSToken"]) {
+			if (isset($_POST["code"]) && !empty($_POST["code"])) {
+				$otp = "";
+				foreach ($_POST["code"] as $code) {
+					$otp .= $code;
+				}
+				if ($otp == $_SESSION['sms_code']) {
+					$_SESSION["SMSLogin"] = true;
+					$_SESSION["loginSuccess"] = true;
+					$data["success"] = true;
+					$data["message"] = "index.php";
+				} else {
+					$data["success"] = false;
+					$data["message"] = "Entry did not match OTP code sent!!";
+				}
+			} else {
+				$data["success"] = false;
+				$data["message"] = "Code entries are needed!";
+			}
+		} else {
+			$data["success"] = false;
+			$data["message"] = "Invalid request!";
+		}
+		die(json_encode($data));
+	}
+
 	//Vendor endpoint
 	elseif ($_GET["url"] == "vendor") {
 		if (isset($_SESSION["_vendor1Token"]) && !empty($_SESSION["_vendor1Token"]) && isset($_POST["_v1Token"]) && !empty($_POST["_v1Token"]) && $_POST["_v1Token"] == $_SESSION["_vendor1Token"]) {
@@ -249,53 +319,33 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 					$app_year = $expose->getAdminYearCode();
 
 					if (!empty($amount) && $app_type != 0) {
-						if ($_SESSION["vendor_id"] === 1665605341) {
-							$vendorData = array(
-								"first_name" => $country_name,
-								"last_name" => $country_code,
-								"country_name" => $country_name,
-								"country_code" => $country_code,
-								"phone_number" => $phone_number,
-								"form_type" => $form_type,
-								"pay_method" => "CASH",
-								"amount" => $amount,
-								"vendor_id" => $_SESSION["vendor_id"],
-								"app_type" => $app_type,
-								"app_year" => $app_year
-							);
+						$_SESSION["vendorData"] = array(
+							"first_name" => $first_name,
+							"last_name" => $last_name,
+							"country_name" => $country_name,
+							"country_code" => $country_code,
+							"phone_number" => $phone_number,
+							"email_address" => "",
+							"form_type" => $form_type,
+							"pay_method" => "CASH",
+							"amount" => $amount,
+							"vendor_id" => $_SESSION["vendor_id"],
+							"app_type" => $app_type,
+							"app_year" => $app_year
+						);
 
-							if (!empty($vendorData)) {
-								$data = $expose->processVendorPay($vendorData);
-							}
-						} else {
-							$_SESSION["vendorData"] = array(
-								"first_name" => $first_name,
-								"last_name" => $last_name,
-								"country_name" => $country_name,
-								"country_code" => $country_code,
-								"phone_number" => $phone_number,
-								"form_type" => $form_type,
-								"pay_method" => "CASH",
-								"amount" => $amount,
-								"vendor_id" => $_SESSION["vendor_id"],
-								"app_type" => $app_type,
-								"app_year" => $app_year
-							);
-
-							$vendorPhone = $expose->getVendorPhone($_SESSION["vendor_id"]);
-							//echo $_SESSION["vendor_id"];
-							if (!empty($vendorPhone)) {
-								if ($expose->sendOTP($vendorPhone[0]["phone_number"], $vendorPhone[0]["country_code"])) {
-									$_SESSION['vendorSMSCode'] = true;
-									$data["success"] = true;
-								} else {
-									$data["success"] = false;
-									$data["message"] = "Error occured while sending OTP!";
-								}
+						if (!empty($_SESSION["vendorData"])) {
+							if ($expose->sendOTP($_SESSION["vendorData"]["phone_number"], $_SESSION["vendorData"]["country_code"])) {
+								$_SESSION['verifySMSCode'] = true;
+								$data["success"] = true;
+								$data["message"] = "OTP verification code sent!";
 							} else {
 								$data["success"] = false;
-								$data["message"] = "Error occured while verifying vendor Phone Number!";
+								$data["message"] = "Error occured while sending OTP!";
 							}
+						} else {
+							$data["success"] = false;
+							$data["message"] = "Failed in preparing data submitted!";
 						}
 					} else {
 						$data["success"] = false;
@@ -316,24 +366,33 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 		die(json_encode($data));
 	}
 
-	//Online Payment confirmation
-	elseif ($_GET["url"] == "verifyVendor") {
+	//Verify customer phone number before sending Application login details
+	elseif ($_GET["url"] == "verifyCustomer") {
 		if (isset($_SESSION["_verifySMSToken"]) && !empty($_SESSION["_verifySMSToken"]) && isset($_POST["_vSMSToken"]) && !empty($_POST["_vSMSToken"]) && $_POST["_vSMSToken"] == $_SESSION["_verifySMSToken"]) {
-			if ($_POST["code"]) {
+			if (isset($_POST["code"]) && !empty($_POST["code"])) {
 				$otp = "";
 				foreach ($_POST["code"] as $code) {
 					$otp .= $code;
 				}
 				if ($otp == $_SESSION['sms_code']) {
-					if (isset($_SESSION["vendorData"]) && !empty($_SESSION["vendorData"]) && isset($_SESSION['vendorSMSCode']) && $_SESSION['vendorSMSCode'] == true) {
+					if (isset($_SESSION["vendorData"]) && !empty($_SESSION["vendorData"])) {
 						if ($expose->vendorExist($_SESSION["vendorData"]["vendor_id"])) {
 							$data = $expose->processVendorPay($_SESSION["vendorData"]);
+						} else {
+							$data["success"] = false;
+							$data["message"] = "Process can only be performed by a vendor!";
 						}
+					} else {
+						$data["success"] = false;
+						$data["message"] = "Empty data payload!";
 					}
 				} else {
 					$data["success"] = false;
-					$data["message"] = "OTP code provided is incorrect!";
+					$data["message"] = "Entry did not match OTP code sent!";
 				}
+			} else {
+				$data["success"] = false;
+				$data["message"] = "Code entries are needed!";
 			}
 		} else {
 			$data["success"] = false;
@@ -343,7 +402,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 	}
 
 	//Vendor Payment confirmation
-	elseif ($_GET["url"] == "vendor-confirm") {
+	elseif ($_GET["url"] == "vendorConfirm") {
 		if (isset($_POST["status"]) && !empty($_POST["status"]) && isset($_POST["exttrid"]) && !empty($_POST["exttrid"])) {
 			$status = $expose->validatePhone($_POST["status"]);
 			$transaction_id = $expose->validatePhone($_POST["exttrid"]);

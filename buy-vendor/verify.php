@@ -1,13 +1,13 @@
 <?php
 session_start();
 echo $_SESSION["sms_code"];
-if (isset($_SESSION['vendorSMSCode']) && $_SESSION['vendorSMSCode'] == true) {
+if (isset($_SESSION['verifySMSCode']) && $_SESSION['verifySMSCode'] == true) {
     if (!isset($_SESSION["_verifySMSToken"])) {
         $rstrong = true;
         $_SESSION["_verifySMSToken"] = hash('sha256', bin2hex(openssl_random_pseudo_bytes(64, $rstrong)));
     }
 } else {
-    header('Location: step4.php');
+    header('Location: index.php');
 }
 
 ?>
@@ -42,12 +42,32 @@ if (isset($_SESSION['vendorSMSCode']) && $_SESSION['vendorSMSCode'] == true) {
     <script src="../js/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
+            //get variable(parameters) from url
+            function getUrlVars() {
+                var vars = {};
+                var parts = window.location.href.replace(
+                    /[?&]+([^=&]+)=([^&]*)/gi,
+                    function(m, key, value) {
+                        vars[key] = value;
+                    }
+                );
+                return vars;
+            }
+
             $("#step1Form").on("submit", function(e) {
                 e.preventDefault();
+                var url = "";
+                if (getUrlVars()["verify"] == "vendor") {
+                    url = "verifyVendor";
+                } else if (getUrlVars()["verify"] == "customer") {
+                    url = "verifyCustomer";
+                } else {
+                    return;
+                }
 
                 $.ajax({
                     type: "POST",
-                    url: "../endpoint/verifyVendor",
+                    url: "../endpoint/" + url,
                     data: new FormData(this),
                     contentType: false,
                     cache: false,

@@ -6,8 +6,14 @@ use Twilio\Rest\Client;
 use Src\System\DatabaseMethods;
 use Src\Controller\PaymentController;
 
-class ExposeDataController extends DatabaseMethods
+class ExposeDataController
 {
+    private $dm;
+
+    public function __construct()
+    {
+        $this->dm = new DatabaseMethods();
+    }
     public function validateEmail($input)
     {
         if (empty($input)) die("Input required!");
@@ -38,6 +44,18 @@ class ExposeDataController extends DatabaseMethods
 
         $user_input = htmlentities(htmlspecialchars($input));
         $validated_input = (bool) preg_match('/^[A-Za-z0-9()+]/', $user_input);
+
+        if ($validated_input) return $user_input;
+
+        die("Invalid input!");
+    }
+
+    public function validatePassword($input)
+    {
+        if (empty($input)) die("Input required!");
+
+        $user_input = htmlentities(htmlspecialchars($input));
+        $validated_input = (bool) preg_match('/^[A-Za-z0-9()+@#.-_=$&!`]/', $user_input);
 
         if ($validated_input) return $user_input;
 
@@ -180,42 +198,42 @@ class ExposeDataController extends DatabaseMethods
 
     public function getFormPrice(string $form_type)
     {
-        return $this->getData("SELECT `amount` FROM `form_type` WHERE `name` LIKE '%$form_type%'");
+        return $this->dm->getData("SELECT `amount` FROM `form_type` WHERE `name` LIKE '%$form_type%'");
     }
 
     public function getAdminYearCode()
     {
         $sql = "SELECT EXTRACT(YEAR FROM (SELECT `start_date` FROM admission_period)) AS 'year'";
-        $year = (string) $this->getData($sql)[0]['year'];
+        $year = (string) $this->dm->getData($sql)[0]['year'];
         return (int) substr($year, 2, 2);
     }
 
     public function getFormTypes()
     {
-        return $this->getData("SELECT * FROM `form_type`");
+        return $this->dm->getData("SELECT * FROM `form_type`");
     }
 
     public function getPaymentMethods()
     {
-        return $this->getData("SELECT * FROM `payment_method`");
+        return $this->dm->getData("SELECT * FROM `payment_method`");
     }
 
     public function getPrograms($type)
     {
         $sql = "SELECT * FROM `programs` WHERE `type` = :t";
         $param = array(":t" => $type);
-        return $this->getData($sql, $param);
+        return $this->dm->getData($sql, $param);
     }
 
     public function getHalls()
     {
-        return $this->getData("SELECT * FROM `halls`");
+        return $this->dm->getData("SELECT * FROM `halls`");
     }
 
     public function sendEmail($recipient_email, $user_id)
     {
         //generate code and store hash version of code
-        $v_code = $this->genCode($user_id);
+        $v_code = $this->dm->genCode($user_id);
         if ($v_code) {
             //prepare mail info
             $headers = 'From: ' . 'y.m.ratty7@gmail.com';
@@ -252,7 +270,7 @@ class ExposeDataController extends DatabaseMethods
 
     public function sendOTP($phone_number, $country_code)
     {
-        $otp_code = $this->genCode(4);
+        $otp_code = $this->dm->genCode(4);
         $message = 'Your OTP verification code is';
         return $this->sendSMS($phone_number, $otp_code, $message, $country_code);
     }
@@ -260,7 +278,7 @@ class ExposeDataController extends DatabaseMethods
     public function getVendorPhone($vendor_id)
     {
         $sql = "SELECT `country_code`, `phone_number` FROM `vendor_details` WHERE `id`=:i";
-        return $this->getData($sql, array(':i' => $vendor_id));
+        return $this->dm->getData($sql, array(':i' => $vendor_id));
     }
     /**
      * @param int transaction_id //transaction_id
@@ -289,12 +307,26 @@ class ExposeDataController extends DatabaseMethods
     public function vendorExist($vendor_id)
     {
         $str = "SELECT `id` FROM `vendor_details` WHERE `id`=:i";
-        return $this->getID($str, array(':i' => $vendor_id));
+        return $this->dm->getID($str, array(':i' => $vendor_id));
     }
 
     public function confirmVendorPurchase(int $vendor_id, int $transaction_id)
     {
         $payConfirm = new PaymentController();
         return $payConfirm->verifyVendorPurchase($vendor_id, $transaction_id);
+    }
+
+    public function verifyVendorLogin($username, $password)
+    {
+        $sql = "SELECT `vendor`, `password` FROM `vendor_login` WHERE `user_name` = :u";
+        $data = $this->dm->getData($sql, array(':u' => sha1($username)));
+        if (!empty($data)) {
+            if (password_verify($password, $data[0]["password"])) {
+                return array("success" => true, "message" => $data[0]["vendor"]);
+            } else {
+                return array("success" => false, "message" => "No match found!");
+            }
+        }
+        return array("success" => false, "message" => "User does not exist!");
     }
 }

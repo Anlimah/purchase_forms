@@ -59,13 +59,13 @@ class VoucherPurchase
         return 0;
     }
 
-    private function saveVendorPurchaseData(int $ti, int $vd, int $ft, int $ap, $pm, float $am, $fn, $ln, $cn, $cc, $pn)
+    private function saveVendorPurchaseData(int $ti, int $vd, int $ft, int $ap, $pm, float $am, $fn, $ln, $em, $cn, $cc, $pn)
     {
-        $sql = "INSERT INTO `purchase_detail` (`id`, `vendor`, `form_type`, `admission_period`, `payment_method`, `first_name`, `last_name`, `country_name`, `country_code`, `phone_number`, `amount`) 
-                VALUES(:ti, :vd, :ft, :ap, :pm, :fn, :ln, :cn, :cc, :pn, :am)";
+        $sql = "INSERT INTO `purchase_detail` (`id`, `vendor`, `form_type`, `admission_period`, `payment_method`, `first_name`, `last_name`, `email_address`, `country_name`, `country_code`, `phone_number`, `amount`) 
+                VALUES(:ti, :vd, :ft, :ap, :pm, :fn, :ln, :em, :cn, :cc, :pn, :am)";
         $params = array(
-            ':ti' => $ti, ':vd' => $vd, ':ft' => $ft, ':pm' => $pm, ':ap' => $ap,
-            ':fn' => $fn, ':ln' => $ln, ':cn' => $cn, ':cc' => $cc, ':pn' => $pn, ':am' => $am,
+            ':ti' => $ti, ':vd' => $vd, ':ft' => $ft, ':pm' => $pm, ':ap' => $ap, ':fn' => $fn,
+            ':ln' => $ln, ':em' => $em, ':cn' => $cn, ':cc' => $cc, ':pn' => $pn, ':am' => $am
         );
         if ($this->dm->inputData($sql, $params)) {
             return $ti;
@@ -180,7 +180,7 @@ class VoucherPurchase
         return $this->dm->getID($sql);
     }
 
-    public function createApplicant($data)
+    /*public function createApplicant($data)
     {
         if (!empty($data)) {
             $fn = $data['step1']['first_name'];
@@ -220,14 +220,15 @@ class VoucherPurchase
         } else {
             return array("success" => false, "message" =>  "Invalid request!");
         }
-    }
+    }*/
 
     public function SaveFormPurchaseData($data, $trans_id)
     {
         if (!empty($data) && !empty($trans_id)) {
+            //return json_encode($data) . " T=" . $trans_id;
             $fn = $data['first_name'];
             $ln = $data['last_name'];
-            //$ea = $data['email_address'];
+            $em = $data['email_address'];
             $cn = $data['country_name'];
             $cc = $data['country_code'];
             $pn = $data['phone_number'];
@@ -243,7 +244,7 @@ class VoucherPurchase
             $ft_id = $this->getFormTypeID($ft);
             //$pm_id = $this->getPaymentMethodID($pm);
 
-            $purchase_id = $this->saveVendorPurchaseData($trans_id, $vd, $ft_id, $ap_id, $pm, $am, $fn, $ln, $cn, $cc, $pn);
+            $purchase_id = $this->saveVendorPurchaseData($trans_id, $vd, $ft_id, $ap_id, $pm, $am, $fn, $ln, $em, $cn, $cc, $pn);
             if ($purchase_id) {
                 $login_details = $this->genLoginDetails($purchase_id, $at, $ay);
                 if (!empty($login_details)) {

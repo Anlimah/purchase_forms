@@ -26,6 +26,11 @@ class PaymentController
         }
     }
 
+    public function verifyVendorPurchase(int $vendor_id, int $transaction_id)
+    {
+        
+    }
+
     private function prepareTransaction($secretKey, $payUrl, $payload)
     {
     }
@@ -57,18 +62,14 @@ class PaymentController
         }
     }
 
-    public function verifyVendorPurchase(int $vendor_id, int $transaction_id)
-    {
-    }
-
     public function processTransaction(int $transaction_id)
     {
-        /*$response = json_decode($this->getTransactionStatus($transaction_id));
+        $response = json_decode($this->getTransactionStatus($transaction_id));
         if (!empty($response)) {
             if (isset($response->trans_status)) {
                 if ($response->trans_status == '000/01') {
                     $voucher = new VoucherPurchase();
-                    return $voucher->createApplicant($_SESSION);
+                    return $voucher->SaveFormPurchaseData($_SESSION, $transaction_id);
                 } else {
                     return array("success" => false, "message" => "Payment failed! Code: " . $response->trans_status);
                 }
@@ -85,7 +86,7 @@ class PaymentController
                 }
             }
         }
-        return array("success" => false, "message" => "Payment failed! Code: 0");*/
+        return array("success" => false, "message" => "Payment failed! Code: 0");
     }
 
     public function orchardPaymentController($amount)

@@ -1,4 +1,4 @@
-USE `db_admissions`;
+USE `rmu_admissions`;
 
 /*
 Tables for form purchase
@@ -52,8 +52,8 @@ INSERT INTO `vendor_details`(`id`, `type`,`vendor_name`, `tin`, `country_code`, 
 DROP TABLE IF EXISTS `vendor_login`;
 CREATE TABLE `vendor_login` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `user_name` VARCHAR(20) UNIQUE NOT NULL,
-    `password` VARCHAR(50) NOT NULL,
+    `user_name` VARCHAR(255) UNIQUE NOT NULL,
+    `password` VARCHAR(255) NOT NULL,
     
     `vendor` INT(11) NOT NULL, -- added
     CONSTRAINT `fk_vendor_login` FOREIGN KEY (`vendor`) 
@@ -61,7 +61,14 @@ CREATE TABLE `vendor_login` (
 
     `added_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
 );
-INSERT INTO `payment_method`(`name`) VALUES ("Credit Card"), ("Mobile Money"), ("Bank Deposit");
+2b31ed06df1415fc301350165d1ff11f7b873675
+$2y$10$jmxuunWRqwB2KgT2jIypwufas3dPtqT9f21gdKT9lOOlNGNQCqeMC
+ALTER TABLE `vendor_login` 
+DROP COLUMN `user_name` 
+DROP COLUMN `password`
+ALTER TABLE `vendor_login` 
+ADD COLUMN `user_name` VARCHAR(255) UNIQUE NOT NULL
+DROP COLUMN `password` VARCHAR(255) NOT NULL;
 
 DROP TABLE IF EXISTS `purchase_detail`; 
 CREATE TABLE `purchase_detail` (

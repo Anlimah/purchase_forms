@@ -1,11 +1,21 @@
 <?php
 session_start();
 //echo $_SERVER["HTTP_USER_AGENT"];
-if (!isset($_SESSION["_vendor1Token"])) {
-    $rstrong = true;
-    $_SESSION["_vendor1Token"] = hash('sha256', bin2hex(openssl_random_pseudo_bytes(64, $rstrong)));
-    $_SESSION["vendor_type"] = "VENDOR";
-    $_SESSION["vendor_id"] = 1665605866;
+if (isset($_SESSION["loginSuccess"]) && $_SESSION["loginSuccess"] = true && isset($_SESSION["vendor_id"]) && !empty($_SESSION["vendor_id"])) {
+    if (!isset($_SESSION["_vendor1Token"])) {
+        $rstrong = true;
+        $_SESSION["_vendor1Token"] = hash('sha256', bin2hex(openssl_random_pseudo_bytes(64, $rstrong)));
+        $_SESSION["vendor_type"] = "VENDOR";
+    }
+} else {
+    header("Location: login.php");
+}
+
+if (isset($_GET['logout'])) {
+    unset($_SESSION['ghAppLogin']);
+    unset($_SESSION['ghApplicant']);
+    session_destroy();
+    header('Location: login.php');
 }
 
 require_once('../bootstrap.php');
@@ -22,7 +32,7 @@ require_once('../inc/page-data.php');
 
 <?php require_once("../inc/head-section.php"); ?>
 
-<body class="fluid-container">
+<body class="fluid-container" style="background-color: #99ccff !important;">
     <div class="flex">
         <div class="form_card card" style="height: 520px !important;padding: 20px 20px 10px 20px !important;">
             <!--<img src="../assets/images/RMU-LOG.png" alt="RMU LOG">-->
@@ -91,7 +101,7 @@ require_once('../inc/page-data.php');
                         success: function(result) {
                             console.log(result);
                             if (result.success) {
-                                window.location.href = "verify.php";
+                                window.location.href = "verify.php?verify=customer";
                             } else {
                                 alert(result.message);
                             }
