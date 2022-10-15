@@ -97,10 +97,6 @@ CREATE TABLE `purchase_detail` (
 
 );
 
-ALTER TABLE `purchase_detail` 
-ADD COLUMN `app_number` VARCHAR(10),
-ADD COLUMN `pin_number` VARCHAR(10);
-
 DROP TABLE IF EXISTS `applicants_login`;
 CREATE TABLE `applicants_login` (
     `id` INT(11) AUTO_INCREMENT PRIMARY KEY,

@@ -165,6 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 					"form_type" => $form_type,
 					"amount" => $amount,
 					"pay_method" => "ONLINE",
+					"vendor_id" => $_SESSION["vendor_id"],
 					"app_type" => $app_type,
 					"app_year" => $app_year,
 				);
