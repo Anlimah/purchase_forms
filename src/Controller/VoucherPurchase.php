@@ -25,7 +25,7 @@ class VoucherPurchase
     private function genAppNumber(int $type, int $year)
     {
         $user_code = $this->dm->genCode(5);
-        $app_number = 'RMU-' . (($type * 10000000) + ($year * 100000) + $user_code);
+        $app_number = ($type * 10000000) + ($year * 100000) + $user_code;
         return $app_number;
     }
 
@@ -38,34 +38,13 @@ class VoucherPurchase
         return 0;
     }
 
-    private function savePurchaseDetails(int $pi, int $ft, int $pm, int $ap, $fn, $ln, $cn, $ea, $pn)
+    private function saveVendorPurchaseData(int $ti, int $vd, int $ft, int $ap, $pm, float $am, $fn, $ln, $em, $cn, $cc, $pn, $an, $pin)
     {
-        $sql = "INSERT INTO `purchase_detail` (`id`, `first_name`, `last_name`, `country`, `email_address`, `phone_number`, `form_type`, `payment_method`, `admission_period`) 
-                VALUES(:ui, :fn, :ln, :cn, :ea, :pn, :ft, :pm, :ap)";
+        $sql = "INSERT INTO `purchase_detail` (`id`, `vendor`, `form_type`, `admission_period`, `payment_method`, `first_name`, `last_name`, `email_address`, `country_name`, `country_code`, `phone_number`, `amount`, `app_number`, `pin_number`) 
+                VALUES(:ti, :vd, :ft, :ap, :pm, :fn, :ln, :em, :cn, :cc, :pn, :am, :an, :pin)";
         $params = array(
-            ':ui' => $pi,
-            ':fn' => $fn,
-            ':ln' => $ln,
-            ':cn' => $cn,
-            ':ea' => $ea,
-            ':pn' => $pn,
-            ':ft' => $ft,
-            ':pm' => $pm,
-            ':ap' => $ap,
-        );
-        if ($this->dm->inputData($sql, $params)) {
-            return $pi;
-        }
-        return 0;
-    }
-
-    private function saveVendorPurchaseData(int $ti, int $vd, int $ft, int $ap, $pm, float $am, $fn, $ln, $em, $cn, $cc, $pn)
-    {
-        $sql = "INSERT INTO `purchase_detail` (`id`, `vendor`, `form_type`, `admission_period`, `payment_method`, `first_name`, `last_name`, `email_address`, `country_name`, `country_code`, `phone_number`, `amount`) 
-                VALUES(:ti, :vd, :ft, :ap, :pm, :fn, :ln, :em, :cn, :cc, :pn, :am)";
-        $params = array(
-            ':ti' => $ti, ':vd' => $vd, ':ft' => $ft, ':pm' => $pm, ':ap' => $ap, ':fn' => $fn,
-            ':ln' => $ln, ':em' => $em, ':cn' => $cn, ':cc' => $cc, ':pn' => $pn, ':am' => $am
+            ':ti' => $ti, ':vd' => $vd, ':ft' => $ft, ':pm' => $pm, ':ap' => $ap, ':fn' => $fn, ':ln' => $ln,
+            ':em' => $em, ':cn' => $cn, ':cc' => $cc, ':pn' => $pn, ':am' => $am, ':an' => $an, ':pin' => $pin
         );
         if ($this->dm->inputData($sql, $params)) {
             return $ti;
@@ -75,42 +54,37 @@ class VoucherPurchase
 
     private function registerApplicantPersI($user_id)
     {
-        $sql1 = "INSERT INTO `personal_information` (`app_login`) VALUES(:a)";
-        $params1 = array(':a' => $user_id);
-        if ($this->dm->inputData($sql1, $params1)) {
-            return 1;
-        }
-        return 0;
+        $sql = "INSERT INTO `personal_information` (`app_login`) VALUES(:a)";
+        $params = array(':a' => $user_id);
+        $this->dm->inputData($sql, $params);
     }
 
     private function registerApplicantAcaB($user_id)
     {
-        $sql1 = "INSERT INTO `academic_background` (`app_login`) VALUES(:a)";
-        $params1 = array(':a' => $user_id);
-        if ($this->dm->inputData($sql1, $params1)) {
-            return 1;
-        }
-        return 0;
+        $sql = "INSERT INTO `academic_background` (`app_login`) VALUES(:a)";
+        $params = array(':a' => $user_id);
+        $this->dm->inputData($sql, $params);
     }
 
     private function registerApplicantProgI($user_id)
     {
-        $sql1 = "INSERT INTO `program_info` (`app_login`) VALUES(:a)";
-        $params1 = array(':a' => $user_id);
-        if ($this->dm->inputData($sql1, $params1)) {
-            return 1;
-        }
-        return 0;
+        $sql = "INSERT INTO `program_info` (`app_login`) VALUES(:a)";
+        $params = array(':a' => $user_id);
+        $this->dm->inputData($sql, $params);
     }
 
     private function registerApplicantPreUni($user_id)
     {
-        $sql1 = "INSERT INTO `previous_uni_records` (`app_login`) VALUES(:a)";
-        $params1 = array(':a' => $user_id);
-        if ($this->dm->inputData($sql1, $params1)) {
-            return 1;
-        }
-        return 0;
+        $sql = "INSERT INTO `previous_uni_records` (`app_login`) VALUES(:a)";
+        $params = array(':a' => $user_id);
+        $this->dm->inputData($sql, $params);
+    }
+
+    private function setFormSectionsChecks($user_id)
+    {
+        $sql = "INSERT INTO `form_sections_chek` (`app_login`) VALUES(:a)";
+        $params = array(':a' => $user_id);
+        $this->dm->inputData($sql, $params);
     }
 
     private function getApplicantLoginID($app_number)
@@ -141,12 +115,15 @@ class VoucherPurchase
             //register in Previous university information
             $this->registerApplicantPreUni($user_id);
 
+            //Set initial form checks
+            $this->setFormSectionsChecks($user_id);
+
             return 1;
         }
         return 0;
     }
 
-    private function genLoginDetails(int $who, int $type, int $year)
+    private function genLoginDetails(int $type, int $year)
     {
         $rslt = 1;
         while ($rslt) {
@@ -154,10 +131,7 @@ class VoucherPurchase
             $rslt = $this->doesCodeExists($app_num);
         }
         $pin = strtoupper($this->genPin());
-        if ($this->saveLoginDetails($app_num, $pin, $who)) {
-            return array('app_number' => $app_num, 'pin_number' => $pin);
-        }
-        return 0;
+        return array('app_number' => $app_num, 'pin_number' => $pin);
     }
 
     //Get and Set IDs for foreign keys
@@ -179,48 +153,6 @@ class VoucherPurchase
         $sql = "SELECT `id` FROM `payment_method` WHERE `name` LIKE '%$name%'";
         return $this->dm->getID($sql);
     }
-
-    /*public function createApplicant($data)
-    {
-        if (!empty($data)) {
-            $fn = $data['step1']['first_name'];
-            $ln = $data['step1']['last_name'];
-            $ea = $data['step2']['email_address'];
-            $cn = $data['step4']['country_name'];
-            $cc = $data['step4']['country_code'];
-            $pn = $data['step4']['phone_number'];
-            $ft = $data['step6']['form_type'];
-            $pm = "Third Party"; //$data['step6']['pay_method'];
-            $at = $data['step6']['app_type'];
-            $ay = $data['step6']['app_year'];
-            $pi = (int) $data['step6']['user'];
-
-            $ap_id = $this->getAdmissionPeriodID();
-            $ft_id = $this->getFormTypeID($ft);
-            $pm_id = $this->getPaymentMethodID($pm);
-
-            $purchase_id = $this->savePurchaseDetails($pi, $ft_id, $pm_id, $ap_id, $fn, $ln, $cn, $ea, $pn);
-            if ($purchase_id) {
-                $login_details = $this->genLoginDetails($purchase_id, $at, $ay);
-                if (!empty($login_details)) {
-                    $key = 'APPLICATION NUMBER: ' . $login_details['app_number'] . '    PIN: ' . $login_details['pin_number'];
-                    $message = 'Your RMU Online Application login details ';
-                    if ($this->expose->sendSMS($pn,  $key, $message, $cc)) {
-                        //return 1;
-                        return array("success" => true, "message" =>  "Forms purchase completed!");
-                    } else {
-                        return array("success" => false, "message" =>  "Failed to send SMS!");
-                    }
-                } else {
-                    return array("success" => false, "message" =>  "Failed to generate login information!");
-                }
-            } else {
-                return array("success" => false, "message" =>  "Failed to log purchase information!");
-            }
-        } else {
-            return array("success" => false, "message" =>  "Invalid request!");
-        }
-    }*/
 
     public function SaveFormPurchaseData($data, $trans_id)
     {
@@ -244,14 +176,16 @@ class VoucherPurchase
             $ft_id = $this->getFormTypeID($ft);
             //$pm_id = $this->getPaymentMethodID($pm);
 
-            $purchase_id = $this->saveVendorPurchaseData($trans_id, $vd, $ft_id, $ap_id, $pm, $am, $fn, $ln, $em, $cn, $cc, $pn);
+            $login_details = $this->genLoginDetails($at, $ay);
+            $app_no = $login_details['app_number'];
+            $pin_no = $login_details['pin_number'];
+
+            $purchase_id = $this->saveVendorPurchaseData($trans_id, $vd, $ft_id, $ap_id, $pm, $am, $fn, $ln, $em, $cn, $cc, $pn, $app_no, $pin_no);
             if ($purchase_id) {
-                $login_details = $this->genLoginDetails($purchase_id, $at, $ay);
-                if (!empty($login_details)) {
-                    $key = 'APPLICATION NUMBER: ' . $login_details['app_number'] . '    PIN: ' . $login_details['pin_number'];
+                if ($this->saveLoginDetails($app_no, $pin_no, $purchase_id)) {
+                    $key = 'APPLICATION NUMBER: RMU-' . $app_no . '    PIN: ' . $pin_no;
                     $message = 'Your RMU Online Application login details ';
                     if ($this->expose->sendSMS($pn,  $key, $message, $cc)) {
-                        //return 1;
                         return array("success" => true, "message" =>  "confirm.php?status=000&exttrid=" . $trans_id);
                     } else {
                         return array("success" => false, "message" =>  "confirm.php?status=001&exttrid=" . $trans_id);

@@ -55,20 +55,16 @@ CREATE TABLE `vendor_login` (
     `user_name` VARCHAR(255) UNIQUE NOT NULL,
     `password` VARCHAR(255) NOT NULL,
     
-    `vendor` INT(11) NOT NULL, -- added
+    `vendor` INT(11) NOT NULL,
     CONSTRAINT `fk_vendor_login` FOREIGN KEY (`vendor`) 
     REFERENCES `vendor_details`(`id`) ON UPDATE CASCADE,
 
     `added_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
 );
-2b31ed06df1415fc301350165d1ff11f7b873675
-$2y$10$jmxuunWRqwB2KgT2jIypwufas3dPtqT9f21gdKT9lOOlNGNQCqeMC
-ALTER TABLE `vendor_login` 
-DROP COLUMN `user_name` 
-DROP COLUMN `password`
-ALTER TABLE `vendor_login` 
-ADD COLUMN `user_name` VARCHAR(255) UNIQUE NOT NULL
-DROP COLUMN `password` VARCHAR(255) NOT NULL;
+
+INSERT INTO `vendor_login`(`vendor`,`user_name`,`password`) VALUES 
+(1665605866, 'd8ded753c6fd237dc576c1846382387e7e739337', '$2y$10$jmxuunWRqwB2KgT2jIypwufas3dPtqT9f21gdKT9lOOlNGNQCqeMC'),
+(1665605341, 'bc4f6e0e173b58999ff3cd1253cc97c1924ecc2e', '$2y$10$jmxuunWRqwB2KgT2jIypwufas3dPtqT9f21gdKT9lOOlNGNQCqeMC');
 
 DROP TABLE IF EXISTS `purchase_detail`; 
 CREATE TABLE `purchase_detail` (
@@ -81,6 +77,9 @@ CREATE TABLE `purchase_detail` (
     `country_code` VARCHAR(30) NOT NULL,
     `phone_number` VARCHAR(15) NOT NULL,
     `amount` DECIMAL(6,2) NOT NULL,
+
+    `app_number` VARCHAR(10) NOT NULL,
+    `pin_number` VARCHAR(10) NOT NULL,
 
     `status_code` VARCHAR(3), -- added
     `device_info` VARCHAR(200), -- added
@@ -98,7 +97,9 @@ CREATE TABLE `purchase_detail` (
 
 );
 
-
+ALTER TABLE `purchase_detail` 
+ADD COLUMN `app_number` VARCHAR(10),
+ADD COLUMN `pin_number` VARCHAR(10);
 
 DROP TABLE IF EXISTS `applicants_login`;
 CREATE TABLE `applicants_login` (
@@ -342,6 +343,17 @@ CREATE TABLE `previous_uni_records` (
 
     `app_login` INT NOT NULL,   
     CONSTRAINT `fk_app_prev_uni` FOREIGN KEY (`app_login`) REFERENCES `applicants_login`(`id`) ON UPDATE CASCADE
+);
+
+CREATE TABLE `form_sections_chek` (
+    `id` INT(11) AUTO_INCREMENT PRIMARY KEY,
+    `use_of_info` TINYINT DEFAULT 0,
+    `personal` TINYINT DEFAULT 0,
+    `education` TINYINT DEFAULT 0,
+    `programme` TINYINT DEFAULT 0,
+    `uploads` TINYINT DEFAULT 0,
+    `app_login` INT NOT NULL,   
+    CONSTRAINT `fk_app_form_sec_check` FOREIGN KEY (`app_login`) REFERENCES `applicants_login`(`id`) ON UPDATE CASCADE
 );
 
 SELECT `purchase_detail`.`form_type` FROM `purchase_detail`, `applicants_login`

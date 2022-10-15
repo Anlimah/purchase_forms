@@ -5,6 +5,26 @@ if (!isset($_GET['status']) || !isset($_GET['exttrid'])) header('Location: index
 if (isset($_GET['status']) && empty($_GET['status'])) header('Location: index.php?status=invalid');
 if (isset($_GET['exttrid']) && empty($_GET['exttrid'])) header('Location: index.php?status=invalid');/**/
 
+if (isset($_SESSION["loginSuccess"]) && $_SESSION["loginSuccess"] = true && isset($_SESSION["vendor_id"]) && !empty($_SESSION["vendor_id"])) {
+    $trans_id = $_GET["exttrid"];
+} else {
+    header("Location: login.php");
+}
+
+if (isset($_GET['logout'])) {
+    unset($_SESSION['loginSuccess']);
+    unset($_SESSION['vendor_id']);
+    session_destroy();
+    header('Location: login.php');
+}
+
+require_once('../bootstrap.php');
+
+use Src\Controller\ExposeDataController;
+
+$expose = new ExposeDataController();
+
+$data = $expose->getApplicationInfo($_GET["exttrid"]);
 ?>
 
 <!DOCTYPE html>
@@ -14,104 +34,50 @@ if (isset($_GET['exttrid']) && empty($_GET['exttrid'])) header('Location: index.
 
 <body class="fluid-container">
     <div class="flex">
-        <div class="form_card card" style="height: 400px !important;">
-            <img src="../assets/images/RMU-LOG.png" alt="RMU LOGO">
-            <h1 style="text-align: center; color: #003262 !important; font-size:24px !important">Confirmation</h1>
-            <div class="pay-status" style="margin: 0px 10%;" style="align-items: baseline;">
-                <div class="d-flex justify-content-center">
-                    <div class="spinner-grow" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                    <p style="margin-left: 10px; margin-top:3px"> Loading...</p>
-                </div>
-                <div>
-                    <table>
+        <div class="form_card card" style="height: 350px !important;width: 650px !important; padding: 20px 20px 10px 20px !important;">
+            <!--<img src="../assets/images/RMU-LOG.png" alt="RMU LOGO">-->
+            <h1 style="text-align: center; color: #003262 !important; font-size:20px !important">SALE OF FORMS</h1>
+            <div class="pay-status" style="margin: 0px 5%;" style="align-items: baseline;">
+                <?php if (!empty($data)) { ?>
+                    <table style="width:100%;border: 1px solid rgb(155, 155, 155); border-collapse: collapse;" class="mb-4">
                         <tr>
-                            <td>VENDOR: </td>
+                            <td style="width: 120px; background: #f1f1f1;text-align: right; padding: 5px; font-size: 11px;"><b>VENDOR:</b></td>
+                            <td colspan="2" style="text-align: left; padding: 5px; font-size: 11px;"><b><?= $data[0]["vendor_name"] ?></b></td>
                         </tr>
                         <tr>
-                            <td>PRICE: </td>
+                            <td style="background: #f1f1f1;text-align: right; padding: 5px; font-size: 11px;"><b>PRICE:</b></td>
+                            <td style="text-align: left; padding: 5px; font-size: 11px;"><b><?= $data[0]["amount"] ?></b></td>
                         </tr>
                         <tr>
-                            <td>APPLICATION NO: </td>
+                            <td style="background: #f1f1f1;text-align: right; padding: 5px; font-size: 11px;"><b>APPLICATION NO:</b></td>
+                            <td style="text-align: left; padding: 5px; font-size: 11px;"><b><?= "RMU-" . $data[0]["app_number"] ?></b></td>
                         </tr>
                         <tr>
-                            <td>PIN NO: </td>
+                            <td style="background: #f1f1f1;text-align: right; padding: 5px; font-size: 11px;"><b>PIN NO:</b></td>
+                            <td style="text-align: left; padding: 5px; font-size: 11px;"><b><?= $data[0]["pin_number"] ?></b></td>
+                        </tr>
+                        <tr style="border-top: 1px solid rgb(155, 155, 155)">
+                            <td style="background: #f1f1f1;text-align: right; padding: 5px; font-size: 11px; padding-top:30px">INSTITUTION:</td>
+                            <td style="text-align: left; padding: 5px; font-size: 11px;"><b>REGIONAL MARITIME UNIVERSITY</b></td>
+                        </tr>
+                        <tr>
+                            <td style="background: #f1f1f1;text-align: right; padding: 5px; font-size: 11px">FORM NAME:</td>
+                            <td style="text-align: left; padding: 5px; font-size: 11px;"><b><?= $data[0]["info"] . "-" . strtoupper($data[0]["name"]) ?></b></td>
                         </tr>
                     </table>
-                </div>
+                    <center>
+                        <button class="btn btn-primary"><b>Print</b></button>
+                    </center>
+                <?php } else { ?>
+                    <div style="width: 100%;height: 100%; text-align:center">No Data available</div>
+                <?php } ?>
             </div>
         </div>
     </div>
 
     <script src="../js/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function() {
-            //get variable(parameters) from url
-            function getUrlVars() {
-                var vars = {};
-                var parts = window.location.href.replace(
-                    /[?&]+([^=&]+)=([^&]*)/gi,
-                    function(m, key, value) {
-                        vars[key] = value;
-                    }
-                );
-                return vars;
-            }
-
-            //Use a default value when param is missing
-            function getUrlParam(parameter, defaultvalue) {
-                var urlparameter = defaultvalue;
-                if (window.location.href.indexOf(parameter) > -1) {
-                    urlparameter = getUrlVars()[parameter];
-                }
-                return urlparameter;
-            }
-
-            if (getUrlVars()["status"] != "" || getUrlVars()["status"] != undefined) {
-                if (getUrlVars()["exttrid"] != "" || getUrlVars()["exttrid"] != undefined) {
-                    $.ajax({
-                        type: "POST",
-                        url: "../endpoint/vendorConfirm",
-                        data: {
-                            status: getUrlVars()["status"],
-                            exttrid: getUrlVars()["exttrid"],
-                        },
-                        success: function(result) {
-                            console.log(result);
-                            if (result.success) {
-                                $(".pay-status").html("").append(
-                                    '<p class="mb-4"><b style="color: #003262">' + result.message + '</b><br>' +
-                                    '<span style="color:red;"><b>Please do not close this page yet.</b></span><br><br>' +
-                                    'An email and SMS with your <b>Application Number</b> and <b>PIN</b> to access application portal, has been sent to you!<br>' +
-                                    'Please confirm and proceed to the <a href="../apply"><b>online applicatioin portal</b></a> to complete your application process.</p>' +
-                                    '<form action="endpoint/sms" method="post" enctype="multipart/form-data" style="display: flex;flex-direction:row;justify-content:space-between">' +
-                                    '<button class="btn btn-primary" type="submit" style="padding: 10px 10px; width:100%">Resend SMS</button>' +
-                                    '<input type="hidden" name="_v1Token" value="' + getUrlVars()["exttrid"] + '">' +
-                                    '</form>'
-                                );
-                                $(".pay-status").html("").append(result.message + '<br><div><a href="/">Try again</a></div>');
-                            } else {
-                                $(".pay-status").html("").append(result.message + '<br><div><a href="/">Try again</a></div>');
-                            }
-                        },
-                        error: function(error) {
-                            console.log(error);
-                        }
-                    });
-                }
-            }
-
-            $(document).on({
-                ajaxStart: function() {
-                    $(".pay-status").removeClass("hide");
-                },
-                ajaxStop: function() {
-                    $(".pay-status").removeClass("hide");
-                }
-            });
-
-        });
+        $(document).ready(function() {});
     </script>
 
 </body>

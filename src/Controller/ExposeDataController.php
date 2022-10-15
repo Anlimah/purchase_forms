@@ -329,4 +329,12 @@ class ExposeDataController
         }
         return array("success" => false, "message" => "User does not exist!");
     }
+
+    public function getApplicationInfo(int $transaction_id)
+    {
+        $sql = "SELECT p.`app_number`, p.`pin_number`, f.`name`, f.`amount`, v.`vendor_name`, a.`info`, f.`name`  
+        FROM `purchase_detail` AS p, `form_type` AS f, `vendor_details` AS v, `admission_period` AS a 
+        WHERE p.`form_type` = f.`id` AND p.vendor = v.`id` AND p.`admission_period` = a.`id` AND p.`id` = :i";
+        return $this->dm->getData($sql, array(':i' => $transaction_id));
+    }
 }
