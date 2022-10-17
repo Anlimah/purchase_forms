@@ -15,7 +15,7 @@ if (isset($_GET['exttrid']) && empty($_GET['exttrid'])) header('Location: index.
 <body class="fluid-container">
     <div class="flex">
         <div class="form_card card" style="height: 320px !important;">
-            <img src="assets/images/RMU-LOG.png" alt="RMU LOG">
+            <img src="../assets/images/RMU-LOG.png" alt="RMU LOG">
             <h1 style="text-align: center; color: #003262 !important; font-size:24px !important">Payment Confirmation</h1>
             <div class="pay-status" style="margin: 0px 10%;" style="align-items: baseline;">
                 <div class="d-flex justify-content-center">
