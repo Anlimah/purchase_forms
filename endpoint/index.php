@@ -173,7 +173,21 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
 				if (isset($_SESSION['step1Done']) && isset($_SESSION['step2Done']) && isset($_SESSION['step3Done']) && isset($_SESSION['step4Done']) && isset($_SESSION['step5Done']) && isset($_SESSION['step6Done'])) {
 					if ($_SESSION['step1Done'] == true && $_SESSION['step2Done'] == true && $_SESSION['step3Done'] == true && $_SESSION['step4Done'] == true && $_SESSION['step5Done'] == true && $_SESSION['step6Done'] == true) {
-						$data = $expose->callOrchardGateway($_SESSION);
+						$_SESSION["customerData"] = array(
+							"first_name" => $_SESSION["step1"]["first_name"],
+							"last_name" => $_SESSION["step1"]["last_name"],
+							"email_address" => $_SESSION["step2"]["email_address"],
+							"country_name" => $_SESSION["step4"]["country_name"],
+							"country_code" => $_SESSION["step4"]["country_code"],
+							"phone_number" => $_SESSION["step4"]["phone_number"],
+							"form_type" => $_SESSION["step6"]["form_type"],
+							"pay_method" => "ONLINE",
+							"amount" => $_SESSION["step6"]["amount"],
+							"vendor_id" => $_SESSION["vendor_id"],
+							"app_type" => $_SESSION["step6"]["app_type"],
+							"app_year" => $_SESSION["step6"]["app_year"]
+						);
+						$data = $expose->callOrchardGateway($_SESSION["customerData"]);
 					}
 				}
 			} else {

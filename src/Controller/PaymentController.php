@@ -102,7 +102,9 @@ class PaymentController
 
     public function orchardPaymentController($data)
     {
+        return $data;
         if (!empty($data)) {
+
             $callback_url = "https://forms.purchase.rmuictonline.com/confirm.php";
             $landing_page = "https://forms.purchase.rmuictonline.com/confirm.php";
             $trans_id = time();
