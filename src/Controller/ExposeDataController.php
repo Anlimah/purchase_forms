@@ -283,10 +283,10 @@ class ExposeDataController
     /**
      * @param int transaction_id //transaction_id
      */
-    public function callOrchardGateway($amount)
+    public function callOrchardGateway($data)
     {
         $payConfirm = new PaymentController();
-        return $payConfirm->orchardPaymentController($amount);
+        return $payConfirm->orchardPaymentController($data);
     }
 
     /**

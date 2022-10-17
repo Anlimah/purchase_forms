@@ -28,7 +28,6 @@ class PaymentController
 
     public function verifyVendorPurchase(int $vendor_id, int $transaction_id)
     {
-        
     }
 
     private function prepareTransaction($secretKey, $payUrl, $payload)
@@ -37,7 +36,7 @@ class PaymentController
     /**
      * @param int transaction_id //transaction_id
      */
-    private function getTransactionStatus(int $transaction_id)
+    private function getTransactionStatusFromOrchard(int $transaction_id)
     {
         $service_id = getenv('ORCHARD_SERVID');
 
@@ -64,41 +63,53 @@ class PaymentController
 
     public function processTransaction(int $transaction_id)
     {
-        $response = json_decode($this->getTransactionStatus($transaction_id));
-        if (!empty($response)) {
-            if (isset($response->trans_status)) {
-                if ($response->trans_status == '000/01') {
-                    $voucher = new VoucherPurchase();
-                    return $voucher->SaveFormPurchaseData($_SESSION, $transaction_id);
-                } else {
-                    return array("success" => false, "message" => "Payment failed! Code: " . $response->trans_status);
-                }
-            }
+        // Fetch transaction ID AND STATUS from DB
+        $data = $this->voucher->getTransactionStatusFromDB($transaction_id);
 
-            if (isset($response->resp_code)) {
-                if ($response->resp_code == '084') {
-                    return array(
-                        "success" => false,
-                        "message" => "Payment pending! Might be due to inssuficient fund in your account or your payment session expired. Code: " . $response->resp_code
-                    );
-                } else {
-                    return array("success" => false, "message" => "Payment process failed! Code: " . $response->resp_code);
+        if (!empty($data)) {
+            if ($data[0]["status"] == "PENDING") {
+                //
+                $response = json_decode($this->getTransactionStatusFromOrchard($transaction_id));
+                if (!empty($response)) {
+                    if (isset($response->trans_status)) {
+                        if ($response->trans_status == '000/01') {
+                            $this->voucher->updateTransactionStatusInDB('COMPLETED', $transaction_id);
+                            return array("success" => true, "message" =>  "Payment successful! Code:" . $response->trans_status);
+                        } else {
+                            $this->voucher->updateTransactionStatusInDB('FAILED', $transaction_id);
+                            return array("success" => false, "message" => "Payment failed! Code: " . $response->trans_status);
+                        }
+                    }
+
+                    if (isset($response->resp_code)) {
+                        if ($response->resp_code == '084') {
+                            return array(
+                                "success" => false,
+                                "message" => "Payment pending! Might be due to inssuficient fund in your account or your payment session expired. Code: " . $response->resp_code
+                            );
+                        } else {
+                            return array("success" => false, "message" => "Payment process failed! Code: " . $response->resp_code);
+                        }
+                    }
                 }
+            } else {
+                return array("success" => false, "message" => "Transaction already performed! Code: 0");
             }
         }
-        return array("success" => false, "message" => "Payment failed! Code: 0");
+        // 
+        return array("success" => false, "message" => "Invalid transaction! Code: 0");
     }
 
-    public function orchardPaymentController($amount)
+    public function orchardPaymentController($data)
     {
-        if (!empty($amount)) {
+        if (!empty($data)) {
             $callback_url = "https://forms.purchase.rmuictonline.com/confirm.php";
             $landing_page = "https://forms.purchase.rmuictonline.com/confirm.php";
             $trans_id = time();
             $service_id = getenv('ORCHARD_SERVID');
 
             $payload = json_encode(array(
-                "amount" => $amount,
+                "amount" => $data["amount"],
                 "callback_url" => $callback_url,
                 "exttrid" => $trans_id,
                 "reference" => "RMU Forms Purchase",
@@ -109,7 +120,7 @@ class PaymentController
                 "ts" => date("Y-m-d H:i:s"),
                 "payment_mode" => "CRM",
                 "currency_code" => "GHS",
-                "currency_val" => $amount
+                "currency_val" => $data["amount"]
             ));
 
             $client_id = getenv('ORCHARD_CLIENT');
@@ -124,8 +135,9 @@ class PaymentController
             $response = json_decode($pay->initiatePayment());
 
             if ($response->resp_code == "000" && $response->resp_desc == "Passed") {
-                //Save user data
-
+                //save Data to database
+                $saved = $this->voucher->savePurchaseData($data, $trans_id);
+                if (empty($saved)) return array("success" => false, "message" => "Failed saving customer data");
                 return array("success" => true, "status" => $response->resp_code, "message" => $response->redirect_url);
             }
             //echo $response->resp_desc;

@@ -200,4 +200,43 @@ class VoucherPurchase
             return array("success" => false, "message" => "confirm.php?status=004&exttrid=" . $trans_id);
         }
     }
+
+    public function savePurchaseData($data, $trans_id)
+    {
+        $fn = $data['first_name'];
+        $ln = $data['last_name'];
+        $em = $data['email_address'];
+        $cn = $data['country_name'];
+        $cc = $data['country_code'];
+        $pn = $data['phone_number'];
+        $am = $data['amount'];
+        $ft = $data['form_type'];
+        $vd = $data['vendor_id'];
+
+        $pm = $data['pay_method'];
+        $at = $data['app_type'];
+        $ay = $data['app_year'];
+
+        $ap_id = $this->getAdmissionPeriodID();
+        $ft_id = $this->getFormTypeID($ft);
+        //$pm_id = $this->getPaymentMethodID($pm);
+
+        $login_details = $this->genLoginDetails($at, $ay);
+        $app_no = $login_details['app_number'];
+        $pin_no = $login_details['pin_number'];
+
+        return $this->saveVendorPurchaseData($trans_id, $vd, $ft_id, $ap_id, $pm, $am, $fn, $ln, $em, $cn, $cc, $pn, $app_no, $pin_no);
+    }
+
+    public function getTransactionStatusFromDB($trans_id)
+    {
+        $sql = "SELECT `id`, `status` FROM `purchase_detail` WHERE `id` = :t";
+        return $this->dm->getData($sql, array(':t' => $trans_id));
+    }
+
+    public function updateTransactionStatusInDB($status, $trans_id)
+    {
+        $sql = "UPDATE `purchase_detail` SET `status` = :s WHERE `id` = :t";
+        return $this->dm->getData($sql, array(':s' => $status, ':t' => $trans_id));
+    }
 }

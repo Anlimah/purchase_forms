@@ -81,7 +81,7 @@ CREATE TABLE `purchase_detail` (
     `app_number` VARCHAR(10) NOT NULL,
     `pin_number` VARCHAR(10) NOT NULL,
 
-    `status_code` VARCHAR(3), -- added
+    `status` VARCHAR(10) DEFAULT 'PENDING', -- added
     `device_info` VARCHAR(200), -- added
     `ip_address` VARCHAR(15), -- added
     `added_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
