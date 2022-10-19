@@ -264,9 +264,8 @@ class ExposeDataController
         //send SMS
         $response = $client->messages->create($to, $from);
         if ($response->sid) {
-            $_SESSION['sms_code'] = $otp_code;
-            $_SESSION['sms_sid'] = $response->sid;
-            if (isset($_SESSION['sms_code']) && !empty($_SESSION['sms_code']) && isset($_SESSION['sms_sid']) && !empty($_SESSION['sms_sid'])) return 1;
+            //$_SESSION['sms_sid'] = $response->sid;
+            return $otp_code;
         } else {
             return 0;
         }
