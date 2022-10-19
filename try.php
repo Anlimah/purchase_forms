@@ -1,5 +1,5 @@
 <?php
-$recipient_email = "y.m.ratty7@gmail.com";
+$recipient_email = "amns44sds@gmail.com";
 $headers = 'From: ' . 'addmissions@rmuictonline.com';
 $subject = '<b>RMU Admissions Form Purchase: Verification Code</b>';
 $message = 'Hi, <br> Your verification code is <b>12345</b>';
