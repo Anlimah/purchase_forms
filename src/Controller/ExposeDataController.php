@@ -238,43 +238,11 @@ class ExposeDataController
             //prepare mail info
             $_SESSION['email_code'] = $v_code;
             $headers = 'MIME-Version: 1.0';
-            $headers .= 'Content-type: text/html; charset=iso-8859-1';
+            $headers .= 'Content-Type: text/html; charset=UTF-8';
             $headers .= 'From: RMU Online Application <admissions@rmuictonline.com>';
             $headers .= 'To: ' . $recipient_email;
             $headers .= 'Subject: Verification Code';
-            $message = '
-                <html>
-                <head>
-                    <title>Birthday Reminders for August</title>
-                    <style>
-                        body {
-                            display: flex !important;
-                            justify-content: center !important;
-                            align-items: center !important;
-                            height: 100vh !important;
-                            width: 100% !important;
-                            background-color: #003262 !important;
-                        }
-                        
-                        body > div {
-                            width: 100% !important;
-                            height: 300px !important;
-                        }
-                        p {
-                            color: #fff;
-                            font-size: 16px;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div>
-                        <p>Hi ' . $first_name . ',</p>
-                        <p>Verification code:</p>
-                        <p style="font-size:24px;letter-spacing: 0.3rem;"><b>' . $v_code . '</b></p>
-                    </div>
-                </body>
-                </html>
-            ';
+            $message = 'Hi ' . $first_name . ', your verification code is <b>' . $v_code . '</b>';
 
             $success = mail($recipient_email, 'Verification Code', $message, $headers);
             if ($success) return 1;
