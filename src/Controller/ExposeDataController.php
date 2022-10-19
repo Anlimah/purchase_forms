@@ -237,11 +237,11 @@ class ExposeDataController
         if ($v_code) {
             //prepare mail info
             $_SESSION['email_code'] = $v_code;
-            $headers[] = 'MIME-Version: 1.0';
-            $headers[] = 'Content-type: text/html; charset=iso-8859-1';
-            $headers[] = 'From: RMU Online Application <admissions@rmuictonline.com>';
-            $headers[] = 'To: ' . $recipient_email;
-            $subject = 'RMU Admissions Form Purchase: Verification Code';
+            $headers = 'MIME-Version: 1.0';
+            $headers .= 'Content-type: text/html; charset=iso-8859-1';
+            $headers .= 'From: RMU Online Application <admissions@rmuictonline.com>';
+            $headers .= 'To: ' . $recipient_email;
+            $headers .= 'Subject: Verification Code';
             $message = '
                 <html>
                 <head>
@@ -276,7 +276,7 @@ class ExposeDataController
                 </html>
             ';
 
-            $success = mail($recipient_email, $subject, $message, $headers);
+            $success = mail($recipient_email, 'Verification Code', $message, $headers);
             if ($success) return 1;
         }
         return 0;
