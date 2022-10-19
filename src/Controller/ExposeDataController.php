@@ -243,6 +243,13 @@ class ExposeDataController
 
             //send mail
             return mail($recipient_email, $subject, $message, $headers);
+            $success = mail($recipient_email, $subject, $message, $headers);
+            if (!$success) {
+                $errorMessage = error_get_last()['message'];
+                echo $errorMessage;
+            } else {
+                echo "Success";
+            }
         }
         return 0;
     }
