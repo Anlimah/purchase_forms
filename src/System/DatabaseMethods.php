@@ -68,10 +68,4 @@ class DatabaseMethods
             echo $e->getMessage();
         }
     }
-
-    public function genCode($length = 6)
-    {
-        $digits = $length;
-        return rand(pow(10, $digits - 1), pow(10, $digits) - 1);
-    }
 }

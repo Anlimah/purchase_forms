@@ -24,7 +24,7 @@ class VoucherPurchase
 
     private function genAppNumber(int $type, int $year)
     {
-        $user_code = $this->dm->genCode(5);
+        $user_code = $this->expose->genCode(5);
         $app_number = ($type * 10000000) + ($year * 100000) + $user_code;
         return $app_number;
     }
@@ -38,18 +38,24 @@ class VoucherPurchase
         return 0;
     }
 
-    private function saveVendorPurchaseData(int $ti, int $vd, int $ft, int $ap, $pm, float $am, $fn, $ln, $em, $cn, $cc, $pn, $an, $pin, $st)
+    private function saveVendorPurchaseData(int $ti, int $vd, int $ft, int $ap, $pm, float $am, $fn, $ln, $em, $cn, $cc, $pn)
     {
-        $sql = "INSERT INTO `purchase_detail` (`id`, `vendor`, `form_type`, `admission_period`, `payment_method`, `first_name`, `last_name`, `email_address`, `country_name`, `country_code`, `phone_number`, `amount`, `app_number`, `pin_number`, `status`) 
-                VALUES(:ti, :vd, :ft, :ap, :pm, :fn, :ln, :em, :cn, :cc, :pn, :am, :an, :pin, :st)";
+        $sql = "INSERT INTO `purchase_detail` (`id`, `vendor`, `form_type`, `admission_period`, `payment_method`, `first_name`, `last_name`, `email_address`, `country_name`, `country_code`, `phone_number`, `amount`) 
+                VALUES(:ti, :vd, :ft, :ap, :pm, :fn, :ln, :em, :cn, :cc, :pn, :am)";
         $params = array(
             ':ti' => $ti, ':vd' => $vd, ':ft' => $ft, ':pm' => $pm, ':ap' => $ap, ':fn' => $fn, ':ln' => $ln,
-            ':em' => $em, ':cn' => $cn, ':cc' => $cc, ':pn' => $pn, ':am' => $am, ':an' => $an, ':pin' => $pin, ':st' => $st
+            ':em' => $em, ':cn' => $cn, ':cc' => $cc, ':pn' => $pn, ':am' => $am
         );
         if ($this->dm->inputData($sql, $params)) {
             return $ti;
         }
         return 0;
+    }
+
+    private function updateVendorPurchaseData(int $trans_id, int $app_number, $pin_number, $status)
+    {
+        $sql = "UPDATE `purchase_detail` SET `app_number`= :a,`pin_number`= :p, `status` = :s WHERE `id` = :t";
+        return $this->dm->getData($sql, array(':a' => $app_number, ':p' => $pin_number, ':s' => $status, ':t' => $trans_id));
     }
 
     private function registerApplicantPersI($user_id)
@@ -169,32 +175,16 @@ class VoucherPurchase
             $vd = $data['vendor_id'];
 
             $pm = $data['pay_method'];
-            $at = $data['app_type'];
-            $ay = $data['app_year'];
 
             $ap_id = $this->getAdmissionPeriodID();
             $ft_id = $this->getFormTypeID($ft);
             //$pm_id = $this->getPaymentMethodID($pm);
 
-            $login_details = $this->genLoginDetails($at, $ay);
-            $app_no = $login_details['app_number'];
-            $pin_no = $login_details['pin_number'];
-
             // For on premises purchases, generate app number and pin and send immediately
             if ($pm == "CASH") {
-                $purchase_id = $this->saveVendorPurchaseData($trans_id, $vd, $ft_id, $ap_id, $pm, $am, $fn, $ln, $em, $cn, $cc, $pn, $app_no, $pin_no, 'COMPLETED');
+                $purchase_id = $this->saveVendorPurchaseData($trans_id, $vd, $ft_id, $ap_id, $pm, $am, $fn, $ln, $em, $cn, $cc, $pn);
                 if ($purchase_id) {
-                    if ($this->saveLoginDetails($app_no, $pin_no, $purchase_id)) {
-                        $key = 'APPLICATION NUMBER: RMU-' . $app_no . '    PIN: ' . $pin_no;
-                        $message = 'Your RMU Online Application login details ';
-                        if ($this->expose->sendSMS($pn,  $key, $message, $cc)) {
-                            return array("success" => true, "message" =>  "confirm.php?status=000&exttrid=" . $trans_id);
-                        } else {
-                            return array("success" => false, "message" =>  "confirm.php?status=001&exttrid=" . $trans_id);
-                        }
-                    } else {
-                        return array("success" => false, "message" =>  "confirm.php?status=002&exttrid=" . $trans_id);
-                    }
+                    return $this->genLoginsAndSend($purchase_id);
                 } else {
                     return array("success" => false, "message" => "confirm.php?status=003&exttrid=" . $trans_id);
                 }
@@ -202,7 +192,7 @@ class VoucherPurchase
 
             // For online purchases, only save the data
             else {
-                return $this->saveVendorPurchaseData($trans_id, $vd, $ft_id, $ap_id, $pm, $am, $fn, $ln, $em, $cn, $cc, $pn, $app_no, $pin_no, 'PENDING');
+                return $this->saveVendorPurchaseData($trans_id, $vd, $ft_id, $ap_id, $pm, $am, $fn, $ln, $em, $cn, $cc, $pn);
             }
         } else {
             return array("success" => false, "message" => "confirm.php?status=004&exttrid=" . $trans_id);
@@ -219,5 +209,51 @@ class VoucherPurchase
     {
         $sql = "UPDATE `purchase_detail` SET `status` = :s WHERE `id` = :t";
         return $this->dm->getData($sql, array(':s' => $status, ':t' => $trans_id));
+    }
+
+    private function getAppLoginDetails(int $trans_id)
+    {
+        // get form_type, country code, phone number
+        $sql = "SELECT `form_type`, `country_code`, `phone_number`, `email_address` FROM `purchase_detail` WHERE `id` = :t";
+        return $this->dm->getData($sql, array(':t' => $trans_id));
+    }
+
+    public function genLoginsAndSend(int $trans_id)
+    {
+        $data = $this->getAppLoginDetails($trans_id);
+        if (!empty($data)) {
+
+            $app_type = 0;
+            if ($data[0]["form_type"] == 2 || $data[0]["form_type"] == 3 || $data[0]["form_type"] == 4) {
+                $app_type = 1;
+            } else if ($data[0]["form_type"] == 'Postgraduate') {
+                $app_type = 2;
+            }
+
+            $app_year = $this->expose->getAdminYearCode();
+
+            $login_details = $this->genLoginDetails($app_type, $app_year);
+
+            if ($this->saveLoginDetails($login_details['app_number'], $login_details['pin_number'], $trans_id)) {
+
+                $this->updateVendorPurchaseData($trans_id, $login_details['app_number'], $login_details['pin_number'], 'COMPLETED');
+
+                $key = 'APPLICATION NUMBER: RMU-' . $login_details['app_number'] . '    PIN: ' . $login_details['pin_number'];
+                $message = 'Your RMU Online Application login details. ';
+
+                if ($this->expose->sendSMS($data[0]["phone_number"],  $key, $message, $data[0]["country_code"])) {
+                    if (!empty($data[0]["email_address"])) {
+                        $msg = $message . $key;
+                        $this->expose->sendEmail($data[0]["email_address"],  'ONLINE APPLICATION PORTAL LOGIN INFORMATION', $msg);
+                    }
+                    return array("success" => true, "message" =>  "confirm.php?status=000&exttrid=" . $trans_id);
+                } else {
+                    return array("success" => false, "message" =>  "confirm.php?status=001&exttrid=" . $trans_id);
+                }
+            } else {
+                return array("success" => false, "message" =>  "confirm.php?status=002&exttrid=" . $trans_id);
+            }
+        }
+        return array("success" => false, "message" =>  "confirm.php?status=004&exttrid=" . $trans_id);
     }
 }

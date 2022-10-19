@@ -14,6 +14,13 @@ class ExposeDataController
     {
         $this->dm = new DatabaseMethods();
     }
+
+    public function genCode($length = 6)
+    {
+        $digits = $length;
+        return rand(pow(10, $digits - 1), pow(10, $digits) - 1);
+    }
+
     public function validateEmail($input)
     {
         if (empty($input)) die("Input required!");
@@ -230,23 +237,16 @@ class ExposeDataController
         return $this->dm->getData("SELECT * FROM `halls`");
     }
 
-    public function sendEmail($recipient_email, $first_name)
+    public function sendEmail($recipient_email, $subject, $message)
     {
-        //generate code and store hash version of code
-        $v_code = $this->dm->genCode();
-        if ($v_code) {
-            //prepare mail info
-            $_SESSION['email_code'] = $v_code;
-            $headers = 'MIME-Version: 1.0';
-            $headers .= 'Content-Type: text/html; charset=UTF-8';
-            $headers .= 'From: RMU Online Application <admissions@rmuictonline.com>';
-            $headers .= 'To: ' . $recipient_email;
-            $headers .= 'Subject: Verification Code';
-            $message = 'Hi ' . $first_name . ', your verification code is ' . $v_code;
+        $headers = 'MIME-Version: 1.0';
+        $headers .= 'Content-Type: text/html; charset=UTF-8';
+        $headers .= 'From: RMU Online Application <admissions@rmuictonline.com>';
+        $headers .= 'To: ' . $recipient_email;
+        $headers .= 'Subject: ' . $subject;
 
-            $success = mail($recipient_email, 'Verification Code', $message, $headers);
-            if ($success) return 1;
-        }
+        $success = mail($recipient_email, $subject, $message, $headers);
+        if ($success) return 1;
         return 0;
     }
 
@@ -274,7 +274,7 @@ class ExposeDataController
 
     public function sendOTP($phone_number, $country_code)
     {
-        $otp_code = $this->dm->genCode(4);
+        $otp_code = $this->genCode(4);
         $message = 'Your OTP verification code is';
         return $this->sendSMS($phone_number, $otp_code, $message, $country_code);
     }

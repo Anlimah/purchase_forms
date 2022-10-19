@@ -69,7 +69,12 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 				"email_address" => $expose->validateInput($_POST["email_address"])
 			);
 
-			if ($expose->sendEmail($_SESSION['step2']["email_address"], $_SESSION["step1"]["first_name"])) {
+			$v_code = $expose->genCode(6);
+			$subject = 'VERIFICATION CODE';
+			$message = 'Hi ' . $_SESSION["step1"]["first_name"] . ', your verification code is ' . $v_code;
+
+			if ($expose->sendEmail($_SESSION['step2']["email_address"], $subject, $message)) {
+				$_SESSION['email_code'] = $v_code;
 				$_SESSION['step2Done'] = true;
 				$data["success"] = true;
 			} else {
@@ -162,23 +167,23 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 			//$pay_method = $expose->validateInput($_POST["pay_method"]);
 			$amount = $expose->getFormPrice($form_type)[0]["amount"];
 
-			$app_type = 0;
+			/*$app_type = 0;
 			if ($form_type == 'Undergraduate (Degree)' || $form_type == 'Undergraduate (Diploma)' || $form_type == 'Short courses') {
 				$app_type = 1;
 			} else if ($form_type == 'Postgraduate') {
 				$app_type = 2;
 			}
 
-			$app_year = $expose->getAdminYearCode();
+			$app_year = $expose->getAdminYearCode();*/
 
-			if (!empty($amount) && $app_type != 0) {
+			if (!empty($amount)) {
 				$_SESSION["step6"] = array(
 					"form_type" => $form_type,
 					"amount" => $amount,
 					"pay_method" => "ONLINE",
-					"vendor_id" => $_SESSION["vendor_id"],
-					"app_type" => $app_type,
-					"app_year" => $app_year,
+					"vendor_id" => $_SESSION["vendor_id"]
+					//"app_type" => $app_type,
+					//"app_year" => $app_year,
 				);
 				$_SESSION['step6Done'] = true;
 
@@ -194,9 +199,9 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 							"form_type" => $_SESSION["step6"]["form_type"],
 							"pay_method" => "ONLINE",
 							"amount" => $_SESSION["step6"]["amount"],
-							"vendor_id" => $_SESSION["vendor_id"],
-							"app_type" => $_SESSION["step6"]["app_type"],
-							"app_year" => $_SESSION["step6"]["app_year"]
+							"vendor_id" => $_SESSION["vendor_id"]
+							//"app_type" => $_SESSION["step6"]["app_type"],
+							//"app_year" => $_SESSION["step6"]["app_year"]
 						);
 						$data = $expose->callOrchardGateway($_SESSION["customerData"]);
 						session_unset();
@@ -338,16 +343,16 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 					//$pay_method = $expose->validateInput($_POST["pay_method"]);
 					$amount = $expose->getFormPrice($form_type)[0]["amount"];
 
-					$app_type = 0;
+					/*$app_type = 0;
 					if ($form_type == 'Undergraduate (Degree)' || $form_type == 'Undergraduate (Diploma)' || $form_type == 'Short courses') {
 						$app_type = 1;
 					} else if ($form_type == 'Postgraduate') {
 						$app_type = 2;
 					}
 
-					$app_year = $expose->getAdminYearCode();
+					$app_year = $expose->getAdminYearCode();*/
 
-					if (!empty($amount) && $app_type != 0) {
+					if (!empty($amount)) {
 						$_SESSION["vendorData"] = array(
 							"first_name" => $first_name,
 							"last_name" => $last_name,
@@ -358,9 +363,9 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 							"form_type" => $form_type,
 							"pay_method" => "CASH",
 							"amount" => $amount,
-							"vendor_id" => $_SESSION["vendor_id"],
-							"app_type" => $app_type,
-							"app_year" => $app_year
+							"vendor_id" => $_SESSION["vendor_id"]
+							//"app_type" => $app_type,
+							//"app_year" => $app_year
 						);
 
 						if (!empty($_SESSION["vendorData"])) {
