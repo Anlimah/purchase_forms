@@ -230,15 +230,16 @@ class ExposeDataController
         return $this->dm->getData("SELECT * FROM `halls`");
     }
 
-    public function sendEmail($recipient_email, $user_id)
+    public function sendEmail($recipient_email)
     {
         //generate code and store hash version of code
-        $v_code = $this->dm->genCode($user_id);
+        $v_code = $this->dm->genCode();
         if ($v_code) {
             //prepare mail info
-            $headers = 'From: ' . 'y.m.ratty7@gmail.com';
-            $subject = 'RMU Admmisions Form Purchase: Code Verification';
-            $message = 'Hi, <br> your verification code is <b>' . $v_code . '</b>';
+            $_SESSION['email_code'] = $v_code;
+            $headers = 'From: ' . 'addmissions@rmuictonline.com';
+            $subject = '<b>RMU Admissions Form Purchase: Verification Code</b>';
+            $message = 'Hi, <br> Your verification code is <b>' . $v_code . '</b>';
 
             //send mail
             return mail($recipient_email, $subject, $message, $headers);

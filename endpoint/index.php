@@ -68,8 +68,14 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 			$_SESSION["step2"] = array(
 				"email_address" => $expose->validateInput($_POST["email_address"])
 			);
-			$_SESSION['step2Done'] = true;
-			$data["success"] = true;
+
+			if ($expose->sendEmail($_SESSION['step2']["email_address"])) {
+				$_SESSION['step2Done'] = true;
+				$data["success"] = true;
+			} else {
+				$data["success"] = false;
+				$data["message"] = "Error occured while sending email!";
+			}
 		} else {
 			$data["success"] = false;
 			$data["message"] = "Invalid request!";
@@ -82,8 +88,13 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 				foreach ($_POST["num"] as $num) {
 					$otp .= $num;
 				}
-				$_SESSION['step3Done'] = true;
-				$data["success"] = true;
+				if ($otp == $_SESSION['email_code']) {
+					$_SESSION['step3Done'] = true;
+					$data["success"] = true;
+				} else {
+					$data["success"] = false;
+					$data["message"] = "Email verification code provided is incorrect!";
+				}
 			}
 		} else {
 			$data["success"] = false;
