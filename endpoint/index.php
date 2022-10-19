@@ -199,6 +199,8 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 							"app_year" => $_SESSION["step6"]["app_year"]
 						);
 						$data = $expose->callOrchardGateway($_SESSION["customerData"]);
+						session_unset();
+						session_destroy();
 					}
 				}
 			} else {

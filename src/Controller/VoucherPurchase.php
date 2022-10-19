@@ -38,13 +38,13 @@ class VoucherPurchase
         return 0;
     }
 
-    private function saveVendorPurchaseData(int $ti, int $vd, int $ft, int $ap, $pm, float $am, $fn, $ln, $em, $cn, $cc, $pn, $an, $pin)
+    private function saveVendorPurchaseData(int $ti, int $vd, int $ft, int $ap, $pm, float $am, $fn, $ln, $em, $cn, $cc, $pn, $an, $pin, $st)
     {
-        $sql = "INSERT INTO `purchase_detail` (`id`, `vendor`, `form_type`, `admission_period`, `payment_method`, `first_name`, `last_name`, `email_address`, `country_name`, `country_code`, `phone_number`, `amount`, `app_number`, `pin_number`) 
-                VALUES(:ti, :vd, :ft, :ap, :pm, :fn, :ln, :em, :cn, :cc, :pn, :am, :an, :pin)";
+        $sql = "INSERT INTO `purchase_detail` (`id`, `vendor`, `form_type`, `admission_period`, `payment_method`, `first_name`, `last_name`, `email_address`, `country_name`, `country_code`, `phone_number`, `amount`, `app_number`, `pin_number`, `status`) 
+                VALUES(:ti, :vd, :ft, :ap, :pm, :fn, :ln, :em, :cn, :cc, :pn, :am, :an, :pin, :st)";
         $params = array(
             ':ti' => $ti, ':vd' => $vd, ':ft' => $ft, ':pm' => $pm, ':ap' => $ap, ':fn' => $fn, ':ln' => $ln,
-            ':em' => $em, ':cn' => $cn, ':cc' => $cc, ':pn' => $pn, ':am' => $am, ':an' => $an, ':pin' => $pin
+            ':em' => $em, ':cn' => $cn, ':cc' => $cc, ':pn' => $pn, ':am' => $am, ':an' => $an, ':pin' => $pin, ':st' => $st
         );
         if ($this->dm->inputData($sql, $params)) {
             return $ti;
@@ -180,52 +180,33 @@ class VoucherPurchase
             $app_no = $login_details['app_number'];
             $pin_no = $login_details['pin_number'];
 
-            $purchase_id = $this->saveVendorPurchaseData($trans_id, $vd, $ft_id, $ap_id, $pm, $am, $fn, $ln, $em, $cn, $cc, $pn, $app_no, $pin_no);
-            if ($purchase_id) {
-                if ($this->saveLoginDetails($app_no, $pin_no, $purchase_id)) {
-                    $key = 'APPLICATION NUMBER: RMU-' . $app_no . '    PIN: ' . $pin_no;
-                    $message = 'Your RMU Online Application login details ';
-                    if ($this->expose->sendSMS($pn,  $key, $message, $cc)) {
-                        return array("success" => true, "message" =>  "confirm.php?status=000&exttrid=" . $trans_id);
+            // For on premises purchases, generate app number and pin and send immediately
+            if ($pm == "CASH") {
+                $purchase_id = $this->saveVendorPurchaseData($trans_id, $vd, $ft_id, $ap_id, $pm, $am, $fn, $ln, $em, $cn, $cc, $pn, $app_no, $pin_no, 'COMPLETED');
+                if ($purchase_id) {
+                    if ($this->saveLoginDetails($app_no, $pin_no, $purchase_id)) {
+                        $key = 'APPLICATION NUMBER: RMU-' . $app_no . '    PIN: ' . $pin_no;
+                        $message = 'Your RMU Online Application login details ';
+                        if ($this->expose->sendSMS($pn,  $key, $message, $cc)) {
+                            return array("success" => true, "message" =>  "confirm.php?status=000&exttrid=" . $trans_id);
+                        } else {
+                            return array("success" => false, "message" =>  "confirm.php?status=001&exttrid=" . $trans_id);
+                        }
                     } else {
-                        return array("success" => false, "message" =>  "confirm.php?status=001&exttrid=" . $trans_id);
+                        return array("success" => false, "message" =>  "confirm.php?status=002&exttrid=" . $trans_id);
                     }
                 } else {
-                    return array("success" => false, "message" =>  "confirm.php?status=002&exttrid=" . $trans_id);
+                    return array("success" => false, "message" => "confirm.php?status=003&exttrid=" . $trans_id);
                 }
-            } else {
-                return array("success" => false, "message" => "confirm.php?status=003&exttrid=" . $trans_id);
+            }
+
+            // For online purchases, only save the data
+            else {
+                return $this->saveVendorPurchaseData($trans_id, $vd, $ft_id, $ap_id, $pm, $am, $fn, $ln, $em, $cn, $cc, $pn, $app_no, $pin_no, 'PENDING');
             }
         } else {
             return array("success" => false, "message" => "confirm.php?status=004&exttrid=" . $trans_id);
         }
-    }
-
-    public function savePurchaseData($data, $trans_id)
-    {
-        $fn = $data['first_name'];
-        $ln = $data['last_name'];
-        $em = $data['email_address'];
-        $cn = $data['country_name'];
-        $cc = $data['country_code'];
-        $pn = $data['phone_number'];
-        $am = $data['amount'];
-        $ft = $data['form_type'];
-        $vd = $data['vendor_id'];
-
-        $pm = $data['pay_method'];
-        $at = $data['app_type'];
-        $ay = $data['app_year'];
-
-        $ap_id = $this->getAdmissionPeriodID();
-        $ft_id = $this->getFormTypeID($ft);
-        //$pm_id = $this->getPaymentMethodID($pm);
-
-        $login_details = $this->genLoginDetails($at, $ay);
-        $app_no = $login_details['app_number'];
-        $pin_no = $login_details['pin_number'];
-
-        return $this->saveVendorPurchaseData($trans_id, $vd, $ft_id, $ap_id, $pm, $am, $fn, $ln, $em, $cn, $cc, $pn, $app_no, $pin_no);
     }
 
     public function getTransactionStatusFromDB($trans_id)

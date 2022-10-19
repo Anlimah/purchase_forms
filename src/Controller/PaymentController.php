@@ -21,7 +21,7 @@ class PaymentController
             if ($trans_id) {
                 return $this->voucher->SaveFormPurchaseData($data, $trans_id);
             } else {
-                return array("success" => true, "message" => "Transaction ID failed!");
+                return array("success" => false, "message" => "Transaction ID failed!");
             }
         }
     }
@@ -137,7 +137,7 @@ class PaymentController
 
             if ($response->resp_code == "000" && $response->resp_desc == "Passed") {
                 //save Data to database
-                $saved = $this->voucher->savePurchaseData($data, $trans_id);
+                $saved = $this->voucher->SaveFormPurchaseData($data, $trans_id);
                 if (empty($saved)) return array("success" => false, "message" => "Failed saving customer data");
                 return array("success" => true, "status" => $response->resp_code, "message" => $response->redirect_url);
             }
