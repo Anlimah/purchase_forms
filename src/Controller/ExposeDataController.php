@@ -242,7 +242,7 @@ class ExposeDataController
             $headers .= 'From: RMU Online Application <admissions@rmuictonline.com>';
             $headers .= 'To: ' . $recipient_email;
             $headers .= 'Subject: Verification Code';
-            $message = 'Hi ' . $first_name . ', your verification code is <b>' . $v_code . '</b>';
+            $message = 'Hi ' . $first_name . ', your verification code is ' . $v_code;
 
             $success = mail($recipient_email, 'Verification Code', $message, $headers);
             if ($success) return 1;
