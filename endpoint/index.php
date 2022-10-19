@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 				"email_address" => $expose->validateInput($_POST["email_address"])
 			);
 
-			if ($expose->sendEmail($_SESSION['step2']["email_address"])) {
+			if ($expose->sendEmail($_SESSION['step2']["email_address"], $_SESSION["step1"]["first_name"])) {
 				$_SESSION['step2Done'] = true;
 				$data["success"] = true;
 			} else {

@@ -230,26 +230,54 @@ class ExposeDataController
         return $this->dm->getData("SELECT * FROM `halls`");
     }
 
-    public function sendEmail($recipient_email)
+    public function sendEmail($recipient_email, $first_name)
     {
         //generate code and store hash version of code
         $v_code = $this->dm->genCode();
         if ($v_code) {
             //prepare mail info
             $_SESSION['email_code'] = $v_code;
-            $headers = 'From: ' . 'addmissions@rmuictonline.com';
-            $subject = '<b>RMU Admissions Form Purchase: Verification Code</b>';
-            $message = 'Hi, <br> Your verification code is <b>' . $v_code . '</b>';
+            $headers[] = 'MIME-Version: 1.0';
+            $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+            $headers[] = 'From: RMU Online Application <admissions@rmuictonline.com>';
+            $headers[] = 'To: ' . $recipient_email;
+            $subject = 'RMU Admissions Form Purchase: Verification Code';
+            $message = '
+                <html>
+                <head>
+                    <title>Birthday Reminders for August</title>
+                    <style>
+                        body {
+                            display: flex !important;
+                            justify-content: center !important;
+                            align-items: center !important;
+                            height: 100vh !important;
+                            width: 100% !important;
+                            background-color: #003262 !important;
+                        }
+                        
+                        body > div {
+                            width: 100% !important;
+                            height: 300px !important;
+                        }
+                        p {
+                            color: #fff;
+                            font-size: 16px;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div>
+                        <p>Hi ' . $first_name . ',</p>
+                        <p>Verification code:</p>
+                        <p style="font-size:24px;letter-spacing: 0.3rem;"><b>' . $v_code . '</b></p>
+                    </div>
+                </body>
+                </html>
+            ';
 
-            //send mail
-            return mail($recipient_email, $subject, $message, $headers);
             $success = mail($recipient_email, $subject, $message, $headers);
-            if (!$success) {
-                $errorMessage = error_get_last()['message'];
-                echo $errorMessage;
-            } else {
-                echo "Success";
-            }
+            if ($success) return 1;
         }
         return 0;
     }
