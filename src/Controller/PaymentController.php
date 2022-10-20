@@ -65,11 +65,11 @@ class PaymentController
     {
         // Fetch transaction ID AND STATUS from DB
         $data = $this->voucher->getTransactionStatusFromDB($transaction_id);
-        return $data;
         if (!empty($data)) {
             if ($data[0]["status"] == "PENDING") {
                 //
                 $response = json_decode($this->getTransactionStatusFromOrchard($transaction_id));
+                return $response;
                 if (!empty($response)) {
                     if (isset($response->trans_status)) {
                         if ($response->trans_status == '000/01') {
