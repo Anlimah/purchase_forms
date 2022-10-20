@@ -69,12 +69,13 @@ class PaymentController
             if ($data[0]["status"] == "PENDING") {
                 //
                 $response = json_decode($this->getTransactionStatusFromOrchard($transaction_id));
-                return $response;
                 if (!empty($response)) {
                     if (isset($response->trans_status)) {
                         if ($response->trans_status == '000/01') {
                             //$this->voucher->updateTransactionStatusInDB('COMPLETED', $transaction_id);
-                            if ($this->voucher->genLoginsAndSend($transaction_id)[0]["success"] == true) {
+                            $genLogNsave = $this->voucher->genLoginsAndSend($transaction_id);
+                            return $genLogNsave;
+                            if ($genLogNsave[0]["success"] == true) {
                                 return array("success" => true, "message" =>  "Payment successful! Code:" . $response->trans_status);
                             }
                         } else {
