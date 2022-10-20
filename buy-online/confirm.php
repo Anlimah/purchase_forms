@@ -79,7 +79,7 @@ if (isset($_GET['exttrid']) && empty($_GET['exttrid'])) header('Location: index.
                                             '<input type="hidden" name="_v1Token" value="' + getUrlVars()["exttrid"] + '">' +
                                             '</form>'
                                         );
-                                        $(".pay-status").html("").append(result.message + '<br><div><a href="/">Try again</a></div>');
+                                        //$(".pay-status").html("").append(result.message + '<br><div><a href="/">Try again</a></div>');
                                     } else {
                                         $(".pay-status").html("").append(result.message + '<br><div><a href="/">Try again</a></div>');
                                     }
