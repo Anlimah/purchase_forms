@@ -65,7 +65,7 @@ class PaymentController
     {
         // Fetch transaction ID AND STATUS from DB
         $data = $this->voucher->getTransactionStatusFromDB($transaction_id);
-
+        return $data;
         if (!empty($data)) {
             if ($data[0]["status"] == "PENDING") {
                 //
