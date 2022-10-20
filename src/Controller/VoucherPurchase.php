@@ -181,21 +181,18 @@ class VoucherPurchase
             //$pm_id = $this->getPaymentMethodID($pm);
 
             // For on premises purchases, generate app number and pin and send immediately
-            if ($pm == "CASH") {
-                $purchase_id = $this->saveVendorPurchaseData($trans_id, $vd, $ft_id, $ap_id, $pm, $am, $fn, $ln, $em, $cn, $cc, $pn);
-                if ($purchase_id) {
+            $purchase_id = $this->saveVendorPurchaseData($trans_id, $vd, $ft_id, $ap_id, $pm, $am, $fn, $ln, $em, $cn, $cc, $pn);
+            if ($purchase_id) {
+                if ($pm == "CASH") {
                     return $this->genLoginsAndSend($purchase_id);
                 } else {
-                    return array("success" => false, "message" => "confirm.php?status=003&exttrid=" . $trans_id);
+                    return array("success" => true, "message" => "Save purchase data!");
                 }
-            }
-
-            // For online purchases, only save the data
-            else {
-                return $this->saveVendorPurchaseData($trans_id, $vd, $ft_id, $ap_id, $pm, $am, $fn, $ln, $em, $cn, $cc, $pn);
+            } else {
+                return array("success" => false, "message" => "Failed saving purchase data!");
             }
         } else {
-            return array("success" => false, "message" => "confirm.php?status=004&exttrid=" . $trans_id);
+            return array("success" => false, "message" => "Invalid data entries!");
         }
     }
 
@@ -211,7 +208,7 @@ class VoucherPurchase
         return $this->dm->getData($sql, array(':s' => $status, ':t' => $trans_id));
     }
 
-    private function getAppLoginDetails(int $trans_id)
+    private function getAppPurchaseData(int $trans_id)
     {
         // get form_type, country code, phone number
         $sql = "SELECT `form_type`, `country_code`, `phone_number`, `email_address` FROM `purchase_detail` WHERE `id` = :t";
@@ -220,7 +217,8 @@ class VoucherPurchase
 
     public function genLoginsAndSend(int $trans_id)
     {
-        $data = $this->getAppLoginDetails($trans_id);
+        $data = $this->getAppPurchaseData($trans_id);
+
         if (!empty($data)) {
 
             $app_type = 0;
@@ -241,19 +239,19 @@ class VoucherPurchase
                 $key = 'APPLICATION NUMBER: RMU-' . $login_details['app_number'] . '    PIN: ' . $login_details['pin_number'];
                 $message = 'Your RMU Online Application login details. ';
 
-                if ($this->expose->sendSMS($data[0]["phone_number"],  $key, $message, $data[0]["country_code"])) {
+                if ($this->expose->sendSMS($data[0]["phone_number"], $key, $message, $data[0]["country_code"])) {
                     if (!empty($data[0]["email_address"])) {
                         $msg = $message . $key;
-                        $this->expose->sendEmail($data[0]["email_address"],  'ONLINE APPLICATION PORTAL LOGIN INFORMATION', $msg);
+                        $this->expose->sendEmail($data[0]["email_address"], 'ONLINE APPLICATION PORTAL LOGIN INFORMATION', $msg);
                     }
-                    return array("success" => true, "message" =>  "confirm.php?status=000&exttrid=" . $trans_id);
+                    return array("success" => true, "message" => "Form purchase successful!", "exttrid" => $trans_id);
                 } else {
-                    return array("success" => false, "message" =>  "confirm.php?status=001&exttrid=" . $trans_id);
+                    return array("success" => false, "message" => "Failed sending login details via SMS!");
                 }
             } else {
-                return array("success" => false, "message" =>  "confirm.php?status=002&exttrid=" . $trans_id);
+                return array("success" => false, "message" => "Failed saving login details!");
             }
         }
-        return array("success" => false, "message" =>  "confirm.php?status=004&exttrid=" . $trans_id);
+        return array("success" => false, "message" => "No data records for this transaction!");
     }
 }
