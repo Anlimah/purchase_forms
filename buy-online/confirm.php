@@ -14,7 +14,7 @@ if (isset($_GET['exttrid']) && empty($_GET['exttrid'])) header('Location: index.
 
 <body class="fluid-container">
     <div class="flex">
-        <div class="form_card card" style="height: 320px !important;">
+        <div class="form_card card" style="height: 350px !important;">
             <img src="../assets/images/RMU-LOG.png" alt="RMU LOG">
             <h1 style="text-align: center; color: #003262 !important; font-size:24px !important">Payment Confirmation</h1>
             <div class="pay-status" style="margin: 0px 10%;" style="align-items: baseline;">
@@ -71,13 +71,12 @@ if (isset($_GET['exttrid']) && empty($_GET['exttrid'])) header('Location: index.
                                     if (result.success) {
                                         $(".pay-status").html("").append(
                                             '<p class="mb-4"><b style="color: #003262">' + result.message + '</b><br>' +
-                                            '<span style="color:red;"><b>Please do not close this page yet.</b></span><br><br>' +
                                             'An email and SMS with your <b>Application Number</b> and <b>PIN</b> to access application portal, has been sent to you!<br>' +
-                                            'Please confirm and proceed to the <a href="admissions.rmuictonline.com"><b>online applicatioin portal</b></a> to complete your application process.</p>' +
-                                            '<form action="endpoint/sms" method="post" enctype="multipart/form-data" style="display: flex;flex-direction:row;justify-content:space-between">' +
+                                            'Please confirm and proceed to the <a href="admissions.rmuictonline.com"><b>online application portal</b></a> to complete your application process.</p>' +
+                                            '<!--<form action="endpoint/sms" method="post" enctype="multipart/form-data" style="display: flex;flex-direction:row;justify-content:space-between">' +
                                             '<button class="btn btn-primary" type="submit" style="padding: 10px 10px; width:100%">Resend SMS</button>' +
                                             '<input type="hidden" name="_v1Token" value="' + getUrlVars()["exttrid"] + '">' +
-                                            '</form>'
+                                            '</form>-->'
                                         );
                                         //$(".pay-status").html("").append(result.message + '<br><div><a href="/">Try again</a></div>');
                                     } else {
