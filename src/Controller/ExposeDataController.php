@@ -241,7 +241,7 @@ class ExposeDataController
     {
         $headers = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-Type: text/html; charset=ISO-8859-1' . "\r\n";
-        $headers .= 'From: admissions@rmuictonline.com' . "\r\n";
+        $headers .= 'From: RMU Admissions <admissions@rmuictonline.com>' . "\r\n";
         $headers .= 'To: ' . $recipient_email . "\r\n";
         $headers .= 'Subject: ' . $subject . "\r\n";
 
