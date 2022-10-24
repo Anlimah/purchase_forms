@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
 			$v_code = $expose->genCode(6);
 			$subject = 'VERIFICATION CODE';
-			$message = 'Hi ' . $_SESSION["step1"]["first_name"] . ' ' . $_SESSION["step1"]["last_name"] . ', <br> Your verification code is ' . $v_code;
+			$message = "Hi " . $_SESSION["step1"]["first_name"] . " " . $_SESSION["step1"]["last_name"] . ", <br> Your verification code is " . $v_code;
 
 			if ($expose->sendEmail($_SESSION['step2']["email_address"], $subject, $message)) {
 				$_SESSION['email_code'] = $v_code;
