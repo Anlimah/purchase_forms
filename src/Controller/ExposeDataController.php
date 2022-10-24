@@ -240,7 +240,7 @@ class ExposeDataController
     public function sendEmail($recipient_email, $subject, $message)
     {
         $headers = 'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'Content-Type: text/html; charset=ISO-8859-1' . "\r\n";
+        $headers .= 'Content-Type: text/html; charset=UTF-8' . "\r\n";
         $headers .= 'From: RMU Admissions <admissions@rmuictonline.com>' . "\r\n";
         $headers .= 'To: ' . $recipient_email . "\r\n";
         $headers .= 'Subject: ' . $subject . "\r\n";
