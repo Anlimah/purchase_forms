@@ -239,12 +239,11 @@ class ExposeDataController
 
     public function sendEmail($recipient_email, $subject, $message)
     {
-        $headers = "MIME-Version: 1.0\n";
-        $headers .= "Content-Type: text/html; charset=\"UTF-8\"; format=flowed\n";
-        $headers .= "Content-Transfer-Encoding: quoted-printable\n";
-        $headers .= "From: admissions@rmuictonline.com\n";
-        $headers .= "To: " . $recipient_email;
-        $headers .= "Subject: " . $subject;
+        $headers = 'MIME-Version: 1.0';
+        $headers .= 'Content-Type: text/html; charset=UTF-8';
+        $headers .= 'From: admissions@rmuictonline.com';
+        $headers .= 'To: ' . $recipient_email;
+        $headers .= 'Subject: ' . $subject;
 
         $success = mail($recipient_email, $subject, $message, $headers);
         if ($success) return 1;
