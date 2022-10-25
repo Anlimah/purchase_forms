@@ -272,7 +272,9 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 						$_SESSION["vendor_id"] = $data["message"];
 						$vendorPhone = $expose->getVendorPhone($_SESSION["vendor_id"]);
 						if (!empty($vendorPhone)) {
-							if ($expose->sendOTP($vendorPhone[0]["phone_number"], $vendorPhone[0]["country_code"])) {
+							$otp_code = $expose->sendOTP($vendorPhone[0]["phone_number"], $vendorPhone[0]["country_code"]);
+							if ($otp_code) {
+								$_SESSION['sms_code'] = $otp_code;
 								$_SESSION['verifySMSCode'] = true;
 								$data["success"] = true;
 								$data["message"] = "Login successfull!";

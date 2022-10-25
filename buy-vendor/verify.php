@@ -75,7 +75,10 @@ if (isset($_SESSION['verifySMSCode']) && $_SESSION['verifySMSCode'] == true) {
                     success: function(result) {
                         console.log(result);
                         if (result.success) {
-                            window.location.href = "confirm.php?status=000&exttrid=" + result.exttrid;
+                            if (url == "verifyVendor")
+                                window.location.href = "./";
+                            else
+                                window.location.href = "confirm.php?status=000&exttrid=" + result.exttrid;
                         } else {
                             alert(result.message);
                         }

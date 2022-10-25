@@ -252,7 +252,7 @@ CREATE TABLE `personal_information` (
     CONSTRAINT `fk_app_pf` FOREIGN KEY (`app_login`) REFERENCES `applicants_login`(`id`) ON UPDATE CASCADE
 );
 
-ALTER TABLE `personal_information` ADD COLUMN `speaks_english` TINYINT;
+ALTER TABLE `personal_information` ADD COLUMN `speaks_english` TINYINT AFTER `english_native`;
 
 DROP TABLE IF EXISTS `awaiting_certs`;
 CREATE TABLE `awaiting_certs` (
@@ -348,6 +348,7 @@ CREATE TABLE `form_sections_chek` (
     `education` TINYINT DEFAULT 0,
     `programme` TINYINT DEFAULT 0,
     `uploads` TINYINT DEFAULT 0,
+    `declaration` TINYINT DEFAULT 0,
     `app_login` INT NOT NULL,   
     CONSTRAINT `fk_app_form_sec_check` FOREIGN KEY (`app_login`) REFERENCES `applicants_login`(`id`) ON UPDATE CASCADE
 );
