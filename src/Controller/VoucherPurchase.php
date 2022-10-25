@@ -236,7 +236,7 @@ class VoucherPurchase
 
                 $this->updateVendorPurchaseData($trans_id, $login_details['app_number'], $login_details['pin_number'], 'COMPLETED');
 
-                $key = 'APPLICATION NUMBER: RMU-' . $login_details['app_number'] . '    PIN: ' . $login_details['pin_number'];
+                $key = 'APPLICATION NUMBER: RMU-' . $login_details['app_number'] . '    PIN: ' . $login_details['pin_number'] . ". Follow this link, www.admissions.rmuictonline.com, to start application process.";
                 $message = 'Your RMU Online Application login details. ';
 
                 if ($this->expose->sendSMS($data[0]["phone_number"], $key, $message, $data[0]["country_code"])) {
