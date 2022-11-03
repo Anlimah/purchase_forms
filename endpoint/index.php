@@ -22,7 +22,6 @@ $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] == "GET") {
 	if ($_GET["url"] == "verifyStepFinal") {
-		//echo json_encode($expose->getAllProInfo());
 		$arr = array();
 		array_push($arr, $_SESSION["step1"], $_SESSION["step2"], $_SESSION["step4"], $_SESSION["step6"], $_SESSION["step7"]);
 		echo json_encode($arr);
@@ -165,17 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 		if (isset($_SESSION["_step6Token"]) && !empty($_SESSION["_step6Token"]) && isset($_POST["_v6Token"]) && !empty($_POST["_v6Token"]) && $_POST["_v6Token"] == $_SESSION["_step6Token"]) {
 
 			$form_type = $expose->validateInput($_POST["form_type"]);
-			//$pay_method = $expose->validateInput($_POST["pay_method"]);
 			$amount = $expose->getFormPrice($form_type)[0]["amount"];
-
-			/*$app_type = 0;
-			if ($form_type == 'Undergraduate (Degree)' || $form_type == 'Undergraduate (Diploma)' || $form_type == 'Short courses') {
-				$app_type = 1;
-			} else if ($form_type == 'Postgraduate') {
-				$app_type = 2;
-			}
-
-			$app_year = $expose->getAdminYearCode();*/
 
 			if (!empty($amount)) {
 				$_SESSION["step6"] = array(
@@ -183,8 +172,6 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 					"amount" => $amount,
 					"pay_method" => "ONLINE",
 					"vendor_id" => $_SESSION["vendor_id"]
-					//"app_type" => $app_type,
-					//"app_year" => $app_year,
 				);
 				$_SESSION['step6Done'] = true;
 
@@ -201,8 +188,6 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 							"pay_method" => "ONLINE",
 							"amount" => $_SESSION["step6"]["amount"],
 							"vendor_id" => $_SESSION["vendor_id"]
-							//"app_type" => $_SESSION["step6"]["app_type"],
-							//"app_year" => $_SESSION["step6"]["app_year"]
 						);
 						$data = $expose->callOrchardGateway($_SESSION["customerData"]);
 						session_unset();
@@ -219,28 +204,6 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 		}
 		die(json_encode($data));
 	}
-
-	//Step for mobile money
-	/*elseif ($_GET["url"] == "verifyStep7Momo") {
-		if (isset($_SESSION["_step7MomoToken"]) && !empty($_SESSION["_step7MomoToken"]) && isset($_POST["_v7MomoToken"]) && !empty($_POST["_v7MomoToken"]) && $_POST["_v7MomoToken"] == $_SESSION["_step7MomoToken"]) {
-			$_SESSION["step7"] = array(
-				"momo_agent" => $expose->validateInput($_POST["momo_agent"]),
-				"momo_number" => $expose->validatePhone($_POST["momo_number"])
-			);
-
-			if (!empty($_SESSION["step7"])) $_SESSION['step7Done'] = true;
-
-			if (isset($_SESSION['step1Done']) && isset($_SESSION['step2Done']) && isset($_SESSION['step3Done']) && isset($_SESSION['step4Done']) && isset($_SESSION['step5Done']) && isset($_SESSION['step6Done']) && isset($_SESSION['step7Done'])) {
-				if ($_SESSION['step1Done'] == true && $_SESSION['step2Done'] == true && $_SESSION['step3Done'] == true && $_SESSION['step4Done'] == true && $_SESSION['step5Done'] == true && $_SESSION['step6Done'] == true && $_SESSION['step7Done'] == true) {
-					$data = $expose->callOrchardGateway($_SESSION["step6"]["amount"]);
-				}
-			}
-		} else {
-			$data["success"] = false;
-			$data["message"] = "Invalid request!";
-		}
-		die(json_encode($data));
-	}*/
 
 	//Online Payment confirmation
 	elseif ($_GET["url"] == "confirm") {
@@ -343,17 +306,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 					$country_code = substr($country, 1, ($charPos - 1));
 
 					$form_type = $expose->validateInput($_POST["form_type"]);
-					//$pay_method = $expose->validateInput($_POST["pay_method"]);
 					$amount = $expose->getFormPrice($form_type)[0]["amount"];
-
-					/*$app_type = 0;
-					if ($form_type == 'Undergraduate (Degree)' || $form_type == 'Undergraduate (Diploma)' || $form_type == 'Short courses') {
-						$app_type = 1;
-					} else if ($form_type == 'Postgraduate') {
-						$app_type = 2;
-					}
-
-					$app_year = $expose->getAdminYearCode();*/
 
 					if (!empty($amount)) {
 						$_SESSION["vendorData"] = array(
@@ -367,8 +320,6 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 							"pay_method" => "CASH",
 							"amount" => $amount,
 							"vendor_id" => $_SESSION["vendor_id"]
-							//"app_type" => $app_type,
-							//"app_year" => $app_year
 						);
 
 						if (!empty($_SESSION["vendorData"])) {
