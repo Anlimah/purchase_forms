@@ -1,5 +1,7 @@
 <?php
 session_start();
+session_unset();
+session_destroy();
 
 if (!isset($_GET['status']) || !isset($_GET['exttrid'])) header('Location: index.php?status=invalid');
 if (isset($_GET['status']) && empty($_GET['status'])) header('Location: index.php?status=invalid');
@@ -72,7 +74,7 @@ if (isset($_GET['exttrid']) && empty($_GET['exttrid'])) header('Location: index.
                                         $(".pay-status").html("").append(
                                             '<p class="mb-4"><b style="color: #003262">' + result.message + '</b><br>' +
                                             'An email and SMS with your <b>Application Number</b> and <b>PIN</b> to access application portal, has been sent to you!<br>' +
-                                            'Please confirm and proceed to the <a href="admissions.rmuictonline.com"><b>online application portal</b></a> to complete your application process.</p>' +
+                                            'Please confirm and proceed to the <a href="https://admissions.rmuictonline.com/apply/"> <b>online application portal</b></a> to complete your application process.</p>' +
                                             '<!--<form action="endpoint/sms" method="post" enctype="multipart/form-data" style="display: flex;flex-direction:row;justify-content:space-between">' +
                                             '<button class="btn btn-primary" type="submit" style="padding: 10px 10px; width:100%">Resend SMS</button>' +
                                             '<input type="hidden" name="_v1Token" value="' + getUrlVars()["exttrid"] + '">' +
