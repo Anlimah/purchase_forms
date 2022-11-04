@@ -61,36 +61,37 @@ class VoucherPurchase
     private function registerApplicantPersI($user_id)
     {
         $sql = "INSERT INTO `personal_information` (`app_login`) VALUES(:a)";
-        $params = array(':a' => $user_id);
-        $this->dm->inputData($sql, $params);
+        $this->dm->inputData($sql, array(':a' => $user_id));
     }
 
     private function registerApplicantAcaB($user_id)
     {
         $sql = "INSERT INTO `academic_background` (`app_login`) VALUES(:a)";
-        $params = array(':a' => $user_id);
-        $this->dm->inputData($sql, $params);
+        $this->dm->inputData($sql, array(':a' => $user_id));
     }
 
     private function registerApplicantProgI($user_id)
     {
         $sql = "INSERT INTO `program_info` (`app_login`) VALUES(:a)";
-        $params = array(':a' => $user_id);
-        $this->dm->inputData($sql, $params);
+        $this->dm->inputData($sql, array(':a' => $user_id));
     }
 
     private function registerApplicantPreUni($user_id)
     {
         $sql = "INSERT INTO `previous_uni_records` (`app_login`) VALUES(:a)";
-        $params = array(':a' => $user_id);
-        $this->dm->inputData($sql, $params);
+        $this->dm->inputData($sql, array(':a' => $user_id));
     }
 
     private function setFormSectionsChecks($user_id)
     {
         $sql = "INSERT INTO `form_sections_chek` (`app_login`) VALUES(:a)";
-        $params = array(':a' => $user_id);
-        $this->dm->inputData($sql, $params);
+        $this->dm->inputData($sql, array(':a' => $user_id));
+    }
+
+    private function setHeardAboutUs($user_id)
+    {
+        $sql = "INSERT INTO `heard_about_us` (`app_login`) VALUES(:a)";
+        $this->dm->inputData($sql, array(':a' => $user_id));
     }
 
     private function getApplicantLoginID($app_number)
@@ -123,6 +124,9 @@ class VoucherPurchase
 
             //Set initial form checks
             $this->setFormSectionsChecks($user_id);
+
+            //Set initial form checks
+            $this->setHeardAboutUs($user_id);
 
             return 1;
         }
