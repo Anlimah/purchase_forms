@@ -323,7 +323,9 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 						);
 
 						if (!empty($_SESSION["vendorData"])) {
-							if ($expose->sendOTP($_SESSION["vendorData"]["phone_number"], $_SESSION["vendorData"]["country_code"])) {
+							$otp_code = $expose->sendOTP($_SESSION["vendorData"]["phone_number"], $_SESSION["vendorData"]["country_code"]);
+							if ($otp_code) {
+								$_SESSION['sms_code'] = $otp_code;
 								$_SESSION['verifySMSCode'] = true;
 								$data["success"] = true;
 								$data["message"] = "OTP verification code sent!";
