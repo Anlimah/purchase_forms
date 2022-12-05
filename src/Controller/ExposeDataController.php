@@ -181,6 +181,12 @@ class ExposeDataController
         return array("status" => "success", "message" => $user_input);
     }
 
+    public function getAdminPeriod()
+    {
+        //return $this->dm->getData("SELECT * FROM `admission_period` WHERE `active` = 1 OR deadline <> NOW()");
+        return $this->dm->getID("SELECT `id` FROM `admission_period` WHERE `active` = 1");
+    }
+
     public function getIPAddress()
     {
         //whether ip is from the share internet  
@@ -203,9 +209,11 @@ class ExposeDataController
         return $_SERVER['HTTP_USER_AGENT'];
     }
 
-    public function getFormPrice(string $form_type)
+    public function getFormPrice(string $form_type, int $admin_period)
     {
-        return $this->dm->getData("SELECT `amount` FROM `form_type` WHERE `name` LIKE '%$form_type%'");
+        $sql = "SELECT `amount` FROM `form_price` AS p, `form_type` AS t 
+        WHERE t.`name` LIKE '%$form_type%' AND p.`admin_period` = :a AND p.`form_type` = t.`id`";
+        return $this->dm->getData($sql, array(":a" => $admin_period));
     }
 
     public function getAdminYearCode()
@@ -335,9 +343,10 @@ class ExposeDataController
 
     public function getApplicationInfo(int $transaction_id)
     {
-        $sql = "SELECT p.`app_number`, p.`pin_number`, f.`name`, f.`amount`, v.`vendor_name`, a.`info`, f.`name`  
-        FROM `purchase_detail` AS p, `form_type` AS f, `vendor_details` AS v, `admission_period` AS a 
-        WHERE p.`form_type` = f.`id` AND p.vendor = v.`id` AND p.`admission_period` = a.`id` AND p.`id` = :i";
+        $sql = "SELECT p.`app_number`, p.`pin_number`, tp.`name`, fp.`amount`, v.`vendor_name`, a.`info` 
+        FROM `purchase_detail` AS p, `form_type` AS tp, `form_price` AS fp, `vendor_details` AS v, `admission_period` AS a 
+        WHERE p.`form_type` = tp.`id` AND p.vendor = v.`id` AND p.`admission_period` = a.`id` AND p.`id` = :i AND 
+        fp.`form_type` = tp.`id` AND fp.`admin_period` = a.`id`";
         return $this->dm->getData($sql, array(':i' => $transaction_id));
     }
 }

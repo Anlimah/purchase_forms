@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 	} elseif ($_GET["url"] == "formInfo") {
 		if (isset($_GET["form_type"]) && !empty($_GET["form_type"])) {
 			$form_type = $expose->validateInput($_GET["form_type"]);
-			$result = $expose->getFormPrice($form_type);
+			$result = $expose->getFormPrice($form_type, $expose->getAdminPeriod());
 			if (!empty($result)) {
 				$data["success"] = true;
 				$data["message"] = $result[0]["amount"];
@@ -45,12 +45,15 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 		}
 		die(json_encode($data));
 	}
+}
 
-	// All POST request will be sent here
-} elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
+// All POST request will be sent here
+elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 	// verify applicant provided details
 	if ($_GET["url"] == "verifyStep1") {
 		if (isset($_SESSION["_step1Token"]) && !empty($_SESSION["_step1Token"]) && isset($_POST["_v1Token"]) && !empty($_POST["_v1Token"]) && $_POST["_v1Token"] == $_SESSION["_step1Token"]) {
+			if (!isset($_SESSION["admin_period"]) || empty($_SESSION["admin_period"])) $_SESSION["admin_period"] = $expose->getAdminPeriod();
+
 			$_SESSION["step1"] = array(
 				"first_name" => $expose->validateInput($_POST["first_name"]),
 				"last_name" => $expose->validateInput($_POST["last_name"])
@@ -62,7 +65,9 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 			$data["message"] = "Invalid request!";
 		}
 		die(json_encode($data));
-	} else if ($_GET["url"] == "verifyStep2") {
+	}
+	//
+	else if ($_GET["url"] == "verifyStep2") {
 		if (isset($_SESSION["_step2Token"]) && !empty($_SESSION["_step2Token"]) && isset($_POST["_v2Token"]) && !empty($_POST["_v2Token"]) && $_POST["_v2Token"] == $_SESSION["_step2Token"]) {
 			$_SESSION["step2"] = array(
 				"email_address" => $expose->validateInput($_POST["email_address"])
@@ -85,7 +90,9 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 			$data["message"] = "Invalid request!";
 		}
 		die(json_encode($data));
-	} elseif ($_GET["url"] == "verifyStep3") {
+	}
+	//
+	elseif ($_GET["url"] == "verifyStep3") {
 		if (isset($_SESSION["_step3Token"]) && !empty($_SESSION["_step3Token"]) && isset($_POST["_v3Token"]) && !empty($_POST["_v3Token"]) && $_POST["_v3Token"] == $_SESSION["_step3Token"]) {
 			if ($_POST["num"]) {
 				$otp = "";
@@ -105,7 +112,9 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 			$data["message"] = "Invalid request!";
 		}
 		die(json_encode($data));
-	} elseif ($_GET["url"] == "verifyStep4") {
+	}
+	//
+	elseif ($_GET["url"] == "verifyStep4") {
 		if (isset($_SESSION["_step4Token"]) && !empty($_SESSION["_step4Token"]) && isset($_POST["_v4Token"]) && !empty($_POST["_v4Token"]) && $_POST["_v4Token"] == $_SESSION["_step4Token"]) {
 			if (isset($_POST["country"]) && !empty($_POST["country"]) && isset($_POST["phone_number"]) && !empty($_POST["phone_number"])) {
 
@@ -164,7 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 		if (isset($_SESSION["_step6Token"]) && !empty($_SESSION["_step6Token"]) && isset($_POST["_v6Token"]) && !empty($_POST["_v6Token"]) && $_POST["_v6Token"] == $_SESSION["_step6Token"]) {
 
 			$form_type = $expose->validateInput($_POST["form_type"]);
-			$amount = $expose->getFormPrice($form_type)[0]["amount"];
+			$amount = $expose->getFormPrice($form_type, $_SESSION["admin_period"])[0]["amount"];
 
 			if (!empty($amount)) {
 				$_SESSION["step6"] = array(
@@ -187,7 +196,8 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 							"form_type" => $_SESSION["step6"]["form_type"],
 							"pay_method" => "ONLINE",
 							"amount" => $_SESSION["step6"]["amount"],
-							"vendor_id" => $_SESSION["vendor_id"]
+							"vendor_id" => $_SESSION["vendor_id"],
+							"admin_period" => $_SESSION["admin_period"]
 						);
 						$data = $expose->callOrchardGateway($_SESSION["customerData"]);
 						session_unset();
@@ -271,6 +281,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 					$otp .= $code;
 				}
 				if ($otp == $_SESSION['sms_code']) {
+					$_SESSION["admin_period"] = $expose->getAdminPeriod();
 					$_SESSION["SMSLogin"] = true;
 					$_SESSION["loginSuccess"] = true;
 					$data["success"] = true;
@@ -306,7 +317,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 					$country_code = substr($country, 1, ($charPos - 1));
 
 					$form_type = $expose->validateInput($_POST["form_type"]);
-					$amount = $expose->getFormPrice($form_type)[0]["amount"];
+					$amount = $expose->getFormPrice($form_type, $_SESSION["admin_period"])[0]["amount"];
 
 					if (!empty($amount)) {
 						$_SESSION["vendorData"] = array(
@@ -319,7 +330,8 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 							"form_type" => $form_type,
 							"pay_method" => "CASH",
 							"amount" => $amount,
-							"vendor_id" => $_SESSION["vendor_id"]
+							"vendor_id" => $_SESSION["vendor_id"],
+							"admin_period" => $_SESSION["admin_period"]
 						);
 
 						if (!empty($_SESSION["vendorData"])) {

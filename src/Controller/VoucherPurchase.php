@@ -180,7 +180,7 @@ class VoucherPurchase
 
             $pm = $data['pay_method'];
 
-            $ap_id = $this->getAdmissionPeriodID();
+            $ap_id = $data['admin_period'];
             $ft_id = $this->getFormTypeID($ft);
             //$pm_id = $this->getPaymentMethodID($pm);
 
