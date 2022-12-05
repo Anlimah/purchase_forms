@@ -12,7 +12,10 @@ if (isset($_GET['exttrid']) && empty($_GET['exttrid'])) header('Location: index.
 <!DOCTYPE html>
 <html lang="en">
 
-<?php require_once("../inc/head-section.php"); ?>
+<head>
+    <?php require_once("../inc/head-section.php"); ?>
+    <title>Form Purchase | Confirm Payment</title>
+</head>
 
 <body class="fluid-container">
     <div class="flex">

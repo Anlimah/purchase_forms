@@ -30,7 +30,10 @@ $data = $expose->getApplicationInfo($_GET["exttrid"]);
 <!DOCTYPE html>
 <html lang="en">
 
-<?php require_once("../inc/head-section.php"); ?>
+<head>
+    <?php require_once("../inc/head-section.php"); ?>
+    <title>Form Purchase | Confirmation</title>
+</head>
 
 <body class="fluid-container">
     <div class="flex">

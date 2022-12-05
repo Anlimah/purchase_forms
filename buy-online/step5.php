@@ -13,7 +13,10 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
 <!DOCTYPE html>
 <html lang="en">
 
-<?php require_once("../inc/head-section.php"); ?>
+<head>
+    <?php require_once("../inc/head-section.php"); ?>
+    <title>Form Purchase | Step 5</title>
+</head>
 
 <body class="fluid-container">
     <div class="flex">

@@ -11,7 +11,10 @@ if (!isset($_SESSION["_step1Token"])) {
 <!DOCTYPE html>
 <html lang="en">
 
-<?php require_once("../inc/head-section.php"); ?>
+<head>
+    <?php require_once("../inc/head-section.php"); ?>
+    <title>Form Purchase | Step 1</title>
+</head>
 
 <body class="fluid-container">
     <div class="flex">

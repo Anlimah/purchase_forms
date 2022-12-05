@@ -10,7 +10,10 @@ if (!isset($_SESSION["_loginToken"])) {
 <!DOCTYPE html>
 <html lang="en">
 
-<?php require_once("../inc/head-section.php"); ?>
+<head>
+    <?php require_once("../inc/head-section.php"); ?>
+    <title>Form Purchase | Vendor Login</title>
+</head>
 
 <body class="fluid-container flex">
     <div class="form_card card" style="height: 350px !important;padding: 20px 20px 10px 20px !important;">

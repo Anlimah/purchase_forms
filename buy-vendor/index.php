@@ -30,7 +30,10 @@ require_once('../inc/page-data.php');
 <!DOCTYPE html>
 <html lang="en">
 
-<?php require_once("../inc/head-section.php"); ?>
+<head>
+    <?php require_once("../inc/head-section.php"); ?>
+    <title>Form Purchase | Vendor</title>
+</head>
 
 <body class="fluid-container" style="background-color: #99ccff !important;">
     <div class="flex">

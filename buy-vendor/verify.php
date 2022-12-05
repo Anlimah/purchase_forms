@@ -14,7 +14,10 @@ if (isset($_SESSION['verifySMSCode']) && $_SESSION['verifySMSCode'] == true) {
 <!DOCTYPE html>
 <html lang="en">
 
-<?php require_once("../inc/head-section.php"); ?>
+<head>
+    <?php require_once("../inc/head-section.php"); ?>
+    <title>Form Purchase | Vendor Verification</title>
+</head>
 
 <body class="fluid-container">
     <div class="flex">
