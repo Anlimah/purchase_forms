@@ -181,7 +181,7 @@ class ExposeDataController
         return array("status" => "success", "message" => $user_input);
     }
 
-    public function getAdminPeriod()
+    public function getCurrentAdmissionPeriodID()
     {
         //return $this->dm->getData("SELECT * FROM `admission_period` WHERE `active` = 1 OR deadline <> NOW()");
         return $this->dm->getID("SELECT `id` FROM `admission_period` WHERE `active` = 1");

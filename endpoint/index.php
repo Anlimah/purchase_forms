@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 	} elseif ($_GET["url"] == "formInfo") {
 		if (isset($_GET["form_type"]) && !empty($_GET["form_type"])) {
 			$form_type = $expose->validateInput($_GET["form_type"]);
-			$result = $expose->getFormPrice($form_type, $expose->getAdminPeriod());
+			$result = $expose->getFormPrice($form_type, $expose->getCurrentAdmissionPeriodID());
 			if (!empty($result)) {
 				$data["success"] = true;
 				$data["message"] = $result[0]["amount"];
@@ -52,7 +52,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 	// verify applicant provided details
 	if ($_GET["url"] == "verifyStep1") {
 		if (isset($_SESSION["_step1Token"]) && !empty($_SESSION["_step1Token"]) && isset($_POST["_v1Token"]) && !empty($_POST["_v1Token"]) && $_POST["_v1Token"] == $_SESSION["_step1Token"]) {
-			if (!isset($_SESSION["admin_period"]) || empty($_SESSION["admin_period"])) $_SESSION["admin_period"] = $expose->getAdminPeriod();
+			if (!isset($_SESSION["admin_period"]) || empty($_SESSION["admin_period"])) $_SESSION["admin_period"] = $expose->getCurrentAdmissionPeriodID();
 
 			$_SESSION["step1"] = array(
 				"first_name" => $expose->validateInput($_POST["first_name"]),
@@ -281,7 +281,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 					$otp .= $code;
 				}
 				if ($otp == $_SESSION['sms_code']) {
-					$_SESSION["admin_period"] = $expose->getAdminPeriod();
+					$_SESSION["admin_period"] = $expose->getCurrentAdmissionPeriodID();
 					$_SESSION["SMSLogin"] = true;
 					$_SESSION["loginSuccess"] = true;
 					$data["success"] = true;
