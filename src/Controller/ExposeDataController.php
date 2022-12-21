@@ -5,6 +5,8 @@ namespace Src\Controller;
 use Twilio\Rest\Client;
 use Src\System\DatabaseMethods;
 use Src\Controller\PaymentController;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 class ExposeDataController
 {
@@ -247,14 +249,27 @@ class ExposeDataController
 
     public function sendEmail($recipient_email, $subject, $message)
     {
-        $headers = 'MIME-Version: 1.0';
-        $headers .= 'Content-Type: text/html; charset=UTF-8';
-        $headers .= 'From: admissions@rmuictonline.com';
-        $headers .= 'To: ' . $recipient_email;
-        $headers .= 'Subject: ' . $subject;
+        //PHPMailer Object
+        $mail = new PHPMailer(true); //Argument true in constructor enables exceptions
 
-        $success = mail($recipient_email, $subject, $message, $headers);
-        if ($success) return 1;
+        //From email address and name
+        $mail->From = "rmuicton@rmuictonline.com";
+        $mail->FromName = "rmuicton";
+
+        //To address and name
+        $mail->addAddress($recipient_email);
+
+        //Send HTML or Plain Text email
+        $mail->isHTML(true);
+
+        $mail->Subject = $subject;
+        $mail->Body = $message;
+
+        try {
+            if ($mail->send()) return 1;
+        } catch (Exception $e) {
+            echo "Mailer Error: " . $mail->ErrorInfo;
+        }
         return 0;
     }
 
