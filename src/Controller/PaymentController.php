@@ -71,7 +71,8 @@ class PaymentController
                 $response = json_decode($this->getTransactionStatusFromOrchard($transaction_id));
                 if (!empty($response)) {
                     if (isset($response->trans_status)) {
-                        if ($response->trans_status == '000/01' || $response->trans_status == '000/APPROVED') {
+                        $status_code = substr($response->trans_status, 3);
+                        if ($status_code == '000') {
                             //$this->voucher->updateTransactionStatusInDB('COMPLETED', $transaction_id);
                             return $this->voucher->genLoginsAndSend($transaction_id);
                         } else {
