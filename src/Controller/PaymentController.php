@@ -65,39 +65,28 @@ class PaymentController
     {
         // Fetch transaction ID AND STATUS from DB
         $data = $this->voucher->getTransactionStatusFromDB($transaction_id);
-        if (!empty($data)) {
-            if ($data[0]["status"] == "PENDING") {
-                //
-                $response = json_decode($this->getTransactionStatusFromOrchard($transaction_id));
-                if (!empty($response)) {
-                    if (isset($response->trans_status)) {
-                        $status_code = substr($response->trans_status, 3);
-                        if ($status_code == '000') {
-                            //$this->voucher->updateTransactionStatusInDB('COMPLETED', $transaction_id);
-                            return $this->voucher->genLoginsAndSend($transaction_id);
-                        } else {
-                            $this->voucher->updateTransactionStatusInDB('FAILED', $transaction_id);
-                            return array("success" => false, "message" => "Payment failed! Code: " . $response->trans_status);
-                        }
-                    }
+        if (empty($data)) return array("success" => false, "message" => "Invalid transaction ID! Code: -1");
 
-                    if (isset($response->resp_code)) {
-                        if ($response->resp_code == '084') {
-                            return array(
-                                "success" => false,
-                                "message" => "Payment pending! Might be due to inssuficient fund in your account or your payment session expired. Code: " . $response->resp_code
-                            );
-                        } else {
-                            return array("success" => false, "message" => "Payment process failed! Code: " . $response->resp_code);
-                        }
-                    }
-                }
-            } else {
-                return array("success" => false, "message" => "Transaction already performed! Code: 0");
-            }
+        if (strtoupper($data[0]["status"]) != "PENDING") return array("success" => false, "message" => "Transaction already performed! Code: 0");
+
+        $response = json_decode($this->getTransactionStatusFromOrchard($transaction_id));
+
+        if (!empty($response)) return array("success" => false, "message" => "Invalid Orchid transaction! Code: -2");
+
+        if (isset($response->trans_status)) {
+            $status_code = substr($response->trans_status, 3);
+            if ($status_code == '000') return $this->voucher->genLoginsAndSend($transaction_id);
+            $this->voucher->updateTransactionStatusInDB('FAILED', $transaction_id);
+            return array("success" => false, "message" => "Payment failed! Code: " . $response->trans_status);
         }
-        // 
-        return array("success" => false, "message" => "Invalid transaction! Code: -1");
+
+        if (isset($response->resp_code)) {
+            if ($response->resp_code == '084') return array(
+                "success" => false,
+                "message" => "Payment pending! Might be due to inssuficient fund in your account or your payment session expired. Code: " . $response->resp_code
+            );
+            return array("success" => false, "message" => "Payment process failed! Code: " . $response->resp_code);
+        }
     }
 
     public function orchardPaymentController($data)
