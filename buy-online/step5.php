@@ -19,25 +19,55 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
 </head>
 
 <body class="fluid-container">
-    <div class="flex">
-        <div class="form_card card">
-            <img src="../assets/images/RMU-LOG.png" alt="RMU LOG">
-            <h1 style="text-align: center; color: #003262 !important; font-size:30px !important">Step 5</h1>
-            <form action="#" id="step1Form" method="post" enctype="multipart/form-data" style="margin: 0px 12%;">
-                <p class="mb-4">Enter the verification code we sent to your phone.</p>
-                <div class="mb-4" style="display:flex !important; flex-direction:row !important; justify-content: space-around !important; align-items:baseline">
-                    <label class="form-label" for="email_addr">RMU - </label>
-                    <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center" name="code[]" id="num1" placeholder="0" required>
-                    <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center" name="code[]" id="num2" placeholder="0" required>
-                    <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center" name="code[]" id="num3" placeholder="0" required>
-                    <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center" name="code[]" id="num4" placeholder="0" required>
-                </div>
-                <button class="btn btn-primary mb-4" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%">Verify</button>
-                <input class="form-control" type="hidden" name="_v5Token" value="<?= $_SESSION["_step5Token"]; ?>">
-                <a href="step4.php">Change number</a>
-            </form>
+
+    <header class="fp-header">
+        <div class="container">
+            <div class="items">
+                <img src="../assets/images/rmu-logo-small.png" style="width: 70px;">
+                <span class="rmu-logo-letter">RMU</span>
+            </div>
         </div>
-    </div>
+    </header>
+
+    <main class="container flex-container" style="margin-bottom: 100px;">
+        <div class="flex-card">
+            <div class="form-card card">
+                <div class="purchase-card-header">
+                    <h1>Verify Phone Number</h1>
+                </div>
+
+                <div class="purchase-card-step-info">
+                    <span class="step-capsule">Step 5 of 6</span>
+                </div>
+
+                <hr style="color:#999">
+
+                <div class="purchase-card-body">
+                    <form action="#" id="step1Form" method="post" enctype="multipart/form-data" style="margin: 0px 12%;">
+                        <p class="mb-4">Enter the verification code we sent to your phone.</p>
+                        <div class="mb-4" style="display:flex !important; flex-direction:row !important; justify-content: space-around !important; align-items:baseline">
+                            <label class="form-label" for="email_addr">RMU - </label>
+                            <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center" name="code[]" id="num1" placeholder="0" required>
+                            <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center" name="code[]" id="num2" placeholder="0" required>
+                            <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center" name="code[]" id="num3" placeholder="0" required>
+                            <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center" name="code[]" id="num4" placeholder="0" required>
+                        </div>
+                        <button class="btn btn-primary mb-4" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%">Verify</button>
+                        <input class="form-control" type="hidden" name="_v5Token" value="<?= $_SESSION["_step5Token"]; ?>">
+                        <a href="step4.php">Change number</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="fp-footer container">
+        <p>For more information and support, reach us: </p>
+        <div style="font-size: 12px;">
+            <span><i class="bi bi-telephone-fill" style="color:#003262"></i> (+233) 302 712775; 718225; 714070</span> |
+            <span><i class="bi bi-envelope-fill" style="color:#003262"></i> admissions@rmu.edu.gh</span>
+        </div>
+    </footer>
 
     <script src="../js/jquery-3.6.0.min.js"></script>
     <script>

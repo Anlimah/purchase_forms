@@ -27,35 +27,65 @@ if (isset($_SESSION['step5Done']) && $_SESSION['step5Done'] == true && isset($_S
 </head>
 
 <body class="fluid-container">
-    <div class="flex">
-        <div class="form_card card">
-            <img src="../assets/images/RMU-LOG.png" alt="RMU LOG">
-            <h1 style="text-align: center; color: #003262 !important; font-size:30px !important">Step 6</h1>
-            <form id="step1Form" method="post" enctype="multipart/form-data" style="margin: 0px 12%;">
-                <div class="mb-4">
-                    <label class="form-label" for="gender">Form type</label>
-                    <select title="Select the type of form you want to purchase." class="form-select form-select-sm" name="form_type" id="form_type" required>
-                        <option selected disabled value="">Choose...</option>
-                        <?php
-                        $data = $expose->getFormTypes();
-                        foreach ($data as $ft) {
-                        ?>
-                            <option value="<?= $ft['name'] ?>"><?= $ft['name'] ?></option>
-                        <?php
-                        }
-                        ?>
-                    </select>
-                </div>
-                <div class=" mb-4 hide" id="form-cost-display">
-                    <p style="line-height: normal !important;">
-                        <b><span id="form-type"></span></b> forms cost <b> GHS<span id="form-cost"></span></b>.
-                    </p>
-                </div>
-                <button class="btn btn-primary" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%" disabled>Pay</button>
-                <input type="hidden" name="_v6Token" value="<?= $_SESSION["_step6Token"]; ?>">
-            </form>
+
+    <header class="fp-header">
+        <div class="container">
+            <div class="items">
+                <img src="../assets/images/rmu-logo-small.png" style="width: 70px;">
+                <span class="rmu-logo-letter">RMU</span>
+            </div>
         </div>
-    </div>
+    </header>
+
+    <main class="container flex-container" style="margin-bottom: 100px;">
+        <div class="flex-card">
+            <div class="form-card card">
+                <div class="purchase-card-header">
+                    <h1>Verify Phone Number</h1>
+                </div>
+
+                <div class="purchase-card-step-info">
+                    <span class="step-capsule">Step 6 of 6</span>
+                </div>
+
+                <hr style="color:#999">
+
+                <div class="purchase-card-body">
+                    <form id="step1Form" method="post" enctype="multipart/form-data" style="margin: 0px 12%;">
+                        <div class="mb-4">
+                            <label class="form-label" for="gender">Form type</label>
+                            <select title="Select the type of form you want to purchase." class="form-select form-select-sm" name="form_type" id="form_type" required>
+                                <option selected disabled value="">Choose...</option>
+                                <?php
+                                $data = $expose->getFormTypes();
+                                foreach ($data as $ft) {
+                                ?>
+                                    <option value="<?= $ft['name'] ?>"><?= $ft['name'] ?></option>
+                                <?php
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class=" mb-4 hide" id="form-cost-display">
+                            <p style="line-height: normal !important;">
+                                <b><span id="form-type"></span></b> forms cost <b> GHS<span id="form-cost"></span></b>.
+                            </p>
+                        </div>
+                        <button class="btn btn-primary" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%" disabled>Pay</button>
+                        <input type="hidden" name="_v6Token" value="<?= $_SESSION["_step6Token"]; ?>">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="fp-footer container">
+        <p>For more information and support, reach us: </p>
+        <div style="font-size: 12px;">
+            <span><i class="bi bi-telephone-fill" style="color:#003262"></i> (+233) 302 712775; 718225; 714070</span> |
+            <span><i class="bi bi-envelope-fill" style="color:#003262"></i> admissions@rmu.edu.gh</span>
+        </div>
+    </footer>
 
     <script src="../js/jquery-3.6.0.min.js"></script>
     <script>
