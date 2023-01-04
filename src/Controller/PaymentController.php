@@ -109,7 +109,7 @@ class PaymentController
                 "nickname" => "RMU",
                 "landing_page" => $landing_page,
                 "ts" => date("Y-m-d H:i:s"),
-                "payment_mode" => "CRM",
+                "payment_mode" => $data["pay_method"],
                 "currency_code" => "GHS",
                 "currency_val" => $data["amount"]
             ));

@@ -174,12 +174,13 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 
 			$form_type = $expose->validateInput($_POST["form_type"]);
 			$amount = $expose->getFormPrice($form_type, $_SESSION["admin_period"])[0]["amount"];
+			$payment_method = $expose->validateText($_POST["payment_method"]);
 
 			if (!empty($amount)) {
 				$_SESSION["step6"] = array(
 					"form_type" => $form_type,
 					"amount" => $amount,
-					"pay_method" => "ONLINE",
+					"pay_method" => $payment_method,
 					"vendor_id" => $_SESSION["vendor_id"]
 				);
 				$_SESSION['step6Done'] = true;
@@ -194,7 +195,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 							"country_code" => $_SESSION["step4"]["country_code"],
 							"phone_number" => $_SESSION["step4"]["phone_number"],
 							"form_type" => $_SESSION["step6"]["form_type"],
-							"pay_method" => "ONLINE",
+							"pay_method" => $_SESSION["step6"]["pay_method"],
 							"amount" => $_SESSION["step6"]["amount"],
 							"vendor_id" => $_SESSION["vendor_id"],
 							"admin_period" => $_SESSION["admin_period"]
