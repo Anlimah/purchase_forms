@@ -36,7 +36,7 @@ if (isset($_GET['exttrid']) && empty($_GET['exttrid'])) header('Location: index.
                 </div>
 
                 <div class="purchase-card-step-info">
-                    <span class="step-capsule">Step 1 of 6</span>
+                    <span class="step-capsule">Step Final</span>
                 </div>
 
                 <hr style="color:#999">
@@ -102,15 +102,7 @@ if (isset($_GET['exttrid']) && empty($_GET['exttrid'])) header('Location: index.
                                 success: function(result) {
                                     console.log(result);
                                     if (result.success) {
-                                        $(".pay-status").html("").append(
-                                            '<p class="mb-4"><b style="color: #003262">' + result.message + '</b><br>' +
-                                            'An email and SMS with your <b>Application Number</b> and <b>PIN</b> to access application portal, has been sent to you!<br>' +
-                                            'Please confirm and proceed to the <a href="https://admissions.rmuictonline.com/apply/"> <b>online application portal</b></a> to complete your application process.</p>' +
-                                            '<!--<form action="endpoint/sms" method="post" enctype="multipart/form-data" style="display: flex;flex-direction:row;justify-content:space-between">' +
-                                            '<button class="btn btn-primary" type="submit" style="padding: 10px 10px; width:100%">Resend SMS</button>' +
-                                            '<input type="hidden" name="_v1Token" value="' + getUrlVars()["exttrid"] + '">' +
-                                            '</form>-->'
-                                        );
+                                        $(".pay-status").html("").append(result.message);
                                         //$(".pay-status").html("").append(result.message + '<br><div><a href="/">Try again</a></div>');
                                     } else {
                                         $(".pay-status").html("").append(result.message + '<br><div><a href="/">Try again</a></div>');
