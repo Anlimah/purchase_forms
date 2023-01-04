@@ -77,7 +77,7 @@ class PaymentController
             $status_code = substr($response->trans_status, 3);
             if ($status_code == '000') return $this->voucher->genLoginsAndSend($transaction_id);
             $this->voucher->updateTransactionStatusInDB('FAILED', $transaction_id);
-            return array("success" => false, "message" => "Payment failed! Code: " . $response->trans_status);
+            return array("success" => false, "message" => "Payment failed! Code: " . $status_code);
         }
 
         if (isset($response->resp_code)) {
