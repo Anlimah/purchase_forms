@@ -36,7 +36,7 @@ require_once('../inc/page-data.php');
         <div class="flex-card">
             <div class="form-card card">
                 <div class="purchase-card-header">
-                    <h1>Verify Phone Number</h1>
+                    <h1>Provide Phone Number</h1>
                 </div>
 
                 <div class="purchase-card-step-info">

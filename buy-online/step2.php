@@ -32,7 +32,7 @@ if (isset($_SESSION['step1Done']) && $_SESSION['step1Done'] == true && isset($_S
         <div class="flex-card">
             <div class="form-card card">
                 <div class="purchase-card-header">
-                    <h1>Email Verification</h1>
+                    <h1>Provide Email Address</h1>
                 </div>
 
                 <div class="purchase-card-step-info">

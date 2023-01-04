@@ -41,7 +41,7 @@ if (isset($_SESSION['step5Done']) && $_SESSION['step5Done'] == true && isset($_S
         <div class="flex-card">
             <div class="form-card card">
                 <div class="purchase-card-header">
-                    <h1>Verify Phone Number</h1>
+                    <h1>Form and Payment Options</h1>
                 </div>
 
                 <div class="purchase-card-step-info">
@@ -66,10 +66,20 @@ if (isset($_SESSION['step5Done']) && $_SESSION['step5Done'] == true && isset($_S
                                 ?>
                             </select>
                         </div>
-                        <div class=" mb-4 hide" id="form-cost-display">
+                        <div class="mb-4 hide" id="form-cost-display">
                             <p style="line-height: normal !important;">
                                 <b><span id="form-type"></span></b> forms cost <b> GHS<span id="form-cost"></span></b>.
                             </p>
+                            <p class="mb-4">
+                                Choose your payment method.
+                            </p>
+                            <div class="mb-4" style="display:flex !important; flex-direction:row !important; justify-content: space-between !important; align-items:baseline">
+                                <label class="form-label" for="momo_agent" style="margin-right: 10px;width:100%">Method: </label>
+                                <select title="Select your phone number network." class="form-select form-select-sm" name="momo_agent" id="momo_agent">
+                                    <option value="CARD">Card</option>
+                                    <option value="MOMO" selected>Mobile Money</option>
+                                </select>
+                            </div>
                         </div>
                         <button class="btn btn-primary" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%" disabled>Pay</button>
                         <input type="hidden" name="_v6Token" value="<?= $_SESSION["_step6Token"]; ?>">
