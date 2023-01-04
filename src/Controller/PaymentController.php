@@ -65,9 +65,10 @@ class PaymentController
     {
         // Fetch transaction ID AND STATUS from DB
         $data = $this->voucher->getTransactionStatusFromDB($transaction_id);
+        return $data;
         if (empty($data)) return array("success" => false, "message" => "Invalid transaction ID! Code: -1");
 
-        if (strtoupper($data[0]["status"]) != "PENDING") return array("success" => false, "message" => "Transaction already performed! Code: 0");
+        if (strtoupper($data[0]["status"]) != "PENDING") return array("success" => false, "message" => "Transaction already performed! Code: 1");
 
         $response = json_decode($this->getTransactionStatusFromOrchard($transaction_id));
 
