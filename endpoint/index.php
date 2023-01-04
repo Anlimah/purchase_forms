@@ -223,7 +223,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 			$data = $expose->confirmPurchase($transaction_id);
 		} else {
 			$data["success"] = false;
-			$data["message"] = "Invalid request! 1";
+			$data["message"] = "Invalid request!";
 		}
 		die(json_encode($data));
 	}
