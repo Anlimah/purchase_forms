@@ -19,29 +19,39 @@ if (isset($_GET['exttrid']) && empty($_GET['exttrid'])) header('Location: index.
 
 <body class="fluid-container">
 
-    <nav class="fp-header">
+    <header class="fp-header">
         <div class="container">
             <div class="items">
                 <img src="../assets/images/rmu-logo-small.png" style="width: 70px;">
                 <span class="rmu-logo-letter">RMU</span>
             </div>
         </div>
-    </nav>
-
-    <header class="container">
-        <img src="../assets/images/e-payment-banner1.png" alt="" style="width: 100%;">
     </header>
 
-    <main class="container .flex-column-justify .align-items-center" style="margin-top: 10px;margin-bottom: 100px;text-align:center">
-        <div class="pay-status" style="margin: 0px 10%;" style="align-items: baseline;">
-            <div class="d-flex justify-content-center">
-                <div class="spinner-border" role="status">
-                    <span class="visually-hidden">Loading...</span>
+    <main class="container flex-container" style="margin-bottom: 100px;">
+        <div class="flex-card">
+            <div class="form-card card">
+                <div class="purchase-card-header">
+                    <h1>Personal Information</h1>
                 </div>
-                <p style="margin-left: 10px; margin-top:3px" id="status-out"> Connecting...</p>
+
+                <div class="purchase-card-step-info">
+                    <span class="step-capsule">Step 1 of 6</span>
+                </div>
+
+                <hr style="color:#999">
+
+                <div class="purchase-card-body">
+                    <div class="pay-status" style="margin: 0px 10%;" style="align-items: baseline;">
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p style="margin-left: 10px; margin-top:3px" id="status-out"> Connecting...</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        </div>
         </div>
     </main>
 
