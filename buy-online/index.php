@@ -24,7 +24,7 @@
     <main class="container .flex-column-justify .align-items-center" style="margin-top: 10px;margin-bottom: 100px;text-align:center">
         <h1 style="text-align: center;">RMU Online Form Purchase</h1>
         <p>Buy your form online. Choose to pay with mobile money or card.</p>
-        <a href="./step1.php" class="btn btn-outline-light" style="padding: 10px 10px;">Buy Now</a>
+        <a href="./step1.php" class="btn btn-outline-primary" style="padding: 10px 10px;">Buy Now</a>
     </main>
 
     <footer class="fp-footer container" style="text-align: center;">
