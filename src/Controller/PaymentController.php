@@ -75,7 +75,7 @@ class PaymentController
         if (empty($response)) return array("success" => false, "message" => "Invalid transaction Parameters! Code: -2");
 
         if (isset($response->trans_status)) {
-            $status_code = substr($response->trans_status, 3);
+            $status_code = substr($response->trans_status, 0, 3);
             if ($status_code == '000') return $this->voucher->genLoginsAndSend($transaction_id);
             $this->voucher->updateTransactionStatusInDB('FAILED', $transaction_id);
             return array("success" => false, "message" => "Payment failed! Code: " . $status_code);
