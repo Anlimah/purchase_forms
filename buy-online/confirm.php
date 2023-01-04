@@ -18,20 +18,38 @@ if (isset($_GET['exttrid']) && empty($_GET['exttrid'])) header('Location: index.
 </head>
 
 <body class="fluid-container">
-    <div class="flex">
-        <div class="form_card card" style="height: 350px !important;">
-            <img src="../assets/images/RMU-LOG.png" alt="RMU LOG">
-            <h1 style="text-align: center; color: #003262 !important; font-size:24px !important">Payment Confirmation</h1>
-            <div class="pay-status" style="margin: 0px 10%;" style="align-items: baseline;">
-                <div class="d-flex justify-content-center">
-                    <div class="spinner-border" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                    <p style="margin-left: 10px; margin-top:3px" id="status-out"> Connecting...</p>
-                </div>
+
+    <nav class="fp-header">
+        <div class="container">
+            <div class="items">
+                <img src="../assets/images/rmu-logo-small.png" style="width: 70px;">
+                <span class="rmu-logo-letter">RMU</span>
             </div>
         </div>
-    </div>
+    </nav>
+
+    <header class="container">
+        <img src="../assets/images/e-payment-banner1.png" alt="" style="width: 100%;">
+    </header>
+
+    <main class="container .flex-column-justify .align-items-center" style="margin-top: 10px;margin-bottom: 100px;text-align:center">
+        <div class="pay-status" style="margin: 0px 10%;" style="align-items: baseline;">
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p style="margin-left: 10px; margin-top:3px" id="status-out"> Connecting...</p>
+            </div>
+        </div>
+        </div>
+        </div>
+    </main>
+
+    <footer class="fp-footer container" style="text-align: center;">
+        <p>For more information and support, reach us: </p>
+        <span><i class="bi bi-telephone-fill" style="color:#003262"></i> (+233) 302 712775; 718225; 714070</span>
+        <span><i class="bi bi-envelope-fill" style="color:#003262"></i> admissions@rmu.edu.gh</span>
+    </footer>
 
     <script src="../js/jquery-3.6.0.min.js"></script>
     <script>
