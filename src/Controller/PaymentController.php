@@ -71,7 +71,7 @@ class PaymentController
 
         $response = json_decode($this->getTransactionStatusFromOrchard($transaction_id));
 
-        if (!empty($response)) return array("success" => false, "message" => "Invalid Orchid transaction! Code: -2");
+        if (empty($response)) return array("success" => false, "message" => "Invalid transaction Parameters! Code: -2");
 
         if (isset($response->trans_status)) {
             $status_code = substr($response->trans_status, 3);

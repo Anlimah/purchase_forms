@@ -32,7 +32,7 @@ if (isset($_GET['exttrid']) && empty($_GET['exttrid'])) header('Location: index.
         <div class="flex-card">
             <div class="form-card card">
                 <div class="purchase-card-header">
-                    <h1>Personal Information</h1>
+                    <h1>Payment Status Confirmation</h1>
                 </div>
 
                 <div class="purchase-card-step-info">
