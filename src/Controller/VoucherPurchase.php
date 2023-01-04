@@ -178,7 +178,10 @@ class VoucherPurchase
             $ft = $data['form_type'];
             $vd = $data['vendor_id'];
 
-            $pm = $data['pay_method'];
+            if ($data['pay_method'] == 'MOM') $pay_method = "MOMO";
+            else if ($data['pay_method'] == 'CRD') $pay_method = "CARD";
+            else $pay_method = $data['pay_method'];
+            $pm = $pay_method;
 
             $ap_id = $data['admin_period'];
             $ft_id = $this->getFormTypeID($ft);
