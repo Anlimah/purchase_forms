@@ -231,7 +231,7 @@ class VoucherPurchase
             $app_type = 0;
             if ($data[0]["form_type"] == 2 || $data[0]["form_type"] == 3 || $data[0]["form_type"] == 4) {
                 $app_type = 1;
-            } else if ($data[0]["form_type"] == 'Postgraduate') {
+            } else if ($data[0]["form_type"] == 1) {
                 $app_type = 2;
             }
 
