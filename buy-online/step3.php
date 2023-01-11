@@ -16,24 +16,6 @@ if (isset($_SESSION['step2Done']) && $_SESSION['step2Done'] == true && isset($_S
 <head>
     <?php require_once("../inc/head-section.php"); ?>
     <title>Form Purchase | Step 3</title>
-    <style>
-        .input-container {
-            width: 100px;
-            /* same width as the input */
-            position: relative;
-            display: inline-block;
-        }
-
-        .input-container::before {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: calc(4*1ch);
-            height: 2px;
-            border-bottom: 2px solid blue;
-        }
-    </style>
 </head>
 
 <body class="fluid-container">
@@ -67,9 +49,6 @@ if (isset($_SESSION['step2Done']) && $_SESSION['step2Done'] == true && isset($_S
                             <p class="mb-4" style="color:#003262;">
                                 A 6 digit code has been sent to the email <?= $_SESSION["step2"]["email_address"] ?>. Enter the code
                             </p>
-                            <div class="input-container">
-                                <input type="text" style="text-align:center; letter-spacing:10px;" class="form-control input" maxlength="6" placeholder="XXXXXX" required>
-                            </div>
                             <div class="mb-4" style="width:100%; display: flex; flex-direction:row; align-items:baseline; justify-content:space-around">
                                 <input class="form-control num" type="text" maxlength="1" style="width:35px; text-align:center;" name="num[]" id="num1" placeholder="0" required>
                                 <input class="form-control num" type="text" maxlength="1" style="width:35px; text-align:center; margin-left:5px" name="num[]" id="num2" placeholder="0" required>
@@ -80,8 +59,8 @@ if (isset($_SESSION['step2Done']) && $_SESSION['step2Done'] == true && isset($_S
                             </div>
                             <button class="btn btn-primary mb-4" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%">Verify</button>
                             <input type="hidden" name="_v3Token" value="<?= $_SESSION["_step3Token"]; ?>">
-                            <a href="step2.php">Change email address</a>
                         </form>
+                        <a href="step2.php">Change email address</a>
                     </div>
                 </div>
             </div>
