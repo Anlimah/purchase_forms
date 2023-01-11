@@ -23,65 +23,68 @@ require_once('../inc/page-data.php');
 
 <body class="fluid-container">
 
-    <header class="fp-header">
-        <div class="container">
-            <div class="items">
-                <img src="../assets/images/rmu-logo-small.png" style="width: 70px;">
-                <span class="rmu-logo-letter">RMU</span>
+    <div id="wrapper">
+
+        <header class="fp-header">
+            <div class="container">
+                <div class="items">
+                    <img src="../assets/images/rmu-logo-small.png" style="width: 70px;">
+                    <span class="rmu-logo-letter">RMU</span>
+                </div>
             </div>
-        </div>
-    </header>
+        </header>
 
-    <main class="container flex-container" style="margin-bottom: 100px;">
-        <div class="flex-card">
-            <div class="form-card card">
-                <div class="purchase-card-header">
-                    <h1>Provide Phone Number</h1>
-                </div>
+        <main class="container flex-container" style="margin-bottom: 100px;">
+            <div class="flex-card">
+                <div class="form-card card">
+                    <div class="purchase-card-header">
+                        <h1>Provide Phone Number</h1>
+                    </div>
 
-                <div class="purchase-card-step-info">
-                    <span class="step-capsule">Step 4 of 6</span>
-                </div>
+                    <div class="purchase-card-step-info">
+                        <span class="step-capsule">Step 4 of 6</span>
+                    </div>
 
-                <hr style="color:#999">
+                    <hr style="color:#999">
 
-                <div class="purchase-card-body">
-                    <form action="#" id="step1Form" method="post" enctype="multipart/form-data" style="margin: 0px 12%;">
-                        <div class="mb-4">
-                            <p class="mb-4" style="color:#003262;">
-                                We'll send you an OTP message with a code to verify your phone number.<br>
-                                <span class="text-danger"><b>Note:</b> We don't accept VoIP or Skype numbers.</span>
-                            </p>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label" for="phone-number">Phone Number</label>
-                            <div style="display:flex !important; flex-direction:row !important; justify-content: space-between !important">
-                                <select title="Choose country and country code" class="form-select form-select-sm country-code" name="country" id="country" style="margin-right: 10px; width: 45%" required>
-                                    <option selected disabled value="">Choose...</option>
-                                    <?php
-                                    foreach (COUNTRIES as $cn) {
-                                        echo '<option value="(' . $cn["code"] . ') ' . $cn["name"] . '">(' . $cn["code"] . ') ' . $cn["name"] . '</option>';
-                                    }
-                                    ?>
-                                </select>
-                                <input maxlength="10" title="Provide your Provide Number" class="form-control form-control-sm" style="width: 70%" type="tel" name="phone_number" id="phone_number" placeholder="0244123123" required>
+                    <div class="purchase-card-body">
+                        <form action="#" id="step1Form" method="post" enctype="multipart/form-data" style="margin: 0px 12%;">
+                            <div class="mb-4">
+                                <p class="mb-4" style="color:#003262;">
+                                    We'll send you an OTP message with a code to verify your phone number.<br>
+                                    <span class="text-danger"><b>Note:</b> We don't accept VoIP or Skype numbers.</span>
+                                </p>
                             </div>
-                        </div>
-                        <button class="btn btn-primary" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%">Continue</button>
-                        <input class="form-control" type="hidden" name="_v4Token" value="<?= $_SESSION["_step4Token"]; ?>">
-                    </form>
+                            <div class="mb-4">
+                                <label class="form-label" for="phone-number">Phone Number</label>
+                                <div style="display:flex !important; flex-direction:row !important; justify-content: space-between !important">
+                                    <select title="Choose country and country code" class="form-select form-select-sm country-code" name="country" id="country" style="margin-right: 10px; width: 45%" required>
+                                        <option selected disabled value="">Choose...</option>
+                                        <?php
+                                        foreach (COUNTRIES as $cn) {
+                                            echo '<option value="(' . $cn["code"] . ') ' . $cn["name"] . '">(' . $cn["code"] . ') ' . $cn["name"] . '</option>';
+                                        }
+                                        ?>
+                                    </select>
+                                    <input maxlength="10" title="Provide your Provide Number" class="form-control form-control-sm" style="width: 70%" type="tel" name="phone_number" id="phone_number" placeholder="0244123123" required>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%">Continue</button>
+                            <input class="form-control" type="hidden" name="_v4Token" value="<?= $_SESSION["_step4Token"]; ?>">
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-    </main>
+        </main>
 
-    <footer class="fp-footer container" style="text-align: center;line-height: 1.2;">
-        <span>For more information and support</span>
-        <div style="font-size: 12px;">
-            <span><i class="bi bi-telephone-fill" style="color:#003262"></i> (+233) 302 712775; 718225; 714070</span> |
-            <span><i class="bi bi-envelope-fill" style="color:#003262"></i> admissions@rmu.edu.gh</span>
-        </div>
-    </footer>
+        <footer class="fp-footer fluid-container text-bg-secondary" style="text-align: center;line-height: 1.2;">
+            <span>For more information and support</span>
+            <div style="font-size: 12px;">
+                <span><i class="bi bi-telephone-fill" style="color:#003262"></i> (+233) 302 712775; 718225; 714070</span> |
+                <span><i class="bi bi-envelope-fill" style="color:#003262"></i> admissions@rmu.edu.gh</span>
+            </div>
+        </footer>
+    </div>
 
     <script src="../js/jquery-3.6.0.min.js"></script>
     <script>
