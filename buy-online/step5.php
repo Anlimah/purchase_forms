@@ -88,7 +88,7 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
                     type: "POST",
                     url: "../endpoint/resend-code",
                     data: {
-                        resend_code: "sms"
+                        resend_code: "email"
                     },
                     contentType: false,
                     cache: false,
