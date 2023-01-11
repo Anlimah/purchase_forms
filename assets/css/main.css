@@ -238,7 +238,8 @@ main {
 
 a {
 	color: #004d99 !important;
-	line-height: 1.5;
+	line-height: 1.5 !important;
+	text-decoration: none !important;
 }
 
 a.active {
@@ -247,7 +248,8 @@ a.active {
 
 a:hover {
 	font-weight: bolder !important;
-	cursor: pointer;
+	cursor: pointer !important;
+	text-decoration: underline !important;
 }
 
 .flex-container {
