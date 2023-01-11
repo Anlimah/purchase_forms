@@ -418,7 +418,34 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 	}
 	// Resend verification code
 	elseif ($_GET["url"] == "resend-code") {
-		die(json_encode(array("success" => true)));
+		if (!isset($_POST["resend_code"])) die(json_encode(array("success" => false, "message" => "Invalid request!")));
+		if (empty($_POST["resend_code"])) die(json_encode(array("success" => false, "message" => "Missing input!")));
+		$code_type = $expose->validateInputTextOnly($_POST["resend_code"]);
+		switch ($code_type) {
+			case 'sms':
+				if ($expose->sendOTP($_SESSION["step4"]["phone_number"], $_SESSION["step4"]["country_code"])) {
+					$_SESSION['sms_code'] = $otp_code;
+					$_SESSION['verifySMSCode'] = true;
+					$data["success"] = true;
+				} else {
+					$data["success"] = false;
+				}
+				break;
+			case 'email':
+				$v_code = $expose->genCode(6);
+				$subject = 'VERIFICATION CODE';
+				$message = "Hi " . $_SESSION["step1"]["first_name"] . " " . $_SESSION["step1"]["last_name"] . ", <br> Your verification code is " . $v_code;
+
+				if ($expose->sendEmail($_SESSION['step2']["email_address"], $subject, $message)) {
+					$_SESSION['email_code'] = $v_code;
+					$_SESSION['step2Done'] = true;
+					$data["success"] = true;
+				} else {
+					$data["success"] = false;
+				}
+				break;
+		}
+		die(json_encode($data));
 	}
 } else if ($_SERVER['REQUEST_METHOD'] == "PUT") {
 	parse_str(file_get_contents("php://input"), $_PUT);

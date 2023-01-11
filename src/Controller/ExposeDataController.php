@@ -303,6 +303,19 @@ class ExposeDataController
         return $this->sendSMS($phone_number, $otp_code, $message, $country_code);
     }
 
+    public function resendVerificationCode(string $code_type, $data)
+    {
+        switch ($code_type) {
+            case 'sms':
+                return $this->sendOTP($data["phone_number"], $data["country_code"]);
+                break;
+
+            default:
+                # code...
+                break;
+        }
+    }
+
     public function getVendorPhone($vendor_id)
     {
         $sql = "SELECT `country_code`, `phone_number` FROM `vendor_details` WHERE `id`=:i";
