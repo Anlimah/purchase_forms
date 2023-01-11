@@ -1,7 +1,7 @@
 <?php
 session_start();
 //echo $_SERVER["HTTP_USER_AGENT"];
-if (isset($_SESSION["loginSuccess"]) && $_SESSION["loginSuccess"] = true && isset($_SESSION["vendor_id"]) && !empty($_SESSION["vendor_id"])) {
+if (isset($_SESSION["loginSuccess"]) && $_SESSION["loginSuccess"] == true && isset($_SESSION["vendor_id"]) && !empty($_SESSION["vendor_id"])) {
     if (!isset($_SESSION["_vendor1Token"])) {
         $rstrong = true;
         $_SESSION["_vendor1Token"] = hash('sha256', bin2hex(openssl_random_pseudo_bytes(64, $rstrong)));
@@ -12,9 +12,21 @@ if (isset($_SESSION["loginSuccess"]) && $_SESSION["loginSuccess"] = true && isse
 }
 
 if (isset($_GET['logout'])) {
-    unset($_SESSION['ghAppLogin']);
-    unset($_SESSION['ghApplicant']);
     session_destroy();
+    $_SESSION = array();
+    if (ini_get("session.use_cookies")) {
+        $params = session_get_cookie_params();
+        setcookie(
+            session_name(),
+            '',
+            time() - 42000,
+            $params["path"],
+            $params["domain"],
+            $params["secure"],
+            $params["httponly"]
+        );
+    }
+
     header('Location: login.php');
 }
 

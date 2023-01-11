@@ -1,6 +1,6 @@
 <?php
 session_start();
-echo $_SESSION["sms_code"];
+
 if (isset($_SESSION['verifySMSCode']) && $_SESSION['verifySMSCode'] == true) {
     if (!isset($_SESSION["_verifySMSToken"])) {
         $rstrong = true;
@@ -8,6 +8,25 @@ if (isset($_SESSION['verifySMSCode']) && $_SESSION['verifySMSCode'] == true) {
     }
 } else {
     header('Location: index.php');
+}
+
+if (isset($_GET['logout'])) {
+    session_destroy();
+    $_SESSION = array();
+    if (ini_get("session.use_cookies")) {
+        $params = session_get_cookie_params();
+        setcookie(
+            session_name(),
+            '',
+            time() - 42000,
+            $params["path"],
+            $params["domain"],
+            $params["secure"],
+            $params["httponly"]
+        );
+    }
+
+    header('Location: login.php');
 }
 
 ?>

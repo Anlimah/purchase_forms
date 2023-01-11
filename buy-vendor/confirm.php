@@ -2,19 +2,28 @@
 session_start();
 
 if (!isset($_GET['status']) || !isset($_GET['exttrid'])) header('Location: index.php?status=invalid');
-if (isset($_GET['status']) && empty($_GET['status'])) header('Location: index.php?status=invalid');
-if (isset($_GET['exttrid']) && empty($_GET['exttrid'])) header('Location: index.php?status=invalid');/**/
+if (empty($_GET['status']) || empty($_GET['exttrid'])) header('Location: index.php?status=invalid');
 
-if (isset($_SESSION["loginSuccess"]) && $_SESSION["loginSuccess"] = true && isset($_SESSION["vendor_id"]) && !empty($_SESSION["vendor_id"])) {
+if (isset($_SESSION["loginSuccess"]) && $_SESSION["loginSuccess"] == true && isset($_SESSION["vendor_id"]) && !empty($_SESSION["vendor_id"]))
     $trans_id = $_GET["exttrid"];
-} else {
-    header("Location: login.php");
-}
+else header("Location: login.php");
 
 if (isset($_GET['logout'])) {
-    unset($_SESSION['loginSuccess']);
-    unset($_SESSION['vendor_id']);
     session_destroy();
+    $_SESSION = array();
+    if (ini_get("session.use_cookies")) {
+        $params = session_get_cookie_params();
+        setcookie(
+            session_name(),
+            '',
+            time() - 42000,
+            $params["path"],
+            $params["domain"],
+            $params["secure"],
+            $params["httponly"]
+        );
+    }
+
     header('Location: login.php');
 }
 
