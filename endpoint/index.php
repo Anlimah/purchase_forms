@@ -419,6 +419,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 	// Resend verification code
 	elseif ($_GET["url"] == "resend-code") {
 		die(json_encode($_POST));
+
 		if (!isset($_POST["resend_code"])) die(json_encode(array("success" => false, "message" => "Invalid request!")));
 		if (empty($_POST["resend_code"])) die(json_encode(array("success" => false, "message" => "Missing input!")));
 

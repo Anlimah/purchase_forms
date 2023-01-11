@@ -69,7 +69,7 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
         $(document).ready(function() {
             var triggeredBy = 0;
 
-            var count = 5;
+            var count = 60;
             var intervalId = setInterval(() => {
                 $("#timer").html("Resend code <b>(" + count + " sec)</b>");
                 count = count - 1;
@@ -100,7 +100,7 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
                             $("#timer").show();
                             $('#resend-code').removeClass("display").addClass("hide");
 
-                            count = 5;
+                            count = 60;
                             intervalId = setInterval(() => {
                                 $("#timer").html("Resend code <b>(" + count + " sec)</b>");
                                 count = count - 1;
