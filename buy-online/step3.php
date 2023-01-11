@@ -54,6 +54,7 @@ if (!isset($_SESSION["_step3Token"])) {
                             <input type="hidden" name="_v3Token" value="<?= $_SESSION["_step3Token"]; ?>">
                         </form>
                     </div>
+
                     <div class="purchase-card-footer flex-row align-items-baseline justify-space-between" style="width: 100%;">
                         <a href="step2.php">Change email address</a>
                         <span id="timer"></span>
