@@ -67,6 +67,58 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
     <script src="../js/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
+            var triggeredBy = 0;
+
+            var count = 5;
+            var intervalId = setInterval(() => {
+                $("#timer").html("Resend code <b>(" + count + " sec)</b>");
+                count = count - 1;
+                if (count <= 0) {
+                    clearInterval(intervalId);
+                    $('#timer').hide();
+                    $('#resend-code').removeClass("hide").addClass("display");
+                    return;
+                }
+            }, 1000); //1000 will  run it every 1 second
+
+            $("#resend-code").click(function() {
+                triggeredBy = 1;
+
+                $.ajax({
+                    type: "POST",
+                    url: "../endpoint/resend-code",
+                    data: {
+                        resend_code: "sms"
+                    },
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function(result) {
+                        console.log(result);
+                        if (result.success) {
+                            clearInterval(intervalId);
+                            $("#timer").show();
+                            $('#resend-code').removeClass("display").addClass("hide");
+
+                            count = 5;
+                            intervalId = setInterval(() => {
+                                $("#timer").html("Resend code <b>(" + count + " sec)</b>");
+                                count = count - 1;
+                                if (count <= 0) {
+                                    clearInterval(intervalId);
+                                    $('#timer').hide();
+                                    $('#resend-code').removeClass("hide").addClass("display").attr("disabled", false);
+                                    return;
+                                }
+                            }, 1000); /**/
+                        } else {
+                            alert(result.message);
+                        }
+                    },
+                    error: function(error) {}
+                });
+            });
+
             $("#step1Form").on("submit", function(e) {
                 e.preventDefault();
                 $.ajax({
@@ -90,9 +142,11 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
 
             $(document).on({
                 ajaxStart: function() {
+                    if (triggeredBy == 1) $("#resend-code").prop("disabled", true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> sending...');
                     $("#submitBtn").prop("disabled", true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
                 },
                 ajaxStop: function() {
+                    if (triggeredBy == 1) $("#resend-code").prop("disabled", false).html('Resend code');
                     $("#submitBtn").prop("disabled", false).html('Verify');
                 }
             });

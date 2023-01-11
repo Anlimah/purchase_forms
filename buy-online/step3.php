@@ -98,8 +98,6 @@ if (!isset($_SESSION["_step3Token"])) {
                     processData: false,
                     success: function(result) {
                         console.log(result);
-
-
                         if (result.success) {
                             clearInterval(intervalId);
                             $("#timer").show();
@@ -122,7 +120,7 @@ if (!isset($_SESSION["_step3Token"])) {
                     },
                     error: function(error) {}
                 });
-            })
+            });
 
             $("#step1Form").on("submit", function(e) {
                 e.preventDefault();
@@ -151,10 +149,8 @@ if (!isset($_SESSION["_step3Token"])) {
                     else $("#submitBtn").prop("disabled", true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
                 },
                 ajaxStop: function() {
-                    if (triggeredBy == 1) {
-                        $("#resend-code").addClass("hide").html('Resend code');
-                        $("#timer").show();
-                    } else $("#submitBtn").prop("disabled", false).html('Verify');
+                    if (triggeredBy == 1) $("#resend-code").prop("disabled", false).html('Resend code');
+                    else $("#submitBtn").prop("disabled", false).html('Verify');
                 }
             });
 
