@@ -1,13 +1,13 @@
 <?php
 session_start();
-if (isset($_SESSION['step2Done']) && $_SESSION['step2Done'] == true && isset($_SESSION["vendor_id"]) && !empty($_SESSION["vendor_id"]) && $_SESSION["vendor_type"] == "ONLINE") {
-    if (!isset($_SESSION["_step3Token"])) {
-        $rstrong = true;
-        $_SESSION["_step3Token"] = hash('sha256', bin2hex(openssl_random_pseudo_bytes(64, $rstrong)));
-    }
-} else {
-    header('Location: step2.php');
+//if (isset($_SESSION['step2Done']) && $_SESSION['step2Done'] == true && isset($_SESSION["vendor_id"]) && !empty($_SESSION["vendor_id"]) && $_SESSION["vendor_type"] == "ONLINE") {
+if (!isset($_SESSION["_step3Token"])) {
+    $rstrong = true;
+    $_SESSION["_step3Token"] = hash('sha256', bin2hex(openssl_random_pseudo_bytes(64, $rstrong)));
 }
+/*} else {
+    header('Location: step2.php');
+}*/
 
 ?>
 <!DOCTYPE html>
@@ -54,7 +54,11 @@ if (isset($_SESSION['step2Done']) && $_SESSION['step2Done'] == true && isset($_S
                             <input type="hidden" name="_v3Token" value="<?= $_SESSION["_step3Token"]; ?>">
                         </form>
                     </div>
-                    <a href="step2.php">Change email address</a>
+                    <div class="purchase-card-footer flex-row align-items-baseline justify-space-between" style="width: 100%;">
+                        <a href="step2.php">Change email address</a>
+                        <span id="timer"></span>
+                        <button id="resend-code" class="btn btn-outline-dark btn-xs hide">Resend code</button>
+                    </div>
                 </div>
             </div>
         </main>
@@ -65,6 +69,60 @@ if (isset($_SESSION['step2Done']) && $_SESSION['step2Done'] == true && isset($_S
     <script src="../js/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
+            var triggeredBy = 0;
+
+            var count = 5;
+            var intervalId = setInterval(() => {
+                $("#timer").html("Resend code <b>(" + count + " sec)</b>");
+                count = count - 1;
+                if (count <= 0) {
+                    clearInterval(intervalId);
+                    $('#timer').hide();
+                    $('#resend-code').removeClass("hide").addClass("display");
+                    return;
+                }
+            }, 1000); //1000 will  run it every 1 second
+
+            $("#resend-code").click(function() {
+                triggeredBy = 1;
+
+                $.ajax({
+                    type: "POST",
+                    url: "../endpoint/resend-code",
+                    data: {
+                        resend_code: "email"
+                    },
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function(result) {
+                        console.log(result);
+
+
+                        if (result.success) {
+                            clearInterval(intervalId);
+                            $("#timer").show();
+                            $('#resend-code').removeClass("display").addClass("hide");
+
+                            count = 5;
+                            intervalId = setInterval(() => {
+                                $("#timer").html("Resend code <b>(" + count + " sec)</b>");
+                                count = count - 1;
+                                if (count <= 0) {
+                                    clearInterval(intervalId);
+                                    $('#timer').hide();
+                                    $('#resend-code').removeClass("hide").addClass("display").attr("disabled", false);
+                                    return;
+                                }
+                            }, 1000); /**/
+                        } else {
+                            alert(result.message);
+                        }
+                    },
+                    error: function(error) {}
+                });
+            })
+
             $("#step1Form").on("submit", function(e) {
                 e.preventDefault();
                 $.ajax({
@@ -88,10 +146,14 @@ if (isset($_SESSION['step2Done']) && $_SESSION['step2Done'] == true && isset($_S
 
             $(document).on({
                 ajaxStart: function() {
-                    $("#submitBtn").prop("disabled", true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
+                    if (triggeredBy == 1) $("#resend-code").prop("disabled", true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> sending...');
+                    else $("#submitBtn").prop("disabled", true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
                 },
                 ajaxStop: function() {
-                    $("#submitBtn").prop("disabled", false).html('Verify');
+                    if (triggeredBy == 1) {
+                        $("#resend-code").addClass("hide").html('Resend code');
+                        $("#timer").show();
+                    } else $("#submitBtn").prop("disabled", false).html('Verify');
                 }
             });
 

@@ -416,6 +416,10 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 		}
 		die(json_encode($data));
 	}
+	// Resend verification code
+	elseif ($_GET["url"] == "resend-code") {
+		die(json_encode(array("success" => true)));
+	}
 } else if ($_SERVER['REQUEST_METHOD'] == "PUT") {
 	parse_str(file_get_contents("php://input"), $_PUT);
 	die(json_encode($data));

@@ -17,7 +17,7 @@
         </header>
 
         <main class="container flex-container">
-            <div class="flex-column-justify align-items-center">
+            <div class="flex-column align-items-center">
                 <h1 style="text-align: center;">RMU Online Form Purchase</h1>
                 <p>Buy your form online. Choose to pay with mobile money or card.</p>
                 <a href="./step1.php" class="btn btn-outline-primary" style="padding: 10px 10px;">Buy Now</a>
