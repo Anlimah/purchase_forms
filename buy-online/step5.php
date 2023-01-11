@@ -22,14 +22,7 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
 
     <div id="wrapper">
 
-        <header class="fp-header">
-            <div class="container">
-                <div class="items">
-                    <img src="../assets/images/rmu-logo-small.png" style="width: 70px;">
-                    <span class="rmu-logo-letter">RMU</span>
-                </div>
-            </div>
-        </header>
+        <?php require_once("../inc/page-nav.php"); ?>
 
         <main class="container flex-container">
             <div class="flex-card">
@@ -48,10 +41,10 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
                         <form action="#" id="step1Form" method="post" enctype="multipart/form-data" style="margin: 0px 12%;">
                             <p class="mb-4">Enter the verification code we sent to your phone.</p>
                             <div class="mb-4" style="display:flex !important; flex-direction:row !important; justify-content: space-around !important; align-items:baseline">
-                                <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center" name="code[]" id="num1" placeholder="X" required>
-                                <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center" name="code[]" id="num2" placeholder="X" required>
-                                <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center" name="code[]" id="num3" placeholder="X" required>
-                                <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center" name="code[]" id="num4" placeholder="X" required>
+                                <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center;" name="code[]" id="num1" placeholder="X" required>
+                                <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center; margin-left:5px" name="code[]" id="num2" placeholder="X" required>
+                                <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center; margin-left:5px" name="code[]" id="num3" placeholder="X" required>
+                                <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center; margin-left:5px" name="code[]" id="num4" placeholder="X" required>
                             </div>
                             <button class="btn btn-primary mb-4" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%">Verify</button>
                             <input class="form-control" type="hidden" name="_v5Token" value="<?= $_SESSION["_step5Token"]; ?>">
@@ -62,13 +55,7 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
             </div>
         </main>
 
-        <footer class="fp-footer fluid-container text-bg-secondary">
-            <span>For more information and support</span>
-            <div style="font-size: 12px;">
-                <span><i class="bi bi-telephone-fill" style="color:#003262"></i> (+233) 302 712775; 718225; 714070</span> |
-                <span><i class="bi bi-envelope-fill" style="color:#003262"></i> admissions@rmu.edu.gh</span>
-            </div>
-        </footer>
+        <?php require_once("../inc/page-footer.php"); ?>
     </div>
 
     <script src="../js/jquery-3.6.0.min.js"></script>

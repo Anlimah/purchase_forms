@@ -10,14 +10,7 @@
 
     <div id="wrapper">
 
-        <nav class="fp-header">
-            <div class="container">
-                <div class="items">
-                    <img src="../assets/images/rmu-logo-small.png" style="width: 70px;">
-                    <span class="rmu-logo-letter">RMU</span>
-                </div>
-            </div>
-        </nav>
+        <?php require_once("../inc/page-nav.php"); ?>
 
         <header class="container">
             <img src="../assets/images/e-payment-banner1.png" alt="" style="width: 100%;">
@@ -31,13 +24,7 @@
             </div>
         </main>
 
-        <footer class="fp-footer fluid-container text-bg-secondary">
-            <span>For more information and support</span>
-            <div style="font-size: 12px;">
-                <span><i class="bi bi-telephone-fill" style="color:#003262"></i> (+233) 302 712775; 718225; 714070</span> |
-                <span><i class="bi bi-envelope-fill" style="color:#003262"></i> admissions@rmu.edu.gh</span>
-            </div>
-        </footer>
+        <?php require_once("../inc/page-footer.php"); ?>
     </div>
 </body>
 

@@ -204,11 +204,11 @@ main {
 .fp-header,
 .fp-footer {
 	width: 100% !important;
-	height: 70px !important;
 }
 
 .fp-header {
 	background-color: #003262 !important;
+	height: 60px !important;
 }
 
 .fp-footer {
@@ -223,6 +223,7 @@ main {
 	bottom: 0 !important;
 	text-align: center !important;
 	line-height: 1.2 !important;
+	height: 50px !important;
 }
 
 .fp-header > div {
@@ -299,7 +300,7 @@ a:hover {
 .purchase-card-header {
 	padding: 0 !important;
 	width: 100% !important;
-	height: 40px;
+	height: 40px !important;
 }
 
 .purchase-card-header > h1 {
@@ -380,11 +381,12 @@ form {
 	display: flex !important;
 	flex-direction: row !important;
 	align-items: center;
+	height: inherit;
 }
 
 .items > img,
 .items > span {
-	padding: 5px 10px !important;
+	padding: 2px 7px !important;
 }
 
 .rmu-logo-letter {

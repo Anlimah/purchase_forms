@@ -22,14 +22,7 @@ if (isset($_SESSION['step1Done']) && $_SESSION['step1Done'] == true && isset($_S
 
     <div id="wrapper">
 
-        <header class="fp-header">
-            <div class="container">
-                <div class="items">
-                    <img src="../assets/images/rmu-logo-small.png" style="width: 70px;">
-                    <span class="rmu-logo-letter">RMU</span>
-                </div>
-            </div>
-        </header>
+        <?php require_once("../inc/page-nav.php"); ?>
 
         <main class="container flex-container">
             <div class="flex-card">
@@ -58,13 +51,7 @@ if (isset($_SESSION['step1Done']) && $_SESSION['step1Done'] == true && isset($_S
             </div>
         </main>
 
-        <footer class="fp-footer fluid-container text-bg-secondary">
-            <span>For more information and support</span>
-            <div style="font-size: 12px;">
-                <span><i class="bi bi-telephone-fill" style="color:#003262"></i> (+233) 302 712775; 718225; 714070</span> |
-                <span><i class="bi bi-envelope-fill" style="color:#003262"></i> admissions@rmu.edu.gh</span>
-            </div>
-        </footer>
+        <?php require_once("../inc/page-footer.php"); ?>
     </div>
 
     <script src="../js/jquery-3.6.0.min.js"></script>
