@@ -17,19 +17,19 @@ if (isset($_SESSION['step2Done']) && $_SESSION['step2Done'] == true && isset($_S
     <?php require_once("../inc/head-section.php"); ?>
     <title>Form Purchase | Step 3</title>
     <style>
-        .input::-webkit-input-placeholder {
+        input[type="text"]::-webkit-input-placeholder {
             border-bottom: 2px solid blue;
         }
 
-        .input:-moz-placeholder {
+        input[type="text"]:-moz-placeholder {
             border-bottom: 2px solid blue;
         }
 
-        .input::-moz-placeholder {
+        input[type="text"]::-moz-placeholder {
             border-bottom: 2px solid blue;
         }
 
-        .input:-ms-input-placeholder {
+        input[type="text"]:-ms-input-placeholder {
             border-bottom: 2px solid blue;
         }
     </style>
