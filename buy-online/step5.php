@@ -53,7 +53,7 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
                     </div>
 
                     <div class="purchase-card-footer flex-row align-items-baseline justify-space-between" style="width: 100%;">
-                        <a href="step2.php">Change email address</a>
+                        <a href="step4.php">Change number</a>
                         <span id="timer"></span>
                         <button id="resend-code" class="btn btn-outline-dark btn-xs hide">Resend code</button>
                     </div>
