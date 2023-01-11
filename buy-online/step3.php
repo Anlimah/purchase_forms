@@ -66,8 +66,8 @@ if (isset($_SESSION['step2Done']) && $_SESSION['step2Done'] == true && isset($_S
                             <p class="mb-4" style="color:#003262;">
                                 A 6 digit code has been sent to the email <?= $_SESSION["step2"]["email_address"] ?>. Enter the code
                             </p>
+                            <input type="text" class="form-control input" maxlength="6" placeholder="XXXXXX" required>
                             <div class="mb-4" style="width:100%; display: flex; flex-direction:row; align-items:baseline; justify-content:space-around">
-                                <input type="text" class="form-control input" maxlength="6" placeholder="XXXXXX" required>
                                 <input class="form-control num" type="text" maxlength="1" style="width:35px; text-align:center;" name="num[]" id="num1" placeholder="0" required>
                                 <input class="form-control num" type="text" maxlength="1" style="width:35px; text-align:center; margin-left:5px" name="num[]" id="num2" placeholder="0" required>
                                 <input class="form-control num" type="text" maxlength="1" style="width:35px; text-align:center; margin-left:5px" name="num[]" id="num3" placeholder="0" required>
