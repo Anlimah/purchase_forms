@@ -252,7 +252,7 @@ class VoucherPurchase
                         $this->expose->sendEmail($data[0]["email_address"], 'ONLINE APPLICATION PORTAL LOGIN INFORMATION', $msg);
                     }
                     $browser_mg = '
-                        <p class="mb-4" style="text-align: center; width: 100%; margin:0; padding:0">
+                        <p class="mb-4" style="text-align: justify !important; width: 100%; margin:0; padding:0">
                             <b class="text-success">Form purchase successful!</b><br> 
                             An email and SMS with your <b>Application Number</b> and <b>PIN</b> 
                             to access application portal, has been sent to you!<br> 

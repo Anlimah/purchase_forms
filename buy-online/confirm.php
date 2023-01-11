@@ -111,6 +111,7 @@ if (isset($_GET['exttrid']) && empty($_GET['exttrid'])) header('Location: index.
                                 },
                                 error: function(error) {
                                     console.log(error);
+                                    alert(error);
                                 }
                             });
                         }, init);
