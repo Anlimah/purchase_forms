@@ -187,9 +187,45 @@ body {
 	font-size: 14px !important;
 }
 
+#wrapper {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	width: 100% !important;
+	height: 100% !important;
+}
+
 main {
 	width: 100%;
 	height: 100%;
+}
+
+.fp-header,
+.fp-footer {
+	width: 100% !important;
+	height: 70px !important;
+}
+
+.fp-header {
+	background-color: #003262 !important;
+}
+
+.fp-footer {
+	display: flex !important;
+	flex-direction: column !important;
+	justify-content: center !important;
+	align-items: center !important;
+	background-color: #fff !important;
+	align-self: flex-end !important;
+	margin: 0 !important;
+	position: fixed;
+	bottom: 0;
+}
+
+.fp-header > div {
+	width: 100% !important;
+	height: 100% !important;
 }
 
 .form-control {
@@ -336,29 +372,6 @@ label {
 
 form {
 	margin: 0px 12% !important;
-}
-
-.fp-header,
-.fp-footer {
-	width: 100% !important;
-	height: 70px !important;
-}
-
-.fp-header {
-	background-color: #003262 !important;
-}
-
-.fp-footer {
-	display: flex !important;
-	flex-direction: column !important;
-	justify-content: center !important;
-	align-items: center !important;
-	background-color: #fff !important;
-}
-
-.fp-header > div {
-	width: 100% !important;
-	height: 100% !important;
 }
 
 .items {
