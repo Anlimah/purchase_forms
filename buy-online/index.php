@@ -23,10 +23,12 @@
             <img src="../assets/images/e-payment-banner1.png" alt="" style="width: 100%;">
         </header>
 
-        <main class="container .flex-column-justify .align-items-center" style="margin-top: 10px;margin-bottom: 100px;text-align:center">
-            <h1 style="text-align: center;">RMU Online Form Purchase</h1>
-            <p>Buy your form online. Choose to pay with mobile money or card.</p>
-            <a href="./step1.php" class="btn btn-outline-primary" style="padding: 10px 10px;">Buy Now</a>
+        <main class="container flex-container">
+            <div class="flex-column-justify align-items-center">
+                <h1 style="text-align: center;">RMU Online Form Purchase</h1>
+                <p>Buy your form online. Choose to pay with mobile money or card.</p>
+                <a href="./step1.php" class="btn btn-outline-primary" style="padding: 10px 10px;">Buy Now</a>
+            </div>
         </main>
 
         <footer class="fp-footer fluid-container text-bg-secondary" style="text-align: center;line-height: 1.2;">

@@ -34,7 +34,7 @@ require_once('../inc/page-data.php');
             </div>
         </header>
 
-        <main class="container flex-container" style="margin-bottom: 100px;">
+        <main class="container flex-container">
             <div class="flex-card">
                 <div class="form-card card">
                     <div class="purchase-card-header">
@@ -77,7 +77,7 @@ require_once('../inc/page-data.php');
             </div>
         </main>
 
-        <footer class="fp-footer fluid-container text-bg-secondary" style="text-align: center;line-height: 1.2;">
+        <footer class="fp-footer fluid-container text-bg-secondary">
             <span>For more information and support</span>
             <div style="font-size: 12px;">
                 <span><i class="bi bi-telephone-fill" style="color:#003262"></i> (+233) 302 712775; 718225; 714070</span> |
