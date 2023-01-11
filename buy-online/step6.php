@@ -89,8 +89,8 @@ if (isset($_SESSION['step5Done']) && $_SESSION['step5Done'] == true && isset($_S
         </div>
     </main>
 
-    <footer class="fp-footer container">
-        <p>For more information and support, reach us: </p>
+    <footer class="fp-footer container" style="text-align: center;line-height: 1.2;">
+        <span>For more information and support</span>
         <div style="font-size: 12px;">
             <span><i class="bi bi-telephone-fill" style="color:#003262"></i> (+233) 302 712775; 718225; 714070</span> |
             <span><i class="bi bi-envelope-fill" style="color:#003262"></i> admissions@rmu.edu.gh</span>

@@ -27,8 +27,8 @@
         <a href="./step1.php" class="btn btn-outline-primary" style="padding: 10px 10px;">Buy Now</a>
     </main>
 
-    <footer class="fp-footer container" style="text-align: center;">
-        <p>For more information and support, reach us: </p>
+    <footer class="fp-footer container" style="text-align: center;line-height: 1.2;">
+        <span>For more information and support</span>
         <span><i class="bi bi-telephone-fill" style="color:#003262"></i> (+233) 302 712775; 718225; 714070</span>
         <span><i class="bi bi-envelope-fill" style="color:#003262"></i> admissions@rmu.edu.gh</span>
     </footer>
