@@ -49,7 +49,7 @@ require_once('../inc/page-data.php');
                     <form action="#" id="step1Form" method="post" enctype="multipart/form-data" style="margin: 0px 12%;">
                         <div class="mb-4">
                             <p class="mb-4" style="color:#003262;">
-                                Provide your <b>number</b>. We'll send you an OTP message with a code for verification on the next screen.<br>
+                                We'll send you an OTP message with a code to verify your phone number.<br>
                                 <span class="text-danger"><b>Note:</b> We don't accept VoIP or Skype numbers.</span>
                             </p>
                         </div>
