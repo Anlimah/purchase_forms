@@ -303,17 +303,14 @@ class ExposeDataController
         return $this->sendSMS($phone_number, $otp_code, $message, $country_code);
     }
 
-    public function resendVerificationCode(string $code_type, $data)
+    public function sendEmailVerificationCode($email)
     {
-        switch ($code_type) {
-            case 'sms':
-                return $this->sendOTP($data["phone_number"], $data["country_code"]);
-                break;
+        $v_code = $this->genCode(6);
+        $subject = 'VERIFICATION CODE';
+        $message = "Your verification code: " . $v_code;
 
-            default:
-                # code...
-                break;
-        }
+        if (!$this->sendEmail($email, $subject, $message)) return 0;
+        return $v_code;
     }
 
     public function getVendorPhone($vendor_id)

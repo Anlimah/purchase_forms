@@ -226,33 +226,22 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 
 		switch ($code_type["message"]) {
 			case 'sms':
-				die(json_encode("sms"));
-
-				if ($expose->sendOTP($_SESSION["step4"]["phone_number"], $_SESSION["step4"]["country_code"])) {
+				if (isset($_SESSION["_step5Token"]) && !empty($_SESSION["_step5Token"]) && isset($_POST["_v5Token"]) && !empty($_POST["_v5Token"]) && $_POST["_v5Token"] == $_SESSION["_step5Token"]) {
+					$otp_code = $expose->sendOTP($_SESSION["step4"]["phone_number"], $_SESSION["step4"]["country_code"]);
+					if (!$otp_code) die(json_encode(array("success" => false, "message" => "Failed to resend code!")));
 					$_SESSION['sms_code'] = $otp_code;
-					$_SESSION['verifySMSCode'] = true;
 					$data["success"] = true;
-				} else {
-					$data["success"] = false;
+					$data["message"] = "Verification code resent!";
 				}
 				break;
+
 			case 'email':
 				if (isset($_SESSION["_step3Token"]) && !empty($_SESSION["_step3Token"]) && isset($_POST["_v3Token"]) && !empty($_POST["_v3Token"]) && $_POST["_v3Token"] == $_SESSION["_step3Token"]) {
-
-
-					die(json_encode("email"));
-				}
-
-				$v_code = $expose->genCode(6);
-				$subject = 'VERIFICATION CODE';
-				$message = "Hi " . $_SESSION["step1"]["first_name"] . " " . $_SESSION["step1"]["last_name"] . ", <br> Your verification code is " . $v_code;
-
-				if ($expose->sendEmail($_SESSION['step2']["email_address"], $subject, $message)) {
+					$v_code = $expose->sendEmailVerificationCode($_SESSION['step2']["email_address"]);
+					if (!$v_code) die(json_encode(array("success" => false, "message" => "Failed to resend code!")));
 					$_SESSION['email_code'] = $v_code;
-					$_SESSION['step2Done'] = true;
 					$data["success"] = true;
-				} else {
-					$data["success"] = false;
+					$data["message"] = "Verification code resent!";
 				}
 				break;
 		}
