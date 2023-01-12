@@ -92,14 +92,10 @@ require_once('../inc/page-data.php');
                         } else {
                             alert(result.message);
                         }
-                        /*if (res["response"] == "success") {
-                            console.log(res['msg']);
-                            window.location.href = 'verify-code.php'
-                        } else {
-                            console.log(res['msg']);
-                        }*/
                     },
-                    error: function(error) {}
+                    error: function(error) {
+                        console.log(error);
+                    }
                 });
             });
 

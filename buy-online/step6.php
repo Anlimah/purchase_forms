@@ -107,7 +107,9 @@ if (isset($_SESSION['step5Done']) && $_SESSION['step5Done'] == true && isset($_S
                             alert(result.message)
                         }
                     },
-                    error: function(error) {}
+                    error: function(error) {
+                        console.log(error);
+                    }
                 });
             });
 

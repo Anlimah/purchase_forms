@@ -47,7 +47,7 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
                                 <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center; margin-left:5px" name="code[]" id="num4" placeholder="X" required>
                             </div>
                             <button class="btn btn-primary mb-4" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%">Verify</button>
-                            <input class="form-control" type="hidden" name="_v5Token" value="<?= $_SESSION["_step5Token"]; ?>">
+                            <input class="form-control" type="hidden" name="_v5Token" id="_v5Token" value="<?= $_SESSION["_step5Token"]; ?>">
 
                         </form>
                     </div>
@@ -88,7 +88,8 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
                     type: "POST",
                     url: "../endpoint/resend-code",
                     data: {
-                        resend_code: "sms"
+                        resend_code: "sms",
+                        _v5Token: $("#_v5Token").val(),
                     },
                     contentType: false,
                     cache: false,
@@ -115,12 +116,15 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
                             alert(result.message);
                         }
                     },
-                    error: function(error) {}
+                    error: function(error) {
+                        console.log(error);
+                    }
                 });
             });
 
             $("#step1Form").on("submit", function(e) {
                 e.preventDefault();
+                triggeredBy = 2;
                 $.ajax({
                     type: "POST",
                     url: "../endpoint/verifyStep5",
@@ -136,18 +140,20 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
                             alert(result.message);
                         }
                     },
-                    error: function(error) {}
+                    error: function(error) {
+                        console.log(error);
+                    }
                 });
             });
 
             $(document).on({
                 ajaxStart: function() {
                     if (triggeredBy == 1) $("#resend-code").prop("disabled", true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> sending...');
-                    $("#submitBtn").prop("disabled", true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
+                    else $("#submitBtn").prop("disabled", true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
                 },
                 ajaxStop: function() {
                     if (triggeredBy == 1) $("#resend-code").prop("disabled", false).html('Resend code');
-                    $("#submitBtn").prop("disabled", false).html('Verify');
+                    else $("#submitBtn").prop("disabled", false).html('Verify');
                 }
             });
 

@@ -82,7 +82,7 @@ if (!isset($_SESSION["_step1Token"])) {
                         }
                     },
                     error: function(error) {
-                        console.log(result);
+                        console.log(error);
                     }
                 });
             });
