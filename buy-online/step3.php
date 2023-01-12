@@ -96,6 +96,7 @@ if (!isset($_SESSION["_step3Token"])) {
                     },
                     success: function(result) {
                         console.log(result);
+                        $("#num1").focus();
                         /*if (result.success) {
                                     clearInterval(intervalId);
                                     $("#timer").show();
