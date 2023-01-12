@@ -72,7 +72,7 @@ if (!isset($_SESSION["_step3Token"])) {
         $(document).ready(function() {
             var triggeredBy = 0;
 
-            var count = 3;
+            var count = 60;
             var intervalId = setInterval(() => {
                 $("#timer").html("Resend code <b>(" + count + " sec)</b>");
                 count = count - 1;
