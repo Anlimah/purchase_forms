@@ -93,30 +93,27 @@ if (!isset($_SESSION["_step3Token"])) {
                     data: {
                         resend_code: "email"
                     },
-                    contentType: false,
-                    cache: false,
-                    processData: false,
                     success: function(result) {
                         console.log(result);
-                        if (result.success) {
-                            clearInterval(intervalId);
-                            $("#timer").show();
-                            $('#resend-code').removeClass("display").addClass("hide");
-
-                            count = 60;
-                            intervalId = setInterval(() => {
-                                $("#timer").html("Resend code <b>(" + count + " sec)</b>");
-                                count = count - 1;
-                                if (count <= 0) {
+                        /*if (result.success) {
                                     clearInterval(intervalId);
-                                    $('#timer').hide();
-                                    $('#resend-code').removeClass("hide").addClass("display").attr("disabled", false);
-                                    return;
-                                }
-                            }, 1000); /**/
-                        } else {
-                            alert(result.message);
-                        }
+                                    $("#timer").show();
+                                    $('#resend-code').removeClass("display").addClass("hide");
+
+                                    count = 60;
+                                    intervalId = setInterval(() => {
+                                        $("#timer").html("Resend code <b>(" + count + " sec)</b>");
+                                        count = count - 1;
+                                        if (count <= 0) {
+                                            clearInterval(intervalId);
+                                            $('#timer').hide();
+                                            $('#resend-code').removeClass("hide").addClass("display").attr("disabled", false);
+                                            return;
+                                        }
+                                    }, 1000);
+                            } else {
+                                alert(result.message);
+                            }*/
                     },
                     error: function(error) {}
                 });
