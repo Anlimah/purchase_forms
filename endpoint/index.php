@@ -225,7 +225,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 		switch ($code_type) {
 			case 'sms':
 
-				die(json_encode($_POST));
+				die(json_encode("sms"));
 
 				if ($expose->sendOTP($_SESSION["step4"]["phone_number"], $_SESSION["step4"]["country_code"])) {
 					$_SESSION['sms_code'] = $otp_code;
@@ -237,7 +237,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 				break;
 			case 'email':
 
-				die(json_encode($_POST));
+				die(json_encode("email"));
 
 				$v_code = $expose->genCode(6);
 				$subject = 'VERIFICATION CODE';
