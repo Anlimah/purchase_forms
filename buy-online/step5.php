@@ -117,7 +117,7 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
                         }
                     },
                     error: function(error) {
-                        console.log(error);
+                        console.log(error.statusText);
                     }
                 });
             });
@@ -141,7 +141,7 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
                         }
                     },
                     error: function(error) {
-                        console.log(error);
+                        console.log(error.statusText);
                     }
                 });
             });

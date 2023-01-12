@@ -81,7 +81,7 @@ if (isset($_SESSION['step1Done']) && $_SESSION['step1Done'] == true && isset($_S
                         }*/
                     },
                     error: function(error) {
-                        console.log(error);
+                        console.log(error.statusText);
                     }
                 });
             });

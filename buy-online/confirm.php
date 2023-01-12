@@ -97,7 +97,7 @@ if (isset($_GET['exttrid']) && empty($_GET['exttrid'])) header('Location: index.
                                     else $(".pay-status").html("").append(result.message + '<br><div><a href="/">Try again</a></div>');
                                 },
                                 error: function(error) {
-                                    console.log(error);
+                                    console.log(error.statusText);
                                 }
                             });
                         }, init);

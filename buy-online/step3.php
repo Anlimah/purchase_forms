@@ -119,7 +119,7 @@ if (!isset($_SESSION["_step3Token"])) {
                         }
                     },
                     error: function(error) {
-                        console.log(error);
+                        console.log(error.statusText);
                     }
                 });
             });
@@ -143,7 +143,7 @@ if (!isset($_SESSION["_step3Token"])) {
                         }
                     },
                     error: function(error) {
-                        console.log(error);
+                        console.log(error.statusText);
                     }
                 });
             });

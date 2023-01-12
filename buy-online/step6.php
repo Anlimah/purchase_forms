@@ -108,7 +108,7 @@ if (isset($_SESSION['step5Done']) && $_SESSION['step5Done'] == true && isset($_S
                         }
                     },
                     error: function(error) {
-                        console.log(error);
+                        console.log(error.statusText);
                     }
                 });
             });
@@ -139,7 +139,7 @@ if (isset($_SESSION['step5Done']) && $_SESSION['step5Done'] == true && isset($_S
                         }
                     },
                     error: function(error) {
-                        console.log(error);
+                        console.log(error.statusText);
                     }
                 });
             });

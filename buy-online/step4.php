@@ -94,7 +94,7 @@ require_once('../inc/page-data.php');
                         }
                     },
                     error: function(error) {
-                        console.log(error);
+                        console.log(error.statusText);
                     }
                 });
             });
