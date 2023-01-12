@@ -119,7 +119,7 @@ class ExposeDataController
         die("Invalid file uploaded!");
     }
 
-    public function validateInputTextOnly($input)
+    public function validateInputTextOnly($input): array
     {
         if (empty($input)) {
             return array("status" => "error", "message" => "required");
@@ -135,7 +135,7 @@ class ExposeDataController
         return array("status" => "error", "message" => "invalid");
     }
 
-    public function validateInputTextNumber($input)
+    public function validateInputTextNumber($input): array
     {
         if (empty($input)) {
             return array("status" => "error", "message" => "required");
@@ -151,7 +151,7 @@ class ExposeDataController
         return array("status" => "error", "message" => "invalid");
     }
 
-    public function validateYearData($input)
+    public function validateYearData($input): array
     {
         if (empty($input) || strtoupper($input) == "YEAR") {
             return array("status" => "error", "message" => "required");
@@ -171,7 +171,7 @@ class ExposeDataController
         return array("status" => "error", "message" => "invalid");
     }
 
-    public function validateGrade($input)
+    public function validateGrade($input): array
     {
         if (empty($input) || strtoupper($input) == "GRADE") {
             return array("status" => "error", "message" => "required");

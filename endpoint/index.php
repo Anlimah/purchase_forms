@@ -222,7 +222,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 		if (empty($_POST["resend_code"])) die(json_encode(array("success" => false, "message" => "Missing input!")));
 
 		$code_type = $expose->validateInputTextOnly($_POST["resend_code"]);
-		switch ($code_type) {
+		switch ($code_type["message"]) {
 			case 'sms':
 
 				die(json_encode("sms"));
