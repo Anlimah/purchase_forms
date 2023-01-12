@@ -122,17 +122,17 @@ class ExposeDataController
     public function validateInputTextOnly($input): array
     {
         if (empty($input)) {
-            return array("status" => "error", "message" => "required");
+            return array("success" => false, "message" => "Input required!");
         }
 
         $user_input = htmlentities(htmlspecialchars($input));
         $validated_input = (bool) preg_match('/^[A-Za-z]/', $user_input);
 
         if ($validated_input) {
-            return array("status" => "success", "message" => $user_input);
+            return array("success" => true, "message" => $user_input);
         }
 
-        return array("status" => "error", "message" => "invalid");
+        return array("success" => false, "message" => "Invalid input!");
     }
 
     public function validateInputTextNumber($input): array

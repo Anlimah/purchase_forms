@@ -222,9 +222,10 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 		if (empty($_POST["resend_code"])) die(json_encode(array("success" => false, "message" => "Missing input!")));
 
 		$code_type = $expose->validateInputTextOnly($_POST["resend_code"]);
+		if (!$code_type["success"]) die(json_encode($code_type));
+
 		switch ($code_type["message"]) {
 			case 'sms':
-
 				die(json_encode("sms"));
 
 				if ($expose->sendOTP($_SESSION["step4"]["phone_number"], $_SESSION["step4"]["country_code"])) {
@@ -236,8 +237,11 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 				}
 				break;
 			case 'email':
+				if (isset($_SESSION["_step3Token"]) && !empty($_SESSION["_step3Token"]) && isset($_POST["_v3Token"]) && !empty($_POST["_v3Token"]) && $_POST["_v3Token"] == $_SESSION["_step3Token"]) {
 
-				die(json_encode("email"));
+
+					die(json_encode("email"));
+				}
 
 				$v_code = $expose->genCode(6);
 				$subject = 'VERIFICATION CODE';

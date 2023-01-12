@@ -51,7 +51,7 @@ if (!isset($_SESSION["_step3Token"])) {
                                 <input class="form-control num" type="text" maxlength="1" style="width:35px; text-align:center; margin-left:5px" name="num[]" id="num6" placeholder="0" required>
                             </div>
                             <button class="btn btn-primary mb-4" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%">Verify</button>
-                            <input type="hidden" name="_v3Token" value="<?= $_SESSION["_step3Token"]; ?>">
+                            <input type="hidden" name="_v3Token" id="_v3Token" value="<?= $_SESSION["_step3Token"]; ?>">
                         </form>
                     </div>
 
@@ -91,7 +91,8 @@ if (!isset($_SESSION["_step3Token"])) {
                     type: "POST",
                     url: "../endpoint/resend-code",
                     data: {
-                        resend_code: "email"
+                        resend_code: "email",
+                        _v3Token: $("#_v3Token").val(),
                     },
                     success: function(result) {
                         console.log(result);
