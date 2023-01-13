@@ -23,9 +23,9 @@
 
     <div id="wrapper">
 
-        <?php require_once("./inc/page-nav.php"); ?>
+        <?php require_once("./inc/page-nav-text-logo.php"); ?>
 
-        <main class="container flex-container" style="height: 500px !important">
+        <main class="container flex-container" style="height: 450px !important">
             <div class="flex-column align-items-center">
                 <h1 style="text-align: center;"><span>January</span> admission has ended.</h1>
                 <p style="font-size: 20px;">For more information and enquiries, <a href="https://rmu.edu.gh/contact/"><b>contact us</b></a>.</p>
