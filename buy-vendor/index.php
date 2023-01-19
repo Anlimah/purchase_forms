@@ -69,47 +69,58 @@ require_once('../inc/page-data.php');
 
                     <div class="purchase-card-body">
                         <form id="step1Form" method="post" enctype="multipart/form-data">
-                            <div class="mb-4">
-                                <label class="form-label" for="gender">Form type</label>
-                                <select title="Select the type of form you want to purchase." class="form-select form-select-sm" name="form_type" id="form_type" required>
-                                    <option selected disabled value="">Choose...</option>
-                                    <?php
-                                    $data = $expose->getFormTypes();
-                                    foreach ($data as $ft) {
-                                    ?>
-                                        <option value="<?= $ft['name'] ?>"><?= $ft['name'] ?></option>
-                                    <?php
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label" for="first_name">First Name</label>
-                                <input name="first_name" id="first_name" title="Provide your first name" class="form-control" type="text" placeholder="Type your first name" required>
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label" for="last_name">Last Name</label>
-                                <input name="last_name" id="last_name" title="Provide your last name" class="form-control" type="text" placeholder="Type your last name" required>
-                            </div>
-                            <div class="mb-4">
-                                <div style="display:flex !important; flex-direction:row !important; justify-content: flex-start !important;">
-                                    <label class="form-label" for="country" style="margin-right: 10px; width: 45%">Country Code</label>
-                                    <label class="form-label" style="float:left" for="phone-number">Phone Number</label>
+                            <div class="flex-column align-items-center">
+                                <div class="flex-row justify-space-between">
+                                    <div>
+                                        <div class="mb-4">
+                                            <label class="form-label" for="first_name">First Name</label>
+                                            <input name="first_name" id="first_name" title="Provide your first name" class="form-control" type="text" placeholder="Type your first name" required>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label" for="last_name">Last Name</label>
+                                            <input name="last_name" id="last_name" title="Provide your last name" class="form-control" type="text" placeholder="Type your last name" required>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="mb-4">
+                                            <label class="form-label" for="gender">Form type</label>
+                                            <select title="Select the type of form you want to purchase." class="form-select form-select-sm" name="form_type" id="form_type" required>
+                                                <option selected disabled value="">Choose...</option>
+                                                <?php
+                                                $data = $expose->getFormTypes();
+                                                foreach ($data as $ft) {
+                                                ?>
+                                                    <option value="<?= $ft['name'] ?>"><?= $ft['name'] ?></option>
+                                                <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="mb-4">
+                                            <div style="display:flex !important; flex-direction:row !important; justify-content: flex-start !important;">
+                                                <label class="form-label" for="country" style="margin-right: 10px; width: 45%">Country Code</label>
+                                                <label class="form-label" style="float:left" for="phone-number">Phone Number</label>
+                                            </div>
+                                            <div style="display:flex !important; flex-direction:row !important; justify-content: space-between !important">
+                                                <input name="country" id="country" value="<?= '(' . COUNTRIES[83]["code"] . ') ' . COUNTRIES[83]["name"]  ?>" title="Choose country and country code" class="form-control form-control-sm" list="address-country-list" style="margin-right: 10px; width: 60%" placeholder="Type for options" required>
+                                                <datalist id="address-country-list">
+                                                    <?php
+                                                    foreach (COUNTRIES as $cn) {
+                                                        echo '<option value="(' . $cn["code"] . ') ' . $cn["name"] . '">(' . $cn["code"] . ') ' . $cn["name"] . '</option>';
+                                                    }
+                                                    ?>
+                                                </datalist>
+                                                <input name="phone_number" id="phone_number" maxlength="10" title="Provide your Provide Number" class="form-control form-control-sm" style="width: 70%" type="tel" placeholder="0244123123" required>
+                                            </div>
+                                        </div>
+
+                                    </div>
                                 </div>
-                                <div style="display:flex !important; flex-direction:row !important; justify-content: space-between !important">
-                                    <input name="country" id="country" value="<?= '(' . COUNTRIES[83]["code"] . ') ' . COUNTRIES[83]["name"]  ?>" title="Choose country and country code" class="form-control form-control-sm" list="address-country-list" style="margin-right: 10px; width: 60%" placeholder="Type for options" required>
-                                    <datalist id="address-country-list">
-                                        <?php
-                                        foreach (COUNTRIES as $cn) {
-                                            echo '<option value="(' . $cn["code"] . ') ' . $cn["name"] . '">(' . $cn["code"] . ') ' . $cn["name"] . '</option>';
-                                        }
-                                        ?>
-                                    </datalist>
-                                    <input name="phone_number" id="phone_number" maxlength="10" title="Provide your Provide Number" class="form-control form-control-sm" style="width: 70%" type="tel" placeholder="0244123123" required>
+                                <div>
+                                    <button class="btn btn-primary" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%">Submit</button>
+                                    <input type="hidden" name="_v1Token" value="<?= $_SESSION["_vendor1Token"]; ?>">
                                 </div>
                             </div>
-                            <button class="btn btn-primary" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%">Submit</button>
-                            <input type="hidden" name="_v1Token" value="<?= $_SESSION["_vendor1Token"]; ?>">
                         </form>
                     </div>
                 </div>
