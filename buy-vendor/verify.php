@@ -39,26 +39,46 @@ if (isset($_GET['logout'])) {
 </head>
 
 <body class="fluid-container">
-    <div class="flex">
-        <div class="form_card card">
-            <img src="../assets/images/RMU-LOG.png" alt="RMU LOG">
-            <h1 style="text-align: center; color: #003262 !important; font-size:30px !important">Verify SMS Code</h1>
-            <form action="#" id="step1Form" method="post" enctype="multipart/form-data" style="margin: 0px 12%;">
-                <p class="mb-4">Enter the verification code we sent to your phone.</p>
-                <div class="mb-4" style="display:flex !important; flex-direction:row !important; justify-content: space-around !important; align-items:baseline">
-                    <label class="form-label" for="email_addr">RMU - </label>
-                    <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center" name="code[]" id="num1" placeholder="0" required>
-                    <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center" name="code[]" id="num2" placeholder="0" required>
-                    <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center" name="code[]" id="num3" placeholder="0" required>
-                    <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center" name="code[]" id="num4" placeholder="0" required>
+
+    <div id="wrapper">
+
+        <?php require_once("../inc/page-nav.php"); ?>
+
+        <main class="container flex-container">
+            <div class="flex-card">
+                <div class="form-card card">
+
+                    <div class="purchase-card-header">
+                        <h1>Vendor Portal</h1>
+                    </div>
+
+                    <div class="purchase-card-step-info">
+                        <span class="step-capsule">Verify SMS Code</span>
+                    </div>
+
+                    <hr style="color:#999">
+
+                    <div class="purchase-card-body">
+                        <form action="#" id="step1Form" method="post" enctype="multipart/form-data" style="margin: 0px 12%;">
+                            <p class="mb-4">Enter the verification code we sent to your phone.</p>
+                            <div class="mb-4" style="display:flex !important; flex-direction:row !important; justify-content: space-around !important; align-items:baseline">
+                                <label class="form-label" for="email_addr">RMU - </label>
+                                <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center" name="code[]" id="num1" placeholder="0" required>
+                                <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center" name="code[]" id="num2" placeholder="0" required>
+                                <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center" name="code[]" id="num3" placeholder="0" required>
+                                <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center" name="code[]" id="num4" placeholder="0" required>
+                            </div>
+                            <button class="btn btn-primary mb-4" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%">
+                                Verify
+                            </button>
+                            <input class="form-control" type="hidden" name="_vSMSToken" value="<?= $_SESSION["_verifySMSToken"]; ?>">
+                            <a href="step4.php">Change number</a>
+                        </form>
+                    </div>
                 </div>
-                <button class="btn btn-primary mb-4" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%">
-                    Verify
-                </button>
-                <input class="form-control" type="hidden" name="_vSMSToken" value="<?= $_SESSION["_verifySMSToken"]; ?>">
-                <a href="step4.php">Change number</a>
-            </form>
-        </div>
+            </div>
+        </main>
+        <?php require_once("../inc/page-footer.php"); ?>
     </div>
 
     <script src="../js/jquery-3.6.0.min.js"></script>

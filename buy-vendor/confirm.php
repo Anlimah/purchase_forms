@@ -45,46 +45,66 @@ $data = $expose->getApplicationInfo($_GET["exttrid"]);
 </head>
 
 <body class="fluid-container">
-    <div class="flex">
-        <div class="form_card card" style="height: 350px !important;width: 650px !important; padding: 20px 20px 10px 20px !important;">
-            <!--<img src="../assets/images/RMU-LOG.png" alt="RMU LOGO">-->
-            <h1 style="text-align: center; color: #003262 !important; font-size:20px !important">SALE OF FORMS</h1>
-            <div class="pay-status" style="margin: 0px 5%;" style="align-items: baseline;">
-                <?php if (!empty($data)) { ?>
-                    <table style="width:100%;border: 1px solid rgb(155, 155, 155); border-collapse: collapse;" class="mb-4">
-                        <tr>
-                            <td style="width: 120px; background: #f1f1f1;text-align: right; padding: 5px; font-size: 11px;"><b>VENDOR:</b></td>
-                            <td colspan="2" style="text-align: left; padding: 5px; font-size: 11px;"><b><?= $data[0]["vendor_name"] ?></b></td>
-                        </tr>
-                        <tr>
-                            <td style="background: #f1f1f1;text-align: right; padding: 5px; font-size: 11px;"><b>PRICE:</b></td>
-                            <td style="text-align: left; padding: 5px; font-size: 11px;"><b><?= $data[0]["amount"] ?></b></td>
-                        </tr>
-                        <tr>
-                            <td style="background: #f1f1f1;text-align: right; padding: 5px; font-size: 11px;"><b>APPLICATION NO:</b></td>
-                            <td style="text-align: left; padding: 5px; font-size: 11px;"><b><?= "RMU-" . $data[0]["app_number"] ?></b></td>
-                        </tr>
-                        <tr>
-                            <td style="background: #f1f1f1;text-align: right; padding: 5px; font-size: 11px;"><b>PIN NO:</b></td>
-                            <td style="text-align: left; padding: 5px; font-size: 11px;"><b><?= $data[0]["pin_number"] ?></b></td>
-                        </tr>
-                        <tr style="border-top: 1px solid rgb(155, 155, 155)">
-                            <td style="background: #f1f1f1;text-align: right; padding: 5px; font-size: 11px; padding-top:30px">INSTITUTION:</td>
-                            <td style="text-align: left; padding: 5px; font-size: 11px;"><b>REGIONAL MARITIME UNIVERSITY</b></td>
-                        </tr>
-                        <tr>
-                            <td style="background: #f1f1f1;text-align: right; padding: 5px; font-size: 11px">FORM NAME:</td>
-                            <td style="text-align: left; padding: 5px; font-size: 11px;"><b><?= $data[0]["info"] . "-" . strtoupper($data[0]["name"]) ?></b></td>
-                        </tr>
-                    </table>
-                    <center>
-                        <button class="btn btn-primary"><b>Print</b></button>
-                    </center>
-                <?php } else { ?>
-                    <div style="width: 100%;height: 100%; text-align:center">No Data available</div>
-                <?php } ?>
+
+    <div id="wrapper">
+
+        <?php require_once("../inc/page-nav.php"); ?>
+
+        <main class="container flex-container">
+            <div class="flex-card">
+                <div class="form-card card">
+
+                    <div class="purchase-card-header">
+                        <h1>Vendor Portal</h1>
+                    </div>
+
+                    <div class="purchase-card-step-info">
+                        <span class="step-capsule">Applicant Receipt</span>
+                    </div>
+
+                    <hr style="color:#999">
+
+                    <div class="purchase-card-body">
+                        <div class="pay-status" style="margin: 0px 5%;" style="align-items: baseline;">
+                            <?php if (!empty($data)) { ?>
+                                <table style="width:100%;border: 1px solid rgb(155, 155, 155); border-collapse: collapse;" class="mb-4">
+                                    <tr>
+                                        <td style="width: 120px; background: #f1f1f1;text-align: right; padding: 5px; font-size: 11px;"><b>VENDOR:</b></td>
+                                        <td colspan="2" style="text-align: left; padding: 5px; font-size: 11px;"><b><?= $data[0]["vendor_name"] ?></b></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="background: #f1f1f1;text-align: right; padding: 5px; font-size: 11px;"><b>PRICE:</b></td>
+                                        <td style="text-align: left; padding: 5px; font-size: 11px;"><b><?= $data[0]["amount"] ?></b></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="background: #f1f1f1;text-align: right; padding: 5px; font-size: 11px;"><b>APPLICATION NO:</b></td>
+                                        <td style="text-align: left; padding: 5px; font-size: 11px;"><b><?= "RMU-" . $data[0]["app_number"] ?></b></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="background: #f1f1f1;text-align: right; padding: 5px; font-size: 11px;"><b>PIN NO:</b></td>
+                                        <td style="text-align: left; padding: 5px; font-size: 11px;"><b><?= $data[0]["pin_number"] ?></b></td>
+                                    </tr>
+                                    <tr style="border-top: 1px solid rgb(155, 155, 155)">
+                                        <td style="background: #f1f1f1;text-align: right; padding: 5px; font-size: 11px; padding-top:30px">INSTITUTION:</td>
+                                        <td style="text-align: left; padding: 5px; font-size: 11px;"><b>REGIONAL MARITIME UNIVERSITY</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="background: #f1f1f1;text-align: right; padding: 5px; font-size: 11px">FORM NAME:</td>
+                                        <td style="text-align: left; padding: 5px; font-size: 11px;"><b><?= $data[0]["info"] . "-" . strtoupper($data[0]["name"]) ?></b></td>
+                                    </tr>
+                                </table>
+                                <center>
+                                    <button class="btn btn-primary"><b>Print</b></button>
+                                </center>
+                            <?php } else { ?>
+                                <div style="width: 100%;height: 100%; text-align:center">No Data available</div>
+                            <?php } ?>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        </main>
+        <?php require_once("../inc/page-footer.php"); ?>
     </div>
 
     <script src="../js/jquery-3.6.0.min.js"></script>

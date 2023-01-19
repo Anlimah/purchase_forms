@@ -47,55 +47,75 @@ require_once('../inc/page-data.php');
     <title>Form Purchase | Vendor</title>
 </head>
 
-<body class="fluid-container" style="background-color: #99ccff !important;">
-    <div class="flex">
-        <div class="form_card card" style="height: 520px !important;padding: 20px 20px 10px 20px !important;">
-            <!--<img src="../assets/images/RMU-LOG.png" alt="RMU LOG">-->
-            <h1 style="text-align: center; color: #003262 !important; font-size:30px !important">RMU Forms Purchase Portal</h1>
-            <form id="step1Form" method="post" enctype="multipart/form-data">
-                <div class="mb-4">
-                    <label class="form-label" for="gender">Form type</label>
-                    <select title="Select the type of form you want to purchase." class="form-select form-select-sm" name="form_type" id="form_type" required>
-                        <option selected disabled value="">Choose...</option>
-                        <?php
-                        $data = $expose->getFormTypes();
-                        foreach ($data as $ft) {
-                        ?>
-                            <option value="<?= $ft['name'] ?>"><?= $ft['name'] ?></option>
-                        <?php
-                        }
-                        ?>
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label class="form-label" for="first_name">First Name</label>
-                    <input name="first_name" id="first_name" title="Provide your first name" class="form-control" type="text" placeholder="Type your first name" required>
-                </div>
-                <div class="mb-4">
-                    <label class="form-label" for="last_name">Last Name</label>
-                    <input name="last_name" id="last_name" title="Provide your last name" class="form-control" type="text" placeholder="Type your last name" required>
-                </div>
-                <div class="mb-4">
-                    <div style="display:flex !important; flex-direction:row !important; justify-content: flex-start !important;">
-                        <label class="form-label" for="country" style="margin-right: 10px; width: 45%">Country Code</label>
-                        <label class="form-label" style="float:left" for="phone-number">Phone Number</label>
+<body class="fluid-container">
+
+    <div id="wrapper">
+
+        <?php require_once("../inc/page-nav.php"); ?>
+
+        <main class="container flex-container">
+            <div class="flex-card">
+                <div class="form-card card">
+
+                    <div class="purchase-card-header">
+                        <h1>Vendor Portal</h1>
                     </div>
-                    <div style="display:flex !important; flex-direction:row !important; justify-content: space-between !important">
-                        <input name="country" id="country" value="<?= '(' . COUNTRIES[83]["code"] . ') ' . COUNTRIES[83]["name"]  ?>" title="Choose country and country code" class="form-control form-control-sm" list="address-country-list" style="margin-right: 10px; width: 60%" placeholder="Type for options" required>
-                        <datalist id="address-country-list">
-                            <?php
-                            foreach (COUNTRIES as $cn) {
-                                echo '<option value="(' . $cn["code"] . ') ' . $cn["name"] . '">(' . $cn["code"] . ') ' . $cn["name"] . '</option>';
-                            }
-                            ?>
-                        </datalist>
-                        <input name="phone_number" id="phone_number" maxlength="10" title="Provide your Provide Number" class="form-control form-control-sm" style="width: 70%" type="tel" placeholder="0244123123" required>
+
+                    <div class="purchase-card-step-info">
+                        <span class="step-capsule">RMU Forms Purchase Portal</span>
+                    </div>
+
+                    <hr style="color:#999">
+
+                    <div class="purchase-card-body">
+                        <form id="step1Form" method="post" enctype="multipart/form-data">
+                            <div class="mb-4">
+                                <label class="form-label" for="gender">Form type</label>
+                                <select title="Select the type of form you want to purchase." class="form-select form-select-sm" name="form_type" id="form_type" required>
+                                    <option selected disabled value="">Choose...</option>
+                                    <?php
+                                    $data = $expose->getFormTypes();
+                                    foreach ($data as $ft) {
+                                    ?>
+                                        <option value="<?= $ft['name'] ?>"><?= $ft['name'] ?></option>
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label" for="first_name">First Name</label>
+                                <input name="first_name" id="first_name" title="Provide your first name" class="form-control" type="text" placeholder="Type your first name" required>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label" for="last_name">Last Name</label>
+                                <input name="last_name" id="last_name" title="Provide your last name" class="form-control" type="text" placeholder="Type your last name" required>
+                            </div>
+                            <div class="mb-4">
+                                <div style="display:flex !important; flex-direction:row !important; justify-content: flex-start !important;">
+                                    <label class="form-label" for="country" style="margin-right: 10px; width: 45%">Country Code</label>
+                                    <label class="form-label" style="float:left" for="phone-number">Phone Number</label>
+                                </div>
+                                <div style="display:flex !important; flex-direction:row !important; justify-content: space-between !important">
+                                    <input name="country" id="country" value="<?= '(' . COUNTRIES[83]["code"] . ') ' . COUNTRIES[83]["name"]  ?>" title="Choose country and country code" class="form-control form-control-sm" list="address-country-list" style="margin-right: 10px; width: 60%" placeholder="Type for options" required>
+                                    <datalist id="address-country-list">
+                                        <?php
+                                        foreach (COUNTRIES as $cn) {
+                                            echo '<option value="(' . $cn["code"] . ') ' . $cn["name"] . '">(' . $cn["code"] . ') ' . $cn["name"] . '</option>';
+                                        }
+                                        ?>
+                                    </datalist>
+                                    <input name="phone_number" id="phone_number" maxlength="10" title="Provide your Provide Number" class="form-control form-control-sm" style="width: 70%" type="tel" placeholder="0244123123" required>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%">Submit</button>
+                            <input type="hidden" name="_v1Token" value="<?= $_SESSION["_vendor1Token"]; ?>">
+                        </form>
                     </div>
                 </div>
-                <button class="btn btn-primary" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%">Submit</button>
-                <input type="hidden" name="_v1Token" value="<?= $_SESSION["_vendor1Token"]; ?>">
-            </form>
-        </div>
+            </div>
+        </main>
+        <?php require_once("../inc/page-footer.php"); ?>
     </div>
 
     <script src="../js/jquery-3.6.0.min.js"></script>

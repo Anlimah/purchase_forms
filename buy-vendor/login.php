@@ -15,24 +15,45 @@ if (!isset($_SESSION["_loginToken"])) {
     <title>Form Purchase | Vendor Login</title>
 </head>
 
-<body class="fluid-container flex">
-    <div class="form_card card" style="height: 350px !important;padding: 20px 20px 10px 20px !important;">
-        <!--<img src="../assets/images/RMU-LOG.png" alt="RMU LOGO" style="width: 100% !important;">-->
-        <form id="loginForm" method="post" enctype="multipart/form-data">
-            <h1 style="text-align: center; color: #003262 !important; font-size:22px !important; letter-spacing: 0.3rem; margin:0;padding:0;">VENDOR PORTAL</h1>
-            <hr style="margin: 0 30px 20px 30px;padding:0;">
-            <div id="liveAlertPlaceholder"></div>
-            <div class="mt-4 mb-4">
-                <label class="form-label" for="username" style="font-size:16px !important">Username</label>
-                <input title="Provide your Username" class="form-control" style="font-size:16px !important;" type="text" name="username" id="username" placeholder="Enter your Username" required>
+<body class="fluid-container">
+
+    <div id="wrapper">
+
+        <?php require_once("../inc/page-nav.php"); ?>
+
+        <main class="container flex-container">
+            <div class="flex-card">
+                <div class="form-card card">
+                    <div class="purchase-card-header">
+                        <h1>Vendor Portal</h1>
+                    </div>
+
+                    <div class="purchase-card-step-info">
+                        <span class="step-capsule">Login</span>
+                    </div>
+
+                    <hr style="color:#999">
+
+                    <div class="purchase-card-body">
+                        <form id="loginForm" method="post" enctype="multipart/form-data">
+                            <div id="liveAlertPlaceholder"></div>
+                            <div class="mt-4 mb-4">
+                                <label class="form-label" for="username" style="font-size:16px !important">Username</label>
+                                <input title="Provide your Username" class="form-control" style="font-size:16px !important;" type="text" name="username" id="username" placeholder="Enter your Username" required>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label" for="password" style="font-size:16px !important">Password</label>
+                                <input title="Provide your Password" class="form-control" style="font-size:16px !important;" type="password" name="password" id="password" placeholder="Enter your Password" required>
+                            </div>
+                            <button class="btn btn-primary" type="submit" id="submitBtn" style="font-size:16px !important; width:100%;font-size:16px !important">Login</button>
+                            <input type="hidden" name="_vlToken" value="<?= $_SESSION["_loginToken"]; ?>">
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="mb-4">
-                <label class="form-label" for="password" style="font-size:16px !important">Password</label>
-                <input title="Provide your Password" class="form-control" style="font-size:16px !important;" type="password" name="password" id="password" placeholder="Enter your Password" required>
-            </div>
-            <button class="btn btn-primary" type="submit" id="submitBtn" style="font-size:16px !important; width:100%;font-size:16px !important">Login</button>
-            <input type="hidden" name="_vlToken" value="<?= $_SESSION["_loginToken"]; ?>">
-        </form>
+        </main>
+
+        <?php require_once("../inc/page-footer.php"); ?>
     </div>
 
     <script src="../js/jquery-3.6.0.min.js"></script>
