@@ -55,7 +55,7 @@ require_once('../inc/page-data.php');
 
         <main class="container flex-container mb-4">
             <div class="flex-card">
-                <div class="form-card card" style="max-width: 700px !important;">
+                <div class="form-card card" style="max-width: 800px !important;">
 
                     <div class="purchase-card-header">
                         <h1>Vendor Portal</h1>
