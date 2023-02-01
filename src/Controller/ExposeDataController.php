@@ -2,9 +2,9 @@
 
 namespace Src\Controller;
 
-use Twilio\Rest\Client;
 use Src\System\DatabaseMethods;
 use Src\Controller\PaymentController;
+use Src\Gateway\CurlGatewayAccess;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -253,17 +253,14 @@ class ExposeDataController
     {
         //PHPMailer Object
         $mail = new PHPMailer(true); //Argument true in constructor enables exceptions
-
         //From email address and name
         $mail->From = "rmuicton@rmuictonline.com";
         $mail->FromName = "rmuicton";
 
         //To address and name
         $mail->addAddress($recipient_email);
-
         //Send HTML or Plain Text email
         $mail->isHTML(true);
-
         $mail->Subject = $subject;
         $mail->Body = $message;
 
@@ -275,32 +272,29 @@ class ExposeDataController
         return 0;
     }
 
-    public function sendSMS($recipient_number, $otp_code, $message, $ISD)
+    public function sendHubtelSMS($url, $payload)
     {
-        $sid = getenv('TWILIO_SID');
-        $token = getenv('TWILIO_TKN');
-        $client = new Client($sid, $token);
+        $client = getenv('HUBTEL_CLIENT');
+        $secret = getenv('HUBTEL_SECRET');
+        $secret_key = base64_encode($client . ":" . $secret);
 
-        //prepare SMS message
-        $to = $ISD . $recipient_number;
-        $account_phone = getenv('TWILIO_PNM');
-        $from = array('from' => $account_phone, 'body' => $message . ' ' . $otp_code);
+        $httpHeader = array("Authorization: Basic " . $secret_key, "Content-Type: application/json");
+        $gateAccess = new CurlGatewayAccess($url, $httpHeader, $payload);
+        $response = json_decode($gateAccess->initiateProcess());
 
-        //send SMS
-        $response = $client->messages->create($to, $from);
-        if ($response->sid) {
-            //$_SESSION['sms_sid'] = $response->sid;
-            return $otp_code;
-        } else {
-            return 0;
-        }
+        if (!$response->status) return 1;
+        return 0;
     }
 
     public function sendOTP($phone_number, $country_code)
     {
+        $to = $country_code . $phone_number;
         $otp_code = $this->genCode(4);
-        $message = 'Your OTP verification code is';
-        return $this->sendSMS($phone_number, $otp_code, $message, $country_code);
+        $message = 'Your OTP verification code: ' . $otp_code;
+        $url = "https://sms.hubtel.com/v1/messages/send";
+        $payload = array("from" => "RMU", "to" => $to, "Content" => $message);
+        if ($this->sendHubtelSMS($url, $payload)) return $otp_code;
+        return 0;
     }
 
     public function sendEmailVerificationCode($email)
