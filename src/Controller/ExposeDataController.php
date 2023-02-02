@@ -280,10 +280,10 @@ class ExposeDataController
 
         $httpHeader = array("Authorization: Basic " . $secret_key, "Content-Type: application/json");
         $gateAccess = new CurlGatewayAccess($url, $httpHeader, $payload);
-        $response = json_decode($gateAccess->initiateProcess());
+        $response = $gateAccess->initiateProcess();
 
         return $response;
-        if (!$response->status) return 1;
+        //if (!$response->status) return 1;
         return 0;
     }
 
@@ -293,8 +293,10 @@ class ExposeDataController
         $otp_code = $this->genCode(4);
         $message = 'Your OTP verification code: ' . $otp_code;
         $url = "https://sms.hubtel.com/v1/messages/send";
-        $payload = array("from" => "RMU", "to" => $to, "Content" => $message);
-        if ($this->sendHubtelSMS($url, $payload)) return $otp_code;
+        $payload = json_encode(array("from" => "RMU", "to" => $to, "Content" => $message));
+
+        return $this->sendHubtelSMS($url, $payload);
+        //if ($this->sendHubtelSMS($url, $payload)) return $otp_code;
         return 0;
     }
 
