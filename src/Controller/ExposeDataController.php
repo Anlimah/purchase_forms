@@ -278,7 +278,7 @@ class ExposeDataController
         $secret = getenv('HUBTEL_SECRET');
         $secret_key = base64_encode($client . ":" . $secret);
 
-        $httpHeader = array("Authorization: Basic " . $secret_key, "Content-Type: application/json");
+        $httpHeader = ["Authorization: Basic " . $secret_key, "Content-Type: application/json"];
         $gateAccess = new CurlGatewayAccess($url, $httpHeader, $payload);
         $response = $gateAccess->initiateProcess();
 
