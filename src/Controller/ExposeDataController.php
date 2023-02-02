@@ -278,13 +278,13 @@ class ExposeDataController
         $secret = getenv('HUBTEL_SECRET');
         $secret_key = base64_encode($client . ":" . $secret);
 
-        $httpHeader = array("Authorization: Basic " . $secret_key, "Content-Type: application/json");
+        $httpHeader = array("Authorization" => "Basic " . $secret_key, "Content-Type" => "application/json");
         $gateAccess = new CurlGatewayAccess($url, $httpHeader, $payload);
         $response = $gateAccess->initiateProcess();
 
         return array("response" => $response);
         //if (!$response->status) return 1;
-        return 0;
+        //return 0;
     }
 
     public function sendOTP($phone_number, $country_code)
@@ -297,7 +297,7 @@ class ExposeDataController
 
         return $this->sendHubtelSMS($url, $payload);
         //if ($this->sendHubtelSMS($url, $payload)) return $otp_code;
-        return 0;
+        //return 0;
     }
 
     public function sendEmailVerificationCode($email)
