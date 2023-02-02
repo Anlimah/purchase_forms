@@ -278,7 +278,7 @@ class ExposeDataController
         $secret = getenv('HUBTEL_SECRET');
         $secret_key = base64_encode($client . ":" . $secret);
 
-        $httpHeader = array("Authorization" => "Basic " . $secret_key, "Content-Type" => "application/json");
+        $httpHeader = array("Authorization: Basic " . $secret_key, "Content-Type: application/json");
         $gateAccess = new CurlGatewayAccess($url, $httpHeader, $payload);
         $response = $gateAccess->initiateProcess();
 
@@ -293,7 +293,7 @@ class ExposeDataController
         $otp_code = $this->genCode(4);
         $message = 'Your OTP verification code: ' . $otp_code;
         $url = "https://sms.hubtel.com/v1/messages/send";
-        $payload = json_encode(array("from" => "RMU", "to" => $to, "Content" => $message));
+        $payload = json_encode(array("From" => "RMU", "To" => $to, "Content" => $message));
 
         return $this->sendHubtelSMS($url, $payload);
         //if ($this->sendHubtelSMS($url, $payload)) return $otp_code;
