@@ -131,7 +131,8 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 					"country_code" => $country_code,
 					"phone_number" => $phone_number,
 				);
-				$otp_code = $expose->sendOTP($phone_number, $country_code);
+				return $expose->sendOTP($phone_number, $country_code);
+				//$otp_code = $expose->sendOTP($phone_number, $country_code);
 				if ($otp_code) {
 					$_SESSION['sms_code'] = $otp_code;
 					$_SESSION['step4Done'] = true;

@@ -282,6 +282,7 @@ class ExposeDataController
         $gateAccess = new CurlGatewayAccess($url, $httpHeader, $payload);
         $response = json_decode($gateAccess->initiateProcess());
 
+        return $response;
         if (!$response->status) return 1;
         return 0;
     }
