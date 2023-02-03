@@ -6,15 +6,15 @@ class CurlGatewayAccess
 {
     private $url = null;
     private $payload = null;
-    private $authKey = null;
+    private $httpHeader = null;
     private $curl_array = array();
 
 
-    public function __construct($url, $authKey, $payload)
+    public function __construct($url, $httpHeader, $payload)
     {
         $this->url = $url;
         $this->payload = $payload;
-        $this->authKey = $authKey;
+        $this->httpHeader = $httpHeader;
     }
 
     private function setCURL_Array()
@@ -22,17 +22,14 @@ class CurlGatewayAccess
         $this->curl_array = array(
             CURLOPT_URL => $this->url,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
+            CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
             CURLOPT_TIMEOUT => 0,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_POSTFIELDS => $this->payload,
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: ' . $this->authKey . '',
-                'Content-Type: application/json'
-            ),
+            CURLOPT_HTTPHEADER => $this->httpHeader,
         );
     }
 

@@ -132,15 +132,16 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 					"phone_number" => $phone_number,
 				);
 
-				die(json_encode($expose->sendOTP($phone_number, $country_code)));
-				//$otp_code = $expose->sendOTP($phone_number, $country_code);
-				if ($otp_code) {
-					$_SESSION['sms_code'] = $otp_code;
+				$response = $expose->sendOTP($phone_number, $country_code);
+
+				if (isset($response->otp_code)) {
+					$_SESSION['sms_code'] = $response->otp_code;
 					$_SESSION['step4Done'] = true;
 					$data["success"] = true;
+					$data["message"] = $response->statusDescription;
 				} else {
 					$data["success"] = false;
-					$data["message"] = "Error occured while sending OTP!";
+					$data["message"] = $response->statusDescription;
 				}
 			} else {
 				$data["success"] = false;

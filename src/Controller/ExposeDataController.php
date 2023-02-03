@@ -276,11 +276,11 @@ class ExposeDataController
     {
         $client = getenv('HUBTEL_CLIENT');
         $secret = getenv('HUBTEL_SECRET');
-        $authKey = "Basic " . base64_encode("$client:$secret");
-        $gateAccess = new CurlGatewayAccess($url, $authKey, $payload);
+        $secret_key = base64_encode($client . ":" . $secret);
+
+        $httpHeader = array("Authorization: Basic " . $secret_key, "Content-Type: application/json");
+        $gateAccess = new CurlGatewayAccess($url, $httpHeader, $payload);
         return $gateAccess->initiateProcess();
-        //if (!$response->status) return 1;
-        //return 0;
     }
 
     public function sendOTP($phone_number, $country_code)
@@ -290,9 +290,9 @@ class ExposeDataController
         $message = 'Your OTP verification code: ' . $otp_code;
         $url = "https://sms.hubtel.com/v1/messages/send";
         $payload = json_encode(array("From" => "RMU", "To" => $to, "Content" => $message));
-        return $this->sendHubtelSMS($url, $payload);
-        //if ($this->sendHubtelSMS($url, $payload)) return $otp_code;
-        //return 0;
+        $response = json_decode($this->sendHubtelSMS($url, $payload));
+        if (!$response->status) array_push($response, array("otp_code" => $otp_code));
+        return $response;
     }
 
     public function sendEmailVerificationCode($email)
