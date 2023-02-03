@@ -295,6 +295,14 @@ class ExposeDataController
         return $response;
     }
 
+    public function sendSMS($phone_number, $country_code, $message)
+    {
+        $to = $country_code . $phone_number;
+        $url = "https://sms.hubtel.com/v1/messages/send";
+        $payload = json_encode(array("From" => "RMU", "To" => $to, "Content" => $message));
+        return $this->sendHubtelSMS($url, $payload);
+    }
+
     public function sendEmailVerificationCode($email)
     {
         $v_code = $this->genCode(6);
