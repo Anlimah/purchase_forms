@@ -6,15 +6,15 @@ class CurlGatewayAccess
 {
     private $url = null;
     private $payload = null;
-    private $httpHeader = null;
+    private $authKey = null;
     private $curl_array = array();
 
 
-    public function __construct($url, $httpHeader, $payload)
+    public function __construct($url, $authKey, $payload)
     {
         $this->url = $url;
         $this->payload = $payload;
-        $this->httpHeader = $httpHeader;
+        $this->authKey = $authKey;
     }
 
     private function setCURL_Array()
@@ -29,29 +29,11 @@ class CurlGatewayAccess
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
             CURLOPT_POSTFIELDS => $this->payload,
-            CURLOPT_HTTPHEADER => $this->httpHeader,
-        );
-    }
-
-    public function initiateProcess2()
-    {
-        //$this->setCURL_Array();
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://sms.hubtel.com/v1/messages/send',
-            CURLOPT_POSTFIELDS => '{
-          "From":"RMU",
-          "To": "233555351068",
-          "Content": "The Job is the JOB"
-          }',
             CURLOPT_HTTPHEADER => array(
-                'Authorization: Basic ZWlxamp4bnc6aXdjcHpudGY=',
+                'Authorization: ' . $this->authKey . '',
                 'Content-Type: application/json'
             ),
-        ));
-        $response = curl_exec($curl);
-        curl_close($curl);
-        echo $response;
+        );
     }
 
     public function initiateProcess()
@@ -59,7 +41,6 @@ class CurlGatewayAccess
         $this->setCURL_Array();
         $curl = curl_init();
         curl_setopt_array($curl, $this->curl_array);
-
         $response = curl_exec($curl);
         curl_close($curl);
         return $response;

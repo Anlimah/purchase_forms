@@ -131,6 +131,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 					"country_code" => $country_code,
 					"phone_number" => $phone_number,
 				);
+
 				return $expose->sendOTP($phone_number, $country_code);
 				//$otp_code = $expose->sendOTP($phone_number, $country_code);
 				if ($otp_code) {
