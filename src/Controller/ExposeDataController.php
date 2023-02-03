@@ -290,9 +290,9 @@ class ExposeDataController
         $message = 'Your OTP verification code: ' . $otp_code;
         $url = "https://sms.hubtel.com/v1/messages/send";
         $payload = json_encode(array("From" => "RMU", "To" => $to, "Content" => $message));
-        $response = json_decode($this->sendHubtelSMS($url, $payload));
-        if (!$response->status) array_push($response, array("otp_code" => $otp_code));
-        return $response;
+        return $this->sendHubtelSMS($url, $payload);
+        //if (!$response->status) array_push($response, array("otp_code" => $otp_code));
+        //return $response;
     }
 
     public function sendEmailVerificationCode($email)
