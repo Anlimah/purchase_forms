@@ -134,14 +134,14 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 
 				$response = $expose->sendOTP($phone_number, $country_code);
 
-				if (isset($response->otp_code)) {
-					$_SESSION['sms_code'] = $response->otp_code;
+				if (isset($response["otp_code"])) {
+					$_SESSION['sms_code'] = $response["otp_code"];
 					$_SESSION['step4Done'] = true;
 					$data["success"] = true;
-					$data["message"] = $response->statusDescription;
+					$data["message"] = $response["statusDescription"];
 				} else {
 					$data["success"] = false;
-					$data["message"] = $response->statusDescription;
+					$data["message"] = $response["statusDescription"];
 				}
 			} else {
 				$data["success"] = false;
