@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
 // All POST request will be sent here
 elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
-	// verify applicant provided details
+	// verify customer first and last name details
 	if ($_GET["url"] == "verifyStep1") {
 		if (isset($_SESSION["_step1Token"]) && !empty($_SESSION["_step1Token"]) && isset($_POST["_v1Token"]) && !empty($_POST["_v1Token"]) && $_POST["_v1Token"] == $_SESSION["_step1Token"]) {
 			if (!isset($_SESSION["admin_period"]) || empty($_SESSION["admin_period"])) $_SESSION["admin_period"] = $expose->getCurrentAdmissionPeriodID();
@@ -69,13 +69,12 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 	//
 	else if ($_GET["url"] == "verifyStep2") {
 		if (isset($_SESSION["_step2Token"]) && !empty($_SESSION["_step2Token"]) && isset($_POST["_v2Token"]) && !empty($_POST["_v2Token"]) && $_POST["_v2Token"] == $_SESSION["_step2Token"]) {
-			$_SESSION["step2"] = array(
-				"email_address" => $expose->validateInput($_POST["email_address"])
-			);
+			$_SESSION["step2"] = array("email_address" => $expose->validateInput($_POST["email_address"]));
 
 			$v_code = $expose->genCode(6);
 			$subject = 'VERIFICATION CODE';
-			$message = "Hi " . $_SESSION["step1"]["first_name"] . " " . $_SESSION["step1"]["last_name"] . ", <br> Your verification code is " . $v_code;
+			$message = "Hi " . $_SESSION["step1"]["first_name"] . " " . $_SESSION["step1"]["last_name"] . ",";
+			$message .= " <br> Your verification code is <b>" . $v_code . "</b>";
 
 			if ($expose->sendEmail($_SESSION['step2']["email_address"], $subject, $message)) {
 				$_SESSION['email_code'] = $v_code;
@@ -99,7 +98,10 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 				foreach ($_POST["num"] as $num) {
 					$otp .= $num;
 				}
-				if ($otp == $_SESSION['email_code']) {
+
+				$otp_code = (int) $expose->validatePhone($otp);
+
+				if ($otp_code == $_SESSION['email_code']) {
 					$_SESSION['step3Done'] = true;
 					$data["success"] = true;
 				} else {
@@ -113,7 +115,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 		}
 		die(json_encode($data));
 	}
-	//
+	// verify step 4
 	elseif ($_GET["url"] == "verifyStep4") {
 		if (isset($_SESSION["_step4Token"]) && !empty($_SESSION["_step4Token"]) && isset($_POST["_v4Token"]) && !empty($_POST["_v4Token"]) && $_POST["_v4Token"] == $_SESSION["_step4Token"]) {
 			if (isset($_POST["country"]) && !empty($_POST["country"]) && isset($_POST["phone_number"]) && !empty($_POST["phone_number"])) {
@@ -124,7 +126,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 				$country_name = substr($country, ($charPos + 2));
 				$country_code = substr($country, 1, ($charPos - 1));
 
-				$phone_number = $expose->validateInput($_POST["phone_number"]);
+				$phone_number = $expose->validatePhone($_POST["phone_number"]);
 
 				$_SESSION["step4"] = array(
 					"country_name" => $country_name,
@@ -152,14 +154,19 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 			$data["message"] = "Invalid request! 1";
 		}
 		die(json_encode($data));
-	} elseif ($_GET["url"] == "verifyStep5") {
+	}
+	// verify step 5
+	elseif ($_GET["url"] == "verifyStep5") {
 		if (isset($_SESSION["_step5Token"]) && !empty($_SESSION["_step5Token"]) && isset($_POST["_v5Token"]) && !empty($_POST["_v5Token"]) && $_POST["_v5Token"] == $_SESSION["_step5Token"]) {
 			if ($_POST["code"]) {
 				$otp = "";
 				foreach ($_POST["code"] as $code) {
 					$otp .= $code;
 				}
-				if ($otp == $_SESSION['sms_code']) {
+
+				$otp_code = (int) $expose->validatePhone($otp);
+
+				if ($otp_code == $_SESSION['sms_code']) {
 					$_SESSION['step5Done'] = true;
 					$data["success"] = true;
 				} else {
@@ -172,7 +179,9 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 			$data["message"] = "Invalid request!";
 		}
 		die(json_encode($data));
-	} elseif ($_GET["url"] == "verifyStep6") {
+	}
+	// verify step 6
+	elseif ($_GET["url"] == "verifyStep6") {
 		if (isset($_SESSION["_step6Token"]) && !empty($_SESSION["_step6Token"]) && isset($_POST["_v6Token"]) && !empty($_POST["_v6Token"]) && $_POST["_v6Token"] == $_SESSION["_step6Token"]) {
 
 			$form_type = $expose->validateInput($_POST["form_type"]);
@@ -204,8 +213,23 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 							"admin_period" => $_SESSION["admin_period"]
 						);
 						$data = $expose->callOrchardGateway($_SESSION["customerData"]);
+
 						session_unset();
 						session_destroy();
+						$_SESSION = array();
+
+						if (ini_get("session.use_cookies")) {
+							$params = session_get_cookie_params();
+							setcookie(
+								session_name(),
+								'',
+								time() - 42000,
+								$params["path"],
+								$params["domain"],
+								$params["secure"],
+								$params["httponly"]
+							);
+						}
 					}
 				}
 			} else {
@@ -224,10 +248,8 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 		if (!isset($_POST["resend_code"])) die(json_encode(array("success" => false, "message" => "Invalid request!")));
 		if (empty($_POST["resend_code"])) die(json_encode(array("success" => false, "message" => "Missing input!")));
 
-		$code_type = $expose->validateInputTextOnly($_POST["resend_code"]);
-		if (!$code_type["success"]) die(json_encode($code_type));
-
-		switch ($code_type["message"]) {
+		$code_type = $expose->validateText($_POST["resend_code"]);
+		switch ($code_type) {
 			case 'sms':
 				if (isset($_SESSION["_step5Token"]) && !empty($_SESSION["_step5Token"]) && isset($_POST["_v5Token"]) && !empty($_POST["_v5Token"]) && $_POST["_v5Token"] == $_SESSION["_step5Token"]) {
 					$response = $expose->sendOTP($_SESSION["step4"]["phone_number"], $_SESSION["step4"]["country_code"]);
