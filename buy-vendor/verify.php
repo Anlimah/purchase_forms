@@ -61,7 +61,7 @@ if (isset($_GET['logout'])) {
                     <div class="purchase-card-body">
                         <form action="#" id="step1Form" method="post" enctype="multipart/form-data" style="margin: 0px 12%;">
                             <p class="mb-4">Enter the verification code we sent to your phone.</p>
-                            <div class="mb-4" style="display:flex !important; flex-direction:row !important; justify-content: space-around !important; align-items:baseline">
+                            <div class="mb-4" style="display:flex !important; flex-direction:row !important; justify-content: space-between !important; align-items:baseline">
                                 <label class="form-label" for="email_addr">RMU - </label>
                                 <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center" name="code[]" id="num1" placeholder="0" required>
                                 <input class="form-control num" type="text" maxlength="1" style="width:50px; text-align:center" name="code[]" id="num2" placeholder="0" required>
