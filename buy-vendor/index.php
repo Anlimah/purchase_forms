@@ -53,6 +53,8 @@ require_once('../inc/page-data.php');
 
         <?php require_once("../inc/page-nav.php"); ?>
 
+        <div id="flashMessage" class="alert text-center" role="alert"></div>
+
         <main class="container flex-container mb-4">
             <div class="flex-card">
                 <div class="form-card card" style="max-width: 800px !important;">
@@ -130,6 +132,7 @@ require_once('../inc/page-data.php');
     </div>
 
     <script src="../js/jquery-3.6.0.min.js"></script>
+    <script src="../js/main.js"></script>
     <script>
         $(document).ready(function() {
 
@@ -149,7 +152,7 @@ require_once('../inc/page-data.php');
                             if (result.success) {
                                 window.location.href = "verify.php?verify=customer";
                             } else {
-                                alert(result.message);
+                                flashMessage("alert-danger", result.message);
                             }
                         },
                         error: function(error) {

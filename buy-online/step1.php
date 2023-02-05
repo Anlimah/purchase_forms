@@ -79,7 +79,7 @@ if (!isset($_SESSION["_step1Token"])) {
                     success: function(result) {
                         console.log(result);
                         if (result.success) {
-                            window.location.href = 'step2.php';
+                            window.location.href = result.message;
                         } else {
                             flashMessage("alert-danger", result.message);
                         }

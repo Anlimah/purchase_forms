@@ -60,6 +60,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 			);
 			$_SESSION['step1Done'] = true;
 			$data["success"] = true;
+			$data["message"] = "step2.php";
 		} else {
 			$data["success"] = false;
 			$data["message"] = "Invalid request!";
@@ -80,6 +81,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 				$_SESSION['email_code'] = $v_code;
 				$_SESSION['step2Done'] = true;
 				$data["success"] = true;
+				$data["message"] = "step3.php";
 			} else {
 				$data["success"] = false;
 				$data["message"] = "Error occured while sending email!";
@@ -104,6 +106,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 				if ($otp_code == $_SESSION['email_code']) {
 					$_SESSION['step3Done'] = true;
 					$data["success"] = true;
+					$data["message"] = "step4.php";
 				} else {
 					$data["success"] = false;
 					$data["message"] = "Email verification code provided is incorrect!";
@@ -140,7 +143,8 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 					$_SESSION['sms_code'] = $response["otp_code"];
 					$_SESSION['step4Done'] = true;
 					$data["success"] = true;
-					$data["message"] = $response["statusDescription"];
+					$data["message"] = "step5.php";
+					//$data["message"] = $response["statusDescription"];
 				} else {
 					$data["success"] = false;
 					$data["message"] = $response["statusDescription"];
@@ -169,6 +173,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 				if ($otp_code == $_SESSION['sms_code']) {
 					$_SESSION['step5Done'] = true;
 					$data["success"] = true;
+					$data["message"] = "step6.php";
 				} else {
 					$data["success"] = false;
 					$data["message"] = "OTP code provided is incorrect!";

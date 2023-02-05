@@ -44,6 +44,8 @@ if (isset($_GET['logout'])) {
 
         <?php require_once("../inc/page-nav.php"); ?>
 
+        <div id="flashMessage" class="alert text-center" role="alert"></div>
+
         <main class="container flex-container">
             <div class="flex-card">
                 <div class="form-card card">
@@ -79,6 +81,7 @@ if (isset($_GET['logout'])) {
     </div>
 
     <script src="../js/jquery-3.6.0.min.js"></script>
+    <script src="../js/main.js"></script>
     <script>
         $(document).ready(function() {
             //get variable(parameters) from url

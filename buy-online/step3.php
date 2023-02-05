@@ -141,7 +141,7 @@ if (isset($_SESSION['step2Done']) && $_SESSION['step2Done'] == true && isset($_S
                     success: function(result) {
                         console.log(result);
                         if (result.success) {
-                            window.location.href = 'step4.php';
+                            window.location.href = result.message;
                         } else {
                             alert(result.message);
                         }
