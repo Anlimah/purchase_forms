@@ -27,7 +27,7 @@ if (isset($_GET['logout'])) {
         );
     }
 
-    header('Location: login.php');
+    header('Location: ../login.php');
 }
 
 require_once('../bootstrap.php');
