@@ -158,6 +158,7 @@ if (isset($_GET['logout'])) {
 
             $("#step1Form").on("submit", function(e) {
                 e.preventDefault();
+                triggeredBy = 2;
                 var url = "";
                 if (getUrlVars()["verify"] == "vendor") {
                     url = "verifyVendor";
@@ -191,10 +192,12 @@ if (isset($_GET['logout'])) {
 
             $(document).on({
                 ajaxStart: function() {
-                    $("#submitBtn").prop("disabled", true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
+                    if (triggeredBy == 1) $("#resend-code").prop("disabled", true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> sending...');
+                    else $("#submitBtn").prop("disabled", true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
                 },
                 ajaxStop: function() {
-                    $("#submitBtn").prop("disabled", false).html('Verify');
+                    if (triggeredBy == 1) $("#resend-code").prop("disabled", false).html('Resend code');
+                    else $("#submitBtn").prop("disabled", false).html('Verify');
                 }
             });
 
