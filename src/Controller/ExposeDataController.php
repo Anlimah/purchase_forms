@@ -265,24 +265,20 @@ class ExposeDataController
         return $gateAccess->initiateProcess();
     }
 
-    public function sendOTP($phone_number, $country_code)
+    public function sendSMS($to, $message)
     {
-        $to = $country_code . $phone_number;
-        $otp_code = $this->genCode(4);
-        $message = 'Your OTP verification code: ' . $otp_code;
-        $url = "https://sms.hubtel.com/v1/messages/send";
-        $payload = json_encode(array("From" => "RMU", "To" => $to, "Content" => $message));
-        $response = json_decode($this->sendHubtelSMS($url, $payload), true);
-        if (!$response["status"]) $response["otp_code"] = $otp_code;
-        return $response;
-    }
-
-    public function sendSMS($phone_number, $country_code, $message)
-    {
-        $to = $country_code . $phone_number;
         $url = "https://sms.hubtel.com/v1/messages/send";
         $payload = json_encode(array("From" => "RMU", "To" => $to, "Content" => $message));
         return $this->sendHubtelSMS($url, $payload);
+    }
+
+    public function sendOTP($to)
+    {
+        $otp_code = $this->genCode(4);
+        $message = 'Your OTP verification code: ' . $otp_code;
+        $response = json_decode($this->sendSMS($to, $message), true);
+        if (!$response["status"]) $response["otp_code"] = $otp_code;
+        return $response;
     }
 
     public function sendEmailVerificationCode($email)
