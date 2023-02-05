@@ -27,6 +27,8 @@ require_once('../inc/page-data.php');
 
         <?php require_once("../inc/page-nav.php"); ?>
 
+        <div id="flashMessage" class="alert text-center" style="display: none" role="alert"></div>
+
         <main class="container flex-container">
             <div class="flex-card">
                 <div class="form-card card">
@@ -52,14 +54,14 @@ require_once('../inc/page-data.php');
                                 <label class="form-label" for="phone-number">Phone Number</label>
                                 <div style="display:flex !important; flex-direction:row !important; justify-content: space-between !important">
                                     <select title="Choose country and country code" class="form-select form-select-sm country-code" name="country" id="country" style="margin-right: 10px; width: 45%" required>
-                                        <option selected disabled value="">Choose...</option>
+                                        <option hidden disabled value="">Choose...</option>
                                         <?php
                                         foreach (COUNTRIES as $cn) {
                                             echo '<option value="(' . $cn["code"] . ') ' . $cn["name"] . '">(' . $cn["code"] . ') ' . $cn["name"] . '</option>';
                                         }
                                         ?>
                                     </select>
-                                    <input maxlength="10" title="Provide your Provide Number" class="form-control form-control-sm" style="width: 70%" type="tel" name="phone_number" id="phone_number" placeholder="0244123123" required>
+                                    <input maxlength="11" title="Provide your Provide Number" class="form-control form-control-sm" style="width: 70%" type="tel" name="phone_number" id="phone_number" placeholder="12345678901" required>
                                 </div>
                             </div>
                             <button class="btn btn-primary" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%">Continue</button>
@@ -74,6 +76,7 @@ require_once('../inc/page-data.php');
     </div>
 
     <script src="../js/jquery-3.6.0.min.js"></script>
+    <script src="../js/main.js"></script>
     <script>
         $(document).ready(function() {
             $("#step1Form").on("submit", function(e) {
@@ -90,7 +93,7 @@ require_once('../inc/page-data.php');
                         if (result.success) {
                             window.location.href = 'step5.php';
                         } else {
-                            alert(result.message);
+                            flashMessage("alert-danger", result.message);
                         }
                     },
                     error: function(error) {

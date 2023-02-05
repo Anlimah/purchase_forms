@@ -1,6 +1,6 @@
 <?php
 session_start();
-//echo $_SERVER["HTTP_USER_AGENT"];
+
 if (!isset($_SESSION["_step1Token"])) {
     $rstrong = true;
     $_SESSION["_step1Token"] = hash('sha256', bin2hex(openssl_random_pseudo_bytes(64, $rstrong)));
@@ -21,6 +21,8 @@ if (!isset($_SESSION["_step1Token"])) {
     <div id="wrapper">
 
         <?php require_once("../inc/page-nav.php"); ?>
+
+        <div id="flashMessage" class="alert text-center" role="alert"></div>
 
         <main class="container flex-container">
             <div class="flex-card">
@@ -60,6 +62,7 @@ if (!isset($_SESSION["_step1Token"])) {
 
 
     <script src="../js/jquery-3.6.0.min.js"></script>
+    <script src="../js/main.js"></script>
     <script>
         $(document).ready(function() {
 
@@ -78,7 +81,7 @@ if (!isset($_SESSION["_step1Token"])) {
                         if (result.success) {
                             window.location.href = 'step2.php';
                         } else {
-                            alert(result.message);
+                            flashMessage("alert-danger", result.message);
                         }
                     },
                     error: function(error) {

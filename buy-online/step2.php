@@ -24,6 +24,8 @@ if (isset($_SESSION['step1Done']) && $_SESSION['step1Done'] == true && isset($_S
 
         <?php require_once("../inc/page-nav.php"); ?>
 
+        <div id="flashMessage" class="alert text-center" role="alert"></div>
+
         <main class="container flex-container">
             <div class="flex-card">
                 <div class="form-card card">
@@ -55,6 +57,7 @@ if (isset($_SESSION['step1Done']) && $_SESSION['step1Done'] == true && isset($_S
     </div>
 
     <script src="../js/jquery-3.6.0.min.js"></script>
+    <script src="../js/main.js"></script>
     <script>
         $(document).ready(function() {
             $("#step1Form").on("submit", function(e) {
@@ -71,14 +74,8 @@ if (isset($_SESSION['step1Done']) && $_SESSION['step1Done'] == true && isset($_S
                         if (result.success) {
                             window.location.href = 'step3.php';
                         } else {
-                            alert(result.message);
+                            flashMessage("alert-danger", result.message);
                         }
-                        /*if (res["response"] == "success") {
-                            console.log(res['msg']);
-                            window.location.href = 'verify-code.php'
-                        } else {
-                            console.log(res['msg']);
-                        }*/
                     },
                     error: function(error) {
                         console.log(error.statusText);

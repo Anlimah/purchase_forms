@@ -27,57 +27,57 @@ class ExposeDataController
 
     public function validateEmail($input)
     {
-        if (empty($input)) die(array("success" => false, "message" => "Input required!"));
+        if (empty($input)) die(json_encode(array("success" => false, "message" => "Input required!")));
         $user_email = htmlentities(htmlspecialchars($input));
         $sanitized_email = filter_var($user_email, FILTER_SANITIZE_EMAIL);
         if (!filter_var($sanitized_email, FILTER_VALIDATE_EMAIL))
-            die(array("success" => false, "message" => "Invalid email address!" . $sanitized_email));
+            die(json_encode(array("success" => false, "message" => "Invalid email address!" . $sanitized_email)));
         return $user_email;
     }
 
     public function validateInput($input)
     {
-        if (empty($input)) die(array("success" => false, "message" => "Input required!"));
+        if (empty($input)) die(json_encode(array("success" => false, "message" => "Input required!")));
         $user_input = htmlentities(htmlspecialchars($input));
         $validated_input = (bool) preg_match('/^[A-Za-z0-9]/', $user_input);
         if ($validated_input) return $user_input;
-        die(array("success" => false, "message" => "Invalid input!"));
+        die(json_encode(array("success" => false, "message" => "Invalid input!")));
     }
 
     public function validateCountryCode($input)
     {
-        if (empty($input)) die(array("success" => false, "message" => "Input required!"));
+        if (empty($input)) die(json_encode(array("success" => false, "message" => "Input required!")));
         $user_input = htmlentities(htmlspecialchars($input));
         $validated_input = (bool) preg_match('/^[A-Za-z0-9()+]/', $user_input);
         if ($validated_input) return $user_input;
-        die(array("success" => false, "message" => "Invalid input!"));
+        die(json_encode(array("success" => false, "message" => "Invalid input!")));
     }
 
     public function validatePassword($input)
     {
-        if (empty($input)) die(array("success" => false, "message" => "Input required!"));
+        if (empty($input)) die(json_encode(array("success" => false, "message" => "Input required!")));
         $user_input = htmlentities(htmlspecialchars($input));
         $validated_input = (bool) preg_match('/^[A-Za-z0-9()+@#.-_=$&!`]/', $user_input);
         if ($validated_input) return $user_input;
-        die(array("success" => false, "message" => "Invalid input!"));
+        die(json_encode(array("success" => false, "message" => "Invalid input!")));
     }
 
     public function validatePhone($input)
     {
-        if (empty($input)) die(array("success" => false, "message" => "Input required!"));
+        if (empty($input)) die(json_encode(array("success" => false, "message" => "Input required!")));
         $user_input = htmlentities(htmlspecialchars($input));
         $validated_input = (bool) preg_match('/^[0-9]/', $user_input);
         if ($validated_input) return $user_input;
-        die(array("success" => false, "message" => "Invalid input!"));
+        die(json_encode(array("success" => false, "message" => "Invalid input!")));
     }
 
     public function validateText($input)
     {
-        if (empty($input)) die(array("success" => false, "message" => "Input required!"));
+        if (empty($input)) die(json_encode(array("success" => false, "message" => "Input required!")));
         $user_input = htmlentities(htmlspecialchars($input));
         $validated_input = (bool) preg_match('/^[A-Za-z]/', $user_input);
         if ($validated_input) return $user_input;
-        die(array("success" => false, "message" => "Invalid input!"));
+        die(json_encode(array("success" => false, "message" => "Invalid input!")));
     }
 
     public function validateDate($date)
@@ -98,7 +98,7 @@ class ExposeDataController
                 }
             }
         }
-        die("Invalid file uploaded!");
+        die(json_encode(array("success" => false, "message" => "Invalid file uploaded!")));
     }
 
     public function validateInputTextOnly($input): array

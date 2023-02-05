@@ -2,9 +2,6 @@
 
 use Src\Controller\ExposeDataController;
 
-require_once('../bootstrap.php');
-$expose = new ExposeDataController();
-
 session_start();
 if (isset($_SESSION['step5Done']) && $_SESSION['step5Done'] == true && isset($_SESSION["vendor_id"]) && !empty($_SESSION["vendor_id"]) && $_SESSION["vendor_type"] == "ONLINE") {
     if (!isset($_SESSION["_step6Token"])) {
@@ -16,6 +13,9 @@ if (isset($_SESSION['step5Done']) && $_SESSION['step5Done'] == true && isset($_S
 } else {
     header('Location: step5.php');
 }
+
+require_once('../bootstrap.php');
+$expose = new ExposeDataController();
 
 ?>
 <!DOCTYPE html>
@@ -31,6 +31,8 @@ if (isset($_SESSION['step5Done']) && $_SESSION['step5Done'] == true && isset($_S
     <div id="wrapper">
 
         <?php require_once("../inc/page-nav.php"); ?>
+
+        <div id="flashMessage" class="alert text-center" role="alert"></div>
 
         <main class="container flex-container">
             <div class="flex-card">
@@ -88,6 +90,7 @@ if (isset($_SESSION['step5Done']) && $_SESSION['step5Done'] == true && isset($_S
     </div>
 
     <script src="../js/jquery-3.6.0.min.js"></script>
+    <script src="../js/main.js"></script>
     <script>
         $(document).ready(function() {
             $("#step1Form").on("submit", function(e) {
@@ -104,7 +107,7 @@ if (isset($_SESSION['step5Done']) && $_SESSION['step5Done'] == true && isset($_S
                         if (result.success) {
                             window.location.href = result.message;
                         } else {
-                            alert(result.message)
+                            flashMessage("alert-danger", result.message);
                         }
                     },
                     error: function(error) {

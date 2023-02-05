@@ -24,6 +24,9 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
 
         <?php require_once("../inc/page-nav.php"); ?>
 
+        <div id="flashMessage" class="alert text-center" style="margin-bottom: 0 !important;" role="alert"></div>
+        <div class="clearfix"></div>
+
         <main class="container flex-container">
             <div class="flex-card">
                 <div class="form-card card">
@@ -65,11 +68,12 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
     </div>
 
     <script src="../js/jquery-3.6.0.min.js"></script>
+    <script src="../js/main.js"></script>
     <script>
         $(document).ready(function() {
             var triggeredBy = 0;
 
-            var count = 60;
+            var count = 1;
             var intervalId = setInterval(() => {
                 $("#timer").html("Resend code <b>(" + count + " sec)</b>");
                 count = count - 1;
@@ -84,24 +88,25 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
             $("#resend-code").click(function() {
                 triggeredBy = 1;
 
+                let data = {
+                    resend_code: "sms",
+                    _v5Token: $("#_v5Token").val()
+                };
+
                 $.ajax({
                     type: "POST",
                     url: "../endpoint/resend-code",
-                    data: {
-                        resend_code: "sms",
-                        _v5Token: $("#_v5Token").val(),
-                    },
-                    contentType: false,
-                    cache: false,
-                    processData: false,
+                    data: data,
                     success: function(result) {
                         console.log(result);
                         if (result.success) {
+                            flashMessage("alert-success", result.message);
+
                             clearInterval(intervalId);
                             $("#timer").show();
                             $('#resend-code').removeClass("display").addClass("hide");
 
-                            count = 60;
+                            count = 1;
                             intervalId = setInterval(() => {
                                 $("#timer").html("Resend code <b>(" + count + " sec)</b>");
                                 count = count - 1;
@@ -113,7 +118,7 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
                                 }
                             }, 1000); /**/
                         } else {
-                            alert(result.message);
+                            flashMessage("alert-danger", result.message);
                         }
                     },
                     error: function(error) {
@@ -137,6 +142,7 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
                         if (result.success) {
                             window.location.href = 'step6.php';
                         } else {
+                            flashMessage("alert-danger", result.message);
                             alert(result.message);
                         }
                     },
@@ -168,6 +174,7 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
             $("input[type='text']").on("click", function() {
                 $(this).select();
             });
+
         });
     </script>
 </body>
