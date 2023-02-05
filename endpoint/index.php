@@ -250,13 +250,41 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 
 	// Resend verification code
 	elseif ($_GET["url"] == "resend-code") {
+
 		if (!isset($_POST["resend_code"])) die(json_encode(array("success" => false, "message" => "Invalid request!")));
 		if (empty($_POST["resend_code"])) die(json_encode(array("success" => false, "message" => "Missing input!")));
 
 		$code_type = $expose->validateText($_POST["resend_code"]);
 		switch ($code_type) {
 			case 'sms':
-				if (isset($_SESSION["_step5Token"]) && !empty($_SESSION["_step5Token"]) && isset($_POST["_v5Token"]) && !empty($_POST["_v5Token"]) && $_POST["_v5Token"] == $_SESSION["_step5Token"]) {
+				// For vendor resend otp code
+				if (isset($_SESSION["_verifySMSToken"]) && !empty($_SESSION["_verifySMSToken"]) && isset($_POST["_vSMSToken"]) && !empty($_POST["_vSMSToken"]) && $_POST["_vSMSToken"] == $_SESSION["_verifySMSToken"]) {
+
+					$vendorPhone = $expose->getVendorPhone($_SESSION["vendor_id"]);
+
+					if (!empty($vendorPhone)) {
+
+						$to = $vendorPhone[0]["country_code"] . $vendorPhone[0]["phone_number"];
+						$response = $expose->sendOTP($to);
+
+						if (isset($response["otp_code"])) {
+							$_SESSION['sms_code'] = $response["otp_code"];
+							$_SESSION['verifySMSCode'] = true;
+							$data["success"] = true;
+							$data["message"] = "Verification code resent!";
+						} else {
+							$_SESSION['verifySMSCode'] = false;
+							$data["success"] = false;
+							$data["message"] = $response["statusDescription"];
+						}
+					} else {
+						$data["success"] = false;
+						$data["message"] = "No phone number entry found for this user!";
+					}
+				}
+
+				// for user/applicant/online resend otp code
+				else if (isset($_SESSION["_step5Token"]) && !empty($_SESSION["_step5Token"]) && isset($_POST["_v5Token"]) && !empty($_POST["_v5Token"]) && $_POST["_v5Token"] == $_SESSION["_step5Token"]) {
 
 					$to = $_SESSION["step4"]["country_code"] . $_SESSION["step4"]["phone_number"];
 					$response = $expose->sendOTP($to);
@@ -269,6 +297,8 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 						$data["success"] = false;
 						$data["message"] = $response["statusDescription"];
 					}
+				} else {
+					die(json_encode(array("success" => false, "message" => "Invalid OTP SMS request!")));
 				}
 				break;
 
@@ -279,6 +309,8 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 					$_SESSION['email_code'] = $v_code;
 					$data["success"] = true;
 					$data["message"] = "Verification code resent!";
+				} else {
+					die(json_encode(array("success" => false, "message" => "Invalid OTP Email request!")));
 				}
 				break;
 		}
@@ -314,6 +346,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 						$vendorPhone = $expose->getVendorPhone($_SESSION["vendor_id"]);
 
 						if (!empty($vendorPhone)) {
+
 							$to = $vendorPhone[0]["country_code"] . $vendorPhone[0]["phone_number"];
 							$response = $expose->sendOTP($to);
 
@@ -321,7 +354,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 								$_SESSION['sms_code'] = $response["otp_code"];
 								$_SESSION['verifySMSCode'] = true;
 								$data["success"] = true;
-								$data["message"] = "Verification code sent!";
+								$data["message"] = "verify.php?verify=vendor";
 							} else {
 								$_SESSION['verifySMSCode'] = false;
 								$data["success"] = false;
@@ -352,7 +385,10 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 				foreach ($_POST["code"] as $code) {
 					$otp .= $code;
 				}
-				if ($otp == $_SESSION['sms_code']) {
+
+				$otp_code = (int) $expose->validatePhone($otp);
+
+				if ($otp_code == $_SESSION['sms_code']) {
 					$_SESSION["admin_period"] = $expose->getCurrentAdmissionPeriodID();
 					$_SESSION["SMSLogin"] = true;
 					$_SESSION["loginSuccess"] = true;
@@ -407,6 +443,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 						);
 
 						if (!empty($_SESSION["vendorData"])) {
+
 							$to = $_SESSION["vendorData"]["country_code"] . $_SESSION["vendorData"]["phone_number"];
 							$response = $expose->sendOTP($to);
 
@@ -414,7 +451,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 								$_SESSION['sms_code'] = $response["otp_code"];
 								$_SESSION['verifySMSCode'] = true;
 								$data["success"] = true;
-								$data["message"] = "Verification code sent!";
+								$data["message"] = "verify.php?verify=customer";
 							} else {
 								$_SESSION['verifySMSCode'] = false;
 								$data["success"] = false;
@@ -451,7 +488,10 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 				foreach ($_POST["code"] as $code) {
 					$otp .= $code;
 				}
-				if ($otp == $_SESSION['sms_code']) {
+
+				$otp_code = (int) $expose->validatePhone($otp);
+
+				if ($otp_code == $_SESSION['sms_code']) {
 					if (isset($_SESSION["vendorData"]) && !empty($_SESSION["vendorData"])) {
 						if ($expose->vendorExist($_SESSION["vendorData"]["vendor_id"])) {
 							$data = $expose->processVendorPay($_SESSION["vendorData"]);

@@ -70,9 +70,13 @@ if (isset($_GET['logout'])) {
                                 <input class="form-control num" type="text" maxlength="1" style="text-align:center" name="code[]" id="num4" placeholder="X" required>
                             </div>
                             <button class="btn btn-primary mb-4" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%">Verify</button>
-                            <input class="form-control" type="hidden" name="_vSMSToken" value="<?= $_SESSION["_verifySMSToken"]; ?>">
-                            <a href="step4.php">Change number</a>
+                            <input class="form-control" type="hidden" name="_vSMSToken" id="_vSMSToken" value="<?= $_SESSION["_verifySMSToken"]; ?>">
                         </form>
+                    </div>
+                    <div class="purchase-card-footer flex-row align-items-baseline justify-space-between" style="width: 100%;">
+                        <a href="step4.php">Change number</a>
+                        <span id="timer"></span>
+                        <button id="resend-code" class="btn btn-outline-dark btn-xs hide">Resend code</button>
                     </div>
                 </div>
             </div>
@@ -95,6 +99,62 @@ if (isset($_GET['logout'])) {
                 );
                 return vars;
             }
+
+            var triggeredBy = 0;
+
+            var count = 1;
+            var intervalId = setInterval(() => {
+                $("#timer").html("Resend code <b>(" + count + " sec)</b>");
+                count = count - 1;
+                if (count <= 0) {
+                    clearInterval(intervalId);
+                    $('#timer').hide();
+                    $('#resend-code').removeClass("hide").addClass("display");
+                    return;
+                }
+            }, 1000); //1000 will  run it every 1 second
+
+            $("#resend-code").click(function() {
+                triggeredBy = 1;
+
+                let data = {
+                    resend_code: "sms",
+                    _vSMSToken: $("#_vSMSToken").val()
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "../endpoint/resend-code",
+                    data: data,
+                    success: function(result) {
+                        console.log(result);
+                        if (result.success) {
+                            flashMessage("alert-success", result.message);
+
+                            clearInterval(intervalId);
+                            $("#timer").show();
+                            $('#resend-code').removeClass("display").addClass("hide");
+
+                            count = 1;
+                            intervalId = setInterval(() => {
+                                $("#timer").html("Resend code <b>(" + count + " sec)</b>");
+                                count = count - 1;
+                                if (count <= 0) {
+                                    clearInterval(intervalId);
+                                    $('#timer').hide();
+                                    $('#resend-code').removeClass("hide").addClass("display").attr("disabled", false);
+                                    return;
+                                }
+                            }, 1000); /**/
+                        } else {
+                            flashMessage("alert-danger", result.message);
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error.statusText);
+                    }
+                });
+            });
 
             $("#step1Form").on("submit", function(e) {
                 e.preventDefault();

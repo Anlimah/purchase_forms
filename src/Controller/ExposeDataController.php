@@ -204,7 +204,7 @@ class ExposeDataController
 
     public function getAdminYearCode()
     {
-        $sql = "SELECT EXTRACT(YEAR FROM (SELECT `start_date` FROM admission_period)) AS 'year'";
+        $sql = "SELECT EXTRACT(YEAR FROM (SELECT `start_date` FROM admission_period WHERE active = 1)) AS 'year'";
         $year = (string) $this->dm->getData($sql)[0]['year'];
         return (int) substr($year, 2, 2);
     }

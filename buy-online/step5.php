@@ -51,10 +51,8 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
                             </div>
                             <button class="btn btn-primary mb-4" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%">Verify</button>
                             <input class="form-control" type="hidden" name="_v5Token" id="_v5Token" value="<?= $_SESSION["_step5Token"]; ?>">
-
                         </form>
                     </div>
-
                     <div class="purchase-card-footer flex-row align-items-baseline justify-space-between" style="width: 100%;">
                         <a href="step4.php">Change number</a>
                         <span id="timer"></span>
@@ -86,7 +84,7 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
             }, 1000); //1000 will  run it every 1 second
 
             $("#resend-code").click(function() {
-                triggeredBy = 1;
+                triggeredBy = 60;
 
                 let data = {
                     resend_code: "sms",
@@ -106,7 +104,7 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
                             $("#timer").show();
                             $('#resend-code').removeClass("display").addClass("hide");
 
-                            count = 1;
+                            count = 60;
                             intervalId = setInterval(() => {
                                 $("#timer").html("Resend code <b>(" + count + " sec)</b>");
                                 count = count - 1;

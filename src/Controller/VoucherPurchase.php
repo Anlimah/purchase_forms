@@ -16,6 +16,13 @@ class VoucherPurchase
         $this->dm = new DatabaseMethods();
     }
 
+    public function logActivity(int $user_id, $operation, $description)
+    {
+        $query = "INSERT INTO `activity_logs`(`user_id`, `operation`, `description`) VALUES (:u,:o,:d)";
+        $params = array(":u" => $user_id, ":o" => $operation, ":d" => $description);
+        $this->dm->inputData($query, $params);
+    }
+
     private function genPin(int $length_pin = 9)
     {
         $str_result = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -226,32 +233,43 @@ class VoucherPurchase
     {
         $data = $this->getAppPurchaseData($trans_id);
 
-        if (!empty($data)) {
+        if (empty($data)) return array("success" => false, "message" => "No data records for this transaction!");
 
-            $app_type = 0;
-            if ($data[0]["form_type"] == 2 || $data[0]["form_type"] == 3 || $data[0]["form_type"] == 4) {
-                $app_type = 1;
-            } else if ($data[0]["form_type"] == 1) {
-                $app_type = 2;
-            }
+        $app_type = 0;
 
-            $app_year = $this->expose->getAdminYearCode();
+        if ($data[0]["form_type"] == 2 || $data[0]["form_type"] == 3 || $data[0]["form_type"] == 4) {
+            $app_type = 1;
+        } else if ($data[0]["form_type"] == 1) {
+            $app_type = 2;
+        }
 
-            $login_details = $this->genLoginDetails($app_type, $app_year);
+        $app_year = $this->expose->getAdminYearCode();
 
-            if ($this->saveLoginDetails($login_details['app_number'], $login_details['pin_number'], $trans_id)) {
+        $login_details = $this->genLoginDetails($app_type, $app_year);
 
-                $this->updateVendorPurchaseData($trans_id, $login_details['app_number'], $login_details['pin_number'], 'COMPLETED');
+        if ($this->saveLoginDetails($login_details['app_number'], $login_details['pin_number'], $trans_id)) {
 
-                $key = 'APPLICATION NUMBER: RMU-' . $login_details['app_number'] . '    PIN: ' . $login_details['pin_number'] . ". Follow the link, https://admissions.rmuictonline.com to start application process.";
-                $message = 'Your RMU Online Application login details. ' . $key;
-                $response = $this->expose->sendSMS($data[0]["phone_number"], $data[0]["country_code"], $message)[0]["status"];
-                if (!$response["status"]) {
-                    if (!empty($data[0]["email_address"])) {
-                        $msg = $message . $key;
-                        $this->expose->sendEmail($data[0]["email_address"], 'ONLINE APPLICATION PORTAL LOGIN INFORMATION', $msg);
-                    }
-                    $browser_mg = '
+            $this->updateVendorPurchaseData($trans_id, $login_details['app_number'], $login_details['pin_number'], 'COMPLETED');
+
+            $this->logActivity(
+                $_SESSION["vendor_id"],
+                "INSERT",
+                "Vendor with ID {$_SESSION["vendor_id"]} sold form with transaction ID {$trans_id}"
+            );
+
+            $message = 'Your RMU Online Application login details. ';
+            $message .= 'APPLICATION NUMBER: RMU-' . $login_details['app_number'];
+            $message .= '    PIN: ' . $login_details['pin_number'] . ".";
+            $message .= ' Follow the link, https://admissions.rmuictonline.com to start application process.';
+            $to = $data[0]["country_code"] . $data[0]["phone_number"];
+
+            $response = json_decode($this->expose->sendSMS($to, $message));
+
+            if (!$response->status) {
+                if (!empty($data[0]["email_address"])) {
+                    $this->expose->sendEmail($data[0]["email_address"], 'ONLINE APPLICATION PORTAL LOGIN INFORMATION', $message);
+                }
+                $browser_mg = '
                         <p class="mb-4" style="text-align: justify !important; width: 100%; margin:0; padding:0">
                             <b class="text-success">Form purchase successful!</b><br> 
                             An email and SMS with your <b>Application Number</b> and <b>PIN</b> 
@@ -260,14 +278,12 @@ class VoucherPurchase
                             <b>online application portal</b></a> 
                             to complete your application process.
                         </p>';
-                    return array("success" => true, "message" => $browser_mg, "exttrid" => $trans_id);
-                } else {
-                    return array("success" => false, "message" => "Failed sending login details via SMS!");
-                }
+                return array("success" => true, "message" => $browser_mg, "exttrid" => $trans_id);
             } else {
-                return array("success" => false, "message" => "Failed saving login details!");
+                return array("success" => false, "message" => "Failed sending login details via SMS!");
             }
+        } else {
+            return array("success" => false, "message" => "Failed saving login details!");
         }
-        return array("success" => false, "message" => "No data records for this transaction!");
     }
 }

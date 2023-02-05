@@ -10,7 +10,7 @@ function flashMessage(bg_color, message) {
     
       setTimeout(function() {
         $("#flashMessage").fadeOut(500, function() {
-          $("#flashMessage").remove();
+          $("#flashMessage").removeClass("show");
         });
       }, 5000);
 }

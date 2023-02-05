@@ -89,7 +89,7 @@ if (!isset($_SESSION["_loginToken"])) {
                         console.log(result);
                         if (result.success) {
                             alerter(result.message, 'success');
-                            window.location.href = "verify.php?verify=vendor";
+                            window.location.href = result.message;
                         } else {
                             alerter(result.message, 'danger');
                         }

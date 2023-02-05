@@ -150,7 +150,7 @@ require_once('../inc/page-data.php');
                         success: function(result) {
                             console.log(result);
                             if (result.success) {
-                                window.location.href = "verify.php?verify=customer";
+                                window.location.href = result.message;
                             } else {
                                 flashMessage("alert-danger", result.message);
                             }
