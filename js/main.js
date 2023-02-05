@@ -3,14 +3,16 @@ function flashMessage(bg_color, message) {
 
     flashMessage.classList.add(bg_color);
     flashMessage.innerHTML = message;
-    
-    setTimeout(function() {
-        $("#flashMessage").fadeIn(500).addClass("show");
-      }, 500);
-    
-      setTimeout(function() {
-        $("#flashMessage").fadeOut(500, function() {
-          $("#flashMessage").removeClass("show");
-        });
-      }, 5000);
+
+    setTimeout(() => {
+        flashMessage.style.visibility = "visible";
+        flashMessage.classList.add("show");
+    }, 500);
+
+    setTimeout(() => {
+        flashMessage.classList.remove("show");
+        setTimeout(() => {
+            flashMessage.style.visibility = "hidden";
+        }, 500);
+    }, 5000);
 }
