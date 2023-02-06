@@ -153,6 +153,11 @@ class VoucherPurchase
 
     //Get and Set IDs for foreign keys
 
+    public function getVendorIDByTransactionID(int $trans_id): int
+    {
+        return $this->dm->getData("SELECT vendor FROM purchase_detail WHERE id = :i", array(":i" => $trans_id));
+    }
+
     private function getAdmissionPeriodID()
     {
         $sql = "SELECT `id` FROM `admission_period` WHERE `active` = 1;";
@@ -250,11 +255,11 @@ class VoucherPurchase
         if ($this->saveLoginDetails($login_details['app_number'], $login_details['pin_number'], $trans_id)) {
 
             $this->updateVendorPurchaseData($trans_id, $login_details['app_number'], $login_details['pin_number'], 'COMPLETED');
-
+            $vendor_id = $this->getVendorIDByTransactionID($trans_id);
             $this->logActivity(
-                $_SESSION["vendor_id"],
+                $vendor_id,
                 "INSERT",
-                "Vendor with ID {$_SESSION["vendor_id"]} sold form with transaction ID {$trans_id}"
+                "Vendor {$vendor_id} sold form with transaction ID {$trans_id}"
             );
 
             $message = 'Your RMU Online Application login details. ';
