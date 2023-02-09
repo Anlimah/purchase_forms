@@ -91,7 +91,7 @@ require_once('../inc/page-data.php');
                     success: function(result) {
                         console.log(result);
                         if (result.success) {
-                            window.location.href = result.message;
+                            window.location.href = "step5.php";
                         } else {
                             flashMessage("alert-danger", result.message);
                         }

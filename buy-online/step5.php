@@ -138,7 +138,7 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
                     success: function(result) {
                         console.log(result);
                         if (result.success) {
-                            window.location.href = result.message;
+                            window.location.href = "step6.php";
                         } else {
                             flashMessage("alert-danger", result.message);
                             alert(result.message);
