@@ -153,7 +153,7 @@ class VoucherPurchase
 
     //Get and Set IDs for foreign keys
 
-    public function getVendorIDByTransactionID(int $trans_id): int
+    public function getVendorIDByTransactionID(int $trans_id)
     {
         return $this->dm->getData("SELECT vendor FROM purchase_detail WHERE id = :i", array(":i" => $trans_id));
     }
