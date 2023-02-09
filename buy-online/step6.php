@@ -4,8 +4,6 @@ if (isset($_SESSION['step5Done']) && $_SESSION['step5Done'] == true && isset($_S
     if (!isset($_SESSION["_step6Token"])) {
         $rstrong = true;
         $_SESSION["_step6Token"] = hash('sha256', bin2hex(openssl_random_pseudo_bytes(64, $rstrong)));
-        $_SESSION["ip"] = $expose->getIPAddress();
-        $_SESSION["device"] = $expose->getDeciveInfo();
     }
 } else {
     header('Location: step5.php');
