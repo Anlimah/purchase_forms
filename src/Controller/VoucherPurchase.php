@@ -257,7 +257,7 @@ class VoucherPurchase
             $this->updateVendorPurchaseData($trans_id, $login_details['app_number'], $login_details['pin_number'], 'COMPLETED');
             $vendor_id = $this->getVendorIDByTransactionID($trans_id);
             $this->logActivity(
-                $vendor_id,
+                $vendor_id[0]["vendor"],
                 "INSERT",
                 "Vendor {$vendor_id} sold form with transaction ID {$trans_id}"
             );
