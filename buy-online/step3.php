@@ -45,12 +45,7 @@ if (isset($_SESSION['step2Done']) && $_SESSION['step2Done'] == true && isset($_S
                                 A 6 digit code has been sent to the email <?= $_SESSION["step2"]["email_address"] ?>. Enter the code
                             </p>
                             <div class="mb-4" style="width:100%; display: flex; flex-direction:row; align-items:baseline; justify-content:space-around">
-                                <input class="form-control num" type="text" maxlength="1" style="width:35px; text-align:center;" name="num[]" id="num1" placeholder="0" required>
-                                <input class="form-control num" type="text" maxlength="1" style="width:35px; text-align:center; margin-left:5px" name="num[]" id="num2" placeholder="0" required>
-                                <input class="form-control num" type="text" maxlength="1" style="width:35px; text-align:center; margin-left:5px" name="num[]" id="num3" placeholder="0" required>
-                                <input class="form-control num" type="text" maxlength="1" style="width:35px; text-align:center; margin-left:5px" name="num[]" id="num4" placeholder="0" required>
-                                <input class="form-control num" type="text" maxlength="1" style="width:35px; text-align:center; margin-left:5px" name="num[]" id="num5" placeholder="0" required>
-                                <input class="form-control num" type="text" maxlength="1" style="width:35px; text-align:center; margin-left:5px" name="num[]" id="num6" placeholder="0" required>
+                                <input class="form-control num" type="text" maxlength="4" style="text-align:center;" name="num" id="num" placeholder="XXXX" required>
                             </div>
                             <button class="btn btn-primary mb-4" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%">Verify</button>
                             <input type="hidden" name="_v3Token" id="_v3Token" value="<?= $_SESSION["_step3Token"]; ?>">
@@ -166,7 +161,7 @@ if (isset($_SESSION['step2Done']) && $_SESSION['step2Done'] == true && isset($_S
             $("#num1").focus();
 
             $(".num").on("keyup", function() {
-                if (this.value) {
+                if (this.value == 4) {
                     $(this).next(":input").focus().select(); //.val(''); and as well clesr
                 }
             });

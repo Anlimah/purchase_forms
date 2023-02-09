@@ -96,12 +96,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 	elseif ($_GET["url"] == "verifyStep3") {
 		if (isset($_SESSION["_step3Token"]) && !empty($_SESSION["_step3Token"]) && isset($_POST["_v3Token"]) && !empty($_POST["_v3Token"]) && $_POST["_v3Token"] == $_SESSION["_step3Token"]) {
 			if ($_POST["num"]) {
-				$otp = "";
-				foreach ($_POST["num"] as $num) {
-					$otp .= $num;
-				}
-
-				$otp_code = (int) $expose->validatePhone($otp);
+				$otp_code = $expose->validatePhone($_POST["num"]);
 
 				if ($otp_code == $_SESSION['email_code']) {
 					$_SESSION['step3Done'] = true;
@@ -163,12 +158,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 	elseif ($_GET["url"] == "verifyStep5") {
 		if (isset($_SESSION["_step5Token"]) && !empty($_SESSION["_step5Token"]) && isset($_POST["_v5Token"]) && !empty($_POST["_v5Token"]) && $_POST["_v5Token"] == $_SESSION["_step5Token"]) {
 			if ($_POST["code"]) {
-				$otp = "";
-				foreach ($_POST["code"] as $code) {
-					$otp .= $code;
-				}
-
-				$otp_code = (int) $expose->validatePhone($otp);
+				$otp_code = $expose->validatePhone($otp);
 
 				if ($otp_code == $_SESSION['sms_code']) {
 					$_SESSION['step5Done'] = true;

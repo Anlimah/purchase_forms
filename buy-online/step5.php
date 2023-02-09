@@ -44,10 +44,7 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
                         <form action="#" id="step1Form" method="post" enctype="multipart/form-data" style="margin: 0px 12%;">
                             <p class="mb-4">Enter the verification code we sent to your phone.</p>
                             <div class="mb-4" style="display:flex !important; flex-direction:row !important; justify-content: space-between !important; align-items:baseline">
-                                <input class="form-control num" type="text" maxlength="1" style="text-align:center;" name="code[]" id="num1" placeholder="X" required>
-                                <input class="form-control num" type="text" maxlength="1" style="text-align:center;" name="code[]" id="num2" placeholder="X" required>
-                                <input class="form-control num" type="text" maxlength="1" style="text-align:center;" name="code[]" id="num3" placeholder="X" required>
-                                <input class="form-control num" type="text" maxlength="1" style="text-align:center;" name="code[]" id="num4" placeholder="X" required>
+                                <input class="form-control num" type="text" maxlength="4" style="text-align:center;" name="num" id="num" placeholder="XXXX" required>
                             </div>
                             <button class="btn btn-primary mb-4" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%">Verify</button>
                             <input class="form-control" type="hidden" name="_v5Token" id="_v5Token" value="<?= $_SESSION["_step5Token"]; ?>">
@@ -164,7 +161,7 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
             $("#num1").focus();
 
             $(".num").on("keyup", function() {
-                if (this.value) {
+                if (this.value == 4) {
                     $(this).next(":input").focus().select(); //.val(''); and as well clesr
                 }
             });
