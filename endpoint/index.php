@@ -158,7 +158,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 	elseif ($_GET["url"] == "verifyStep5") {
 		if (isset($_SESSION["_step5Token"]) && !empty($_SESSION["_step5Token"]) && isset($_POST["_v5Token"]) && !empty($_POST["_v5Token"]) && $_POST["_v5Token"] == $_SESSION["_step5Token"]) {
 			if ($_POST["code"]) {
-				$otp_code = $expose->validatePhone($otp);
+				$otp_code = $expose->validatePhone($_POST["code"]);
 
 				if ($otp_code == $_SESSION['sms_code']) {
 					$_SESSION['step5Done'] = true;
