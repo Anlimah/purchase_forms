@@ -1,7 +1,4 @@
 <?php
-
-use Src\Controller\ExposeDataController;
-
 session_start();
 if (isset($_SESSION['step5Done']) && $_SESSION['step5Done'] == true && isset($_SESSION["vendor_id"]) && !empty($_SESSION["vendor_id"]) && $_SESSION["vendor_type"] == "ONLINE") {
     if (!isset($_SESSION["_step6Token"])) {
@@ -15,6 +12,9 @@ if (isset($_SESSION['step5Done']) && $_SESSION['step5Done'] == true && isset($_S
 }
 
 require_once('../bootstrap.php');
+
+use Src\Controller\ExposeDataController;
+
 $expose = new ExposeDataController();
 
 ?>
