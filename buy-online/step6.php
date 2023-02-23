@@ -71,7 +71,7 @@ $expose = new ExposeDataController();
                                 <div class="mb-4" style="display:flex !important; flex-direction:row !important; justify-content: space-between !important; align-items:baseline">
                                     <label class="form-label" for="payment_method" style="margin-right: 10px;width:50%">Method: </label>
                                     <select title="Select your phone number network." class="form-select form-select-sm" name="payment_method" id="payment_method" required>
-                                        <option value="CRD">Card</option>
+                                        <option value="CRD">Credit/Debit Card</option>
                                         <option value="MOM" selected>Mobile Money</option>
                                     </select>
                                 </div>

@@ -170,12 +170,6 @@ class VoucherPurchase
         return $this->dm->getID($sql);
     }
 
-    private function getPaymentMethodID($name)
-    {
-        $sql = "SELECT `id` FROM `payment_method` WHERE `name` LIKE '%$name%'";
-        return $this->dm->getID($sql);
-    }
-
     public function SaveFormPurchaseData($data, $trans_id)
     {
         if (!empty($data) && !empty($trans_id)) {
@@ -197,7 +191,6 @@ class VoucherPurchase
 
             $ap_id = $data['admin_period'];
             $ft_id = $this->getFormTypeID($ft);
-            //$pm_id = $this->getPaymentMethodID($pm);
 
             // For on premises purchases, generate app number and pin and send immediately
             $purchase_id = $this->saveVendorPurchaseData($trans_id, $vd, $ft_id, $ap_id, $pm, $am, $fn, $ln, $em, $cn, $cc, $pn);
@@ -230,7 +223,8 @@ class VoucherPurchase
     private function getAppPurchaseData(int $trans_id)
     {
         // get form_type, country code, phone number
-        $sql = "SELECT `form_type`, `country_code`, `phone_number`, `email_address` FROM `purchase_detail` WHERE `id` = :t";
+        $sql = "SELECT `form_type`, `country_code`, `phone_number`, `email_address` 
+                FROM `purchase_detail` WHERE `id` = :t";
         return $this->dm->getData($sql, array(':t' => $trans_id));
     }
 
