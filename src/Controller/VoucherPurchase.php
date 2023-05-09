@@ -45,10 +45,10 @@ class VoucherPurchase
         return 0;
     }
 
-    private function saveVendorPurchaseData(int $ti, int $vd, int $ft, int $ap, $pm, float $am, $fn, $ln, $em, $cn, $cc, $pn)
+    private function saveVendorPurchaseData(int $ti, int $vd, int $ft, int $ap, $pm, float $am, $fn, $ln, $em, $cn, $cc, $pn, $deleted = 0)
     {
-        $sql = "INSERT INTO `purchase_detail` (`id`, `vendor`, `form_type`, `admission_period`, `payment_method`, `first_name`, `last_name`, `email_address`, `country_name`, `country_code`, `phone_number`, `amount`) 
-                VALUES(:ti, :vd, :ft, :ap, :pm, :fn, :ln, :em, :cn, :cc, :pn, :am)";
+        $sql = "INSERT INTO `purchase_detail` (`id`, `vendor`, `form_type`, `admission_period`, `payment_method`, `first_name`, `last_name`, `email_address`, `country_name`, `country_code`, `phone_number`, `amount`, `deleted`) 
+                VALUES(:ti, :vd, :ft, :ap, :pm, :fn, :ln, :em, :cn, :cc, :pn, :am, $deleted)";
         $params = array(
             ':ti' => $ti, ':vd' => $vd, ':ft' => $ft, ':pm' => $pm, ':ap' => $ap, ':fn' => $fn, ':ln' => $ln,
             ':em' => $em, ':cn' => $cn, ':cc' => $cc, ':pn' => $pn, ':am' => $am
