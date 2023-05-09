@@ -30,9 +30,6 @@ class PaymentController
     {
     }
 
-    private function prepareTransaction($secretKey, $payUrl, $payload)
-    {
-    }
     /**
      * @param int transaction_id //transaction_id
      */
