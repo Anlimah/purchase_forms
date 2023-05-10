@@ -48,14 +48,14 @@ $expose = new ExposeDataController();
                     <div class="purchase-card-body">
                         <form id="step1Form" method="post" enctype="multipart/form-data" style="margin: 0px 12%;">
                             <div class="mb-4">
-                                <label class="form-label" for="gender">Form type</label>
-                                <select title="Select the type of form you want to purchase." class="form-select form-select-sm" name="form_type" id="form_type" required>
+                                <label class="form-label" for="gender">Available Forms</label>
+                                <select name="available_forms" id="available_forms" title="Select the type of form you want to purchase." class="form-select form-select-sm" required>
                                     <option selected disabled value="">Choose...</option>
                                     <?php
-                                    $data = $expose->getFormTypes();
-                                    foreach ($data as $ft) {
+                                    $data = $expose->getAvailableForms();
+                                    foreach ($data as $fp) {
                                     ?>
-                                        <option value="<?= $ft['name'] ?>"><?= $ft['name'] ?></option>
+                                        <option value="<?= $fp['id'] ?>"><?= $fp['name'] ?></option>
                                     <?php
                                     }
                                     ?>
@@ -128,7 +128,7 @@ $expose = new ExposeDataController();
                     type: "GET",
                     url: "../endpoint/formInfo",
                     data: {
-                        form_type: this.value,
+                        form_id: this.value,
                     },
                     success: function(result) {
                         console.log(result);

@@ -29,9 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 		//save all user data
 		//echo success message
 	} elseif ($_GET["url"] == "formInfo") {
-		if (isset($_GET["form_type"]) && !empty($_GET["form_type"])) {
-			$form_type = $expose->validateInput($_GET["form_type"]);
-			$result = $expose->getFormPrice($form_type, $expose->getCurrentAdmissionPeriodID());
+		if (isset($_GET["form_id"]) && !empty($_GET["form_id"])) {
+			$form_id = $expose->validateInput($_GET["form_id"]);
+			$result = $expose->getFormPriceA($form_id, $expose->getCurrentAdmissionPeriodID());
 			if (!empty($result)) {
 				$data["success"] = true;
 				$data["message"] = $result[0]["amount"];

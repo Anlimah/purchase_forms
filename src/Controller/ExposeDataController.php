@@ -195,6 +195,12 @@ class ExposeDataController
         return $_SERVER['HTTP_USER_AGENT'];
     }
 
+    public function getFormPriceA(int $form_id, int $admin_period)
+    {
+        $sql = "SELECT `amount` FROM `form_price` WHERE `id` = :fi AND `admin_period` = :ap";
+        return $this->dm->getData($sql, array(":fi" => $form_id, ":ap" => $admin_period));
+    }
+
     public function getFormPrice(string $form_type, int $admin_period)
     {
         $sql = "SELECT `amount` FROM `form_price` AS p, `form_type` AS t 
@@ -207,6 +213,11 @@ class ExposeDataController
         $sql = "SELECT EXTRACT(YEAR FROM (SELECT `start_date` FROM admission_period WHERE active = 1)) AS 'year'";
         $year = (string) $this->dm->getData($sql)[0]['year'];
         return (int) substr($year, 2, 2);
+    }
+
+    public function getAvailableForms()
+    {
+        return $this->dm->getData("SELECT * FROM `form_price`");
     }
 
     public function getFormTypes()
