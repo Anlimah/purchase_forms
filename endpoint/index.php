@@ -28,22 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 		//verify all sessions
 		//save all user data
 		//echo success message
-	} elseif ($_GET["url"] == "formInfo") {
-		if (isset($_GET["form_id"]) && !empty($_GET["form_id"])) {
-			$form_id = $expose->validateInput($_GET["form_id"]);
-			$result = $expose->getFormPriceA($form_id, $expose->getCurrentAdmissionPeriodID());
-			if (!empty($result)) {
-				$data["success"] = true;
-				$data["message"] = $result[0]["amount"];
-			} else {
-				$data["success"] = false;
-				$data["message"] = "Amount not set";
-			}
-		} else {
-			$data["success"] = false;
-			$data["message"] = "Amount not set";
-		}
-		die(json_encode($data));
 	}
 }
 
@@ -175,6 +159,20 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 		}
 		die(json_encode($data));
 	}
+
+	//
+	elseif ($_GET["url"] == "formInfo") {
+		if (!isset($_POST["form_id"]) || empty($_POST["form_id"])) {
+			die(json_encode(array("success" => false, "message" => "Error: Form has not been set properly in database!")));
+		}
+
+		$form_id = $expose->validateInput($_POST["form_id"]);
+		$result = $expose->getFormPriceA($form_id, $expose->getCurrentAdmissionPeriodID());
+
+		if (empty($result)) die(json_encode(array("success" => false, "message" => "Forms' price has not set in the database!")));
+		die(json_encode(array("success" => true, "message" => $result)));
+	}
+
 	// verify step 6
 	elseif ($_GET["url"] == "verifyStep6") {
 		if (isset($_SESSION["_step6Token"]) && !empty($_SESSION["_step6Token"]) && isset($_POST["_v6Token"]) && !empty($_POST["_v6Token"]) && $_POST["_v6Token"] == $_SESSION["_step6Token"]) {

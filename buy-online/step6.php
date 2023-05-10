@@ -63,7 +63,7 @@ $expose = new ExposeDataController();
                             </div>
                             <div class="mb-4 hide" id="form-cost-display">
                                 <p style="line-height: normal !important;">
-                                    <b><span id="form-type"></span></b> forms cost <b> GHS<span id="form-cost"></span></b>.
+                                    <b><span id="form-name"></span></b> forms cost <b> GHS<span id="form-cost"></span></b>.
                                 </p>
                                 <p class="mb-4">
                                     Choose your payment method.
@@ -125,7 +125,7 @@ $expose = new ExposeDataController();
 
             $(".form-select").change("blur", function() {
                 $.ajax({
-                    type: "GET",
+                    type: "POST",
                     url: "../endpoint/formInfo",
                     data: {
                         form_id: this.value,
@@ -134,8 +134,8 @@ $expose = new ExposeDataController();
                         console.log(result);
                         if (result.success) {
                             $("#form-cost-display").removeClass("hide");
-                            $("#form-type").text($("#form_type").val());
-                            $("#form-cost").text(result.message);
+                            $("#form-name").text(result.message[0]["name"]);
+                            $("#form-cost").text(result.message[0]["amount"]);
                             $(':input[type="submit"]').prop('disabled', false);
                         }
                     },

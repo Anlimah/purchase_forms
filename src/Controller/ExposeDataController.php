@@ -197,7 +197,7 @@ class ExposeDataController
 
     public function getFormPriceA(int $form_id, int $admin_period)
     {
-        $sql = "SELECT `amount` FROM `form_price` WHERE `id` = :fi AND `admin_period` = :ap";
+        $sql = "SELECT `name`, `amount` FROM `form_price` WHERE `id` = :fi AND `admin_period` = :ap";
         return $this->dm->getData($sql, array(":fi" => $form_id, ":ap" => $admin_period));
     }
 
