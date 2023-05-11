@@ -79,7 +79,7 @@ class PaymentController
         } elseif (isset($response->resp_code)) {
             if ($response->resp_code == '084') return array(
                 "success" => false,
-                "message" => "Payment pending! Might be due to insufficient fund in your account or your payment session expired. Code: " . $response->resp_code
+                "message" => "Payment pending! This might be due to insufficient fund in your mobile wallet or your payment session expired. Code: " . $response->resp_code
             );
             return array("success" => false, "message" => "Payment process failed! Code: " . $response->resp_code);
         }
@@ -124,7 +124,8 @@ class PaymentController
             if ($response->resp_code == "000" && $response->resp_desc == "Passed") {
                 //save Data to database
                 $saved = $this->voucher->SaveFormPurchaseData($data, $trans_id);
-                if (!$saved["success"]) return array("success" => false, "message" => "Failed saving customer data");
+                //if (!$saved["success"]) return array("success" => false, "message" => "Failed saving customer data");
+                if (!$saved["success"]) return $saved;
                 return array("success" => true, "status" => $response->resp_code, "message" => $response->redirect_url);
             }
             //echo $response->resp_desc;

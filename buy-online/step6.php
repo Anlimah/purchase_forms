@@ -1,13 +1,13 @@
 <?php
 session_start();
-if (isset($_SESSION['step5Done']) && $_SESSION['step5Done'] == true && isset($_SESSION["vendor_id"]) && !empty($_SESSION["vendor_id"]) && $_SESSION["vendor_type"] == "ONLINE") {
+/*if (isset($_SESSION['step5Done']) && $_SESSION['step5Done'] == true && isset($_SESSION["vendor_id"]) && !empty($_SESSION["vendor_id"]) && $_SESSION["vendor_type"] == "ONLINE") {
     if (!isset($_SESSION["_step6Token"])) {
         $rstrong = true;
         $_SESSION["_step6Token"] = hash('sha256', bin2hex(openssl_random_pseudo_bytes(64, $rstrong)));
     }
 } else {
     header('Location: step5.php');
-}
+}*/
 
 require_once('../bootstrap.php');
 
@@ -78,6 +78,8 @@ $expose = new ExposeDataController();
                             </div>
                             <button class="btn btn-primary" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%" disabled>Pay</button>
                             <input type="hidden" name="_v6Token" value="<?= $_SESSION["_step6Token"]; ?>">
+                            <input type="hidden" name="form_price" id="form_price" value="0">
+                            <input type="hidden" name="form_type" id="form_type" value="0">
                         </form>
                     </div>
                 </div>
@@ -136,6 +138,8 @@ $expose = new ExposeDataController();
                             $("#form-cost-display").removeClass("hide");
                             $("#form-name").text(result.message[0]["name"]);
                             $("#form-cost").text(result.message[0]["amount"]);
+                            $("#form_price").val(result.message[0]["amount"]);
+                            $("#form_type").val(result.message[0]["form_type"]);
                             $(':input[type="submit"]').prop('disabled', false);
                         }
                     },

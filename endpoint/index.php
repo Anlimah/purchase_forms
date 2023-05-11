@@ -167,7 +167,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 		}
 
 		$form_id = $expose->validateInput($_POST["form_id"]);
-		$result = $expose->getFormPriceA($form_id, $expose->getCurrentAdmissionPeriodID());
+		$result = $expose->getFormPriceA($form_id);
 
 		if (empty($result)) die(json_encode(array("success" => false, "message" => "Forms' price has not set in the database!")));
 		die(json_encode(array("success" => true, "message" => $result)));
@@ -177,13 +177,14 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 	elseif ($_GET["url"] == "verifyStep6") {
 		if (isset($_SESSION["_step6Token"]) && !empty($_SESSION["_step6Token"]) && isset($_POST["_v6Token"]) && !empty($_POST["_v6Token"]) && $_POST["_v6Token"] == $_SESSION["_step6Token"]) {
 
-			$form_type = $expose->validateInput($_POST["form_type"]);
-			$amount = $expose->getFormPrice($form_type, $_SESSION["admin_period"])[0]["amount"];
+			$form_id = $expose->validateInput($_POST["formSold"]);
+			//$amount = $expose->getFormPrice($form_id, $_SESSION["admin_period"])[0]["amount"];
+			$amount = $_POST["form_price"];
 			$payment_method = $expose->validateText($_POST["payment_method"]);
 
 			if (!empty($amount)) {
 				$_SESSION["step6"] = array(
-					"form_type" => $form_type,
+					"form_id" => $form_id,
 					"amount" => $amount,
 					"pay_method" => $payment_method,
 					"vendor_id" => $_SESSION["vendor_id"]
@@ -199,7 +200,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 							"country_name" => $_SESSION["step4"]["country_name"],
 							"country_code" => $_SESSION["step4"]["country_code"],
 							"phone_number" => $_SESSION["step4"]["phone_number"],
-							"form_type" => $_SESSION["step6"]["form_type"],
+							"form_id" => $_SESSION["step6"]["form_id"],
 							"pay_method" => $_SESSION["step6"]["pay_method"],
 							"amount" => $_SESSION["step6"]["amount"],
 							"vendor_id" => $_SESSION["vendor_id"],
@@ -319,7 +320,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 	}
 
 	//vendor login
-	elseif ($_GET["url"] == "loginVendor") {
+	/*elseif ($_GET["url"] == "loginVendor") {
 		if (isset($_SESSION["_loginToken"]) && !empty($_SESSION["_loginToken"]) && isset($_POST["_vlToken"]) && !empty($_POST["_vlToken"]) && $_POST["_vlToken"] == $_SESSION["_loginToken"]) {
 			if (isset($_POST["username"]) && !empty($_POST["username"])) {
 				if (isset($_POST["password"]) && !empty($_POST["password"])) {
@@ -363,10 +364,10 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 			}
 		}
 		die(json_encode($data));
-	}
+	}*/
 
 	//After a successfull login, verify vendor mobile phone before redirection to home page
-	elseif ($_GET["url"] == "verifyVendor") {
+	/*elseif ($_GET["url"] == "verifyVendor") {
 		if (isset($_SESSION["_verifySMSToken"]) && !empty($_SESSION["_verifySMSToken"]) && isset($_POST["_vSMSToken"]) && !empty($_POST["_vSMSToken"]) && $_POST["_vSMSToken"] == $_SESSION["_verifySMSToken"]) {
 			if (isset($_POST["code"]) && !empty($_POST["code"])) {
 				$otp = "";
@@ -395,10 +396,10 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 			$data["message"] = "Invalid request!";
 		}
 		die(json_encode($data));
-	}
+	}*/
 
 	//Vendor endpoint
-	elseif ($_GET["url"] == "vendor") {
+	/*elseif ($_GET["url"] == "vendor") {
 		if (isset($_SESSION["_vendor1Token"]) && !empty($_SESSION["_vendor1Token"]) && isset($_POST["_v1Token"]) && !empty($_POST["_v1Token"]) && $_POST["_v1Token"] == $_SESSION["_vendor1Token"]) {
 			if (isset($_POST["form_type"]) && isset($_POST["first_name"]) && isset($_POST["last_name"]) && isset($_POST["country"]) && isset($_POST["phone_number"])) {
 				if (!empty($_POST["form_type"]) && !empty($_POST["first_name"]) && !empty($_POST["last_name"]) && !empty($_POST["country"]) && !empty($_POST["phone_number"])) {
@@ -466,7 +467,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 			$data["message"] = "Invalid request!1";
 		}
 		die(json_encode($data));
-	}
+	}*/
 
 	//Verify customer phone number before sending Application login details
 	elseif ($_GET["url"] == "verifyCustomer") {
@@ -507,7 +508,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 	}
 
 	//Vendor Payment confirmation
-	elseif ($_GET["url"] == "vendorConfirm") {
+	/*elseif ($_GET["url"] == "vendorConfirm") {
 		if (isset($_POST["status"]) && !empty($_POST["status"]) && isset($_POST["exttrid"]) && !empty($_POST["exttrid"])) {
 			$status = $expose->validatePhone($_POST["status"]);
 			$transaction_id = $expose->validatePhone($_POST["exttrid"]);
@@ -517,7 +518,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 			$data["message"] = "Invalid request! 1";
 		}
 		die(json_encode($data));
-	}
+	}*/
 } else if ($_SERVER['REQUEST_METHOD'] == "PUT") {
 	parse_str(file_get_contents("php://input"), $_PUT);
 	die(json_encode($data));

@@ -45,17 +45,15 @@ class VoucherPurchase
         return 0;
     }
 
-    private function saveVendorPurchaseData(int $ti, int $vd, int $ft, int $ap, $pm, float $am, $fn, $ln, $em, $cn, $cc, $pn, $deleted = 0)
+    private function saveVendorPurchaseData(int $ti, int $vd, int $fi, int $ap, $pm, float $am, $fn, $ln, $em, $cn, $cc, $pn)
     {
-        $sql = "INSERT INTO `purchase_detail` (`id`, `vendor`, `form_type`, `admission_period`, `payment_method`, `first_name`, `last_name`, `email_address`, `country_name`, `country_code`, `phone_number`, `amount`, `deleted`) 
-                VALUES(:ti, :vd, :ft, :ap, :pm, :fn, :ln, :em, :cn, :cc, :pn, :am, $deleted)";
+        $sql = "INSERT INTO `purchase_detail` (`id`, `vendor`, `form_id`, `admission_period`, `payment_method`, `first_name`, `last_name`, `email_address`, `country_name`, `country_code`, `phone_number`, `amount`) 
+                VALUES(:ti, :vd, :fi, :ap, :pm, :fn, :ln, :em, :cn, :cc, :pn, :am)";
         $params = array(
-            ':ti' => $ti, ':vd' => $vd, ':ft' => $ft, ':pm' => $pm, ':ap' => $ap, ':fn' => $fn, ':ln' => $ln,
+            ':ti' => $ti, ':vd' => $vd, ':fi' => $fi, ':pm' => $pm, ':ap' => $ap, ':fn' => $fn, ':ln' => $ln,
             ':em' => $em, ':cn' => $cn, ':cc' => $cc, ':pn' => $pn, ':am' => $am
         );
-        if ($this->dm->inputData($sql, $params)) {
-            return $ti;
-        }
+        if ($this->dm->inputData($sql, $params)) return $ti;
         return 0;
     }
 
@@ -164,48 +162,40 @@ class VoucherPurchase
         return $this->dm->getID($sql);
     }
 
-    private function getFormTypeID($form_type)
+    /*private function getFormTypeID($form_type)
     {
         $sql = "SELECT `id` FROM `form_type` WHERE `name` LIKE '%$form_type%'";
         return $this->dm->getID($sql);
-    }
+    }*/
 
     public function SaveFormPurchaseData($data, $trans_id)
     {
-        if (!empty($data) && !empty($trans_id)) {
-            //return json_encode($data) . " T=" . $trans_id;
-            $fn = $data['first_name'];
-            $ln = $data['last_name'];
-            $em = $data['email_address'];
-            $cn = $data['country_name'];
-            $cc = $data['country_code'];
-            $pn = $data['phone_number'];
-            $am = $data['amount'];
-            $ft = $data['form_type'];
-            $vd = $data['vendor_id'];
+        if (empty($data) && empty($trans_id)) return array("success" => false, "message" => "Invalid data entries!");
 
-            if ($data['pay_method'] == 'MOM') $pay_method = "MOMO";
-            else if ($data['pay_method'] == 'CRD') $pay_method = "CARD";
-            else $pay_method = $data['pay_method'];
-            $pm = $pay_method;
+        $fn = $data['first_name'];
+        $ln = $data['last_name'];
+        $em = $data['email_address'];
+        $cn = $data['country_name'];
+        $cc = $data['country_code'];
+        $pn = $data['phone_number'];
+        $am = $data['amount'];
+        $fi = $data['form_id'];
+        $vd = $data['vendor_id'];
 
-            $ap_id = $data['admin_period'];
-            $ft_id = $this->getFormTypeID($ft);
+        if ($data['pay_method'] == 'MOM') $pay_method = "MOMO";
+        else if ($data['pay_method'] == 'CRD') $pay_method = "CARD";
+        else $pay_method = $data['pay_method'];
+        $pm = $pay_method;
 
-            $purchase_id = $this->saveVendorPurchaseData($trans_id, $vd, $ft_id, $ap_id, $pm, $am, $fn, $ln, $em, $cn, $cc, $pn);
-            if ($purchase_id) {
-                // For on premises purchases, generate app number and pin and send immediately
-                if ($pm == "CASH") {
-                    return $this->genLoginsAndSend($purchase_id);
-                } else {
-                    return array("success" => true, "message" => "Save purchase data!");
-                }
-            } else {
-                return array("success" => false, "message" => "Failed saving purchase data!");
-            }
-        } else {
-            return array("success" => false, "message" => "Invalid data entries!");
-        }
+        $ap_id = $data['admin_period'];
+        //$ft_id = $this->getFormTypeID($ft);
+
+        $purchase_id = $this->saveVendorPurchaseData($trans_id, $vd, $fi, $ap_id, $pm, $am, $fn, $ln, $em, $cn, $cc, $pn);
+        if (!$purchase_id) return array("success" => false, "message" => "Failed saving purchase data!");
+
+        // For on premises purchases, generate app number and pin and send immediately
+        if ($pm == "CASH") return $this->genLoginsAndSend($purchase_id);
+        return array("success" => true);
     }
 
     public function getTransactionStatusFromDB($trans_id)
@@ -223,8 +213,8 @@ class VoucherPurchase
     private function getAppPurchaseData(int $trans_id)
     {
         // get form_type, country code, phone number
-        $sql = "SELECT `form_type`, `country_code`, `phone_number`, `email_address` 
-                FROM `purchase_detail` WHERE `id` = :t";
+        $sql = "SELECT f.`form_type`, pd.`country_code`, pd.`phone_number`, pd.`email_address` 
+                FROM `purchase_detail` AS pd, forms AS f WHERE pd.`id` = :t AND f.`id` = pd.`form_id`";
         return $this->dm->getData($sql, array(':t' => $trans_id));
     }
 

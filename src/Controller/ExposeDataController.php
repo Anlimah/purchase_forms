@@ -195,18 +195,17 @@ class ExposeDataController
         return $_SERVER['HTTP_USER_AGENT'];
     }
 
-    public function getFormPriceA(int $form_id, int $admin_period)
+    public function getFormPriceA(int $form_id)
     {
-        $sql = "SELECT `name`, `amount` FROM `form_price` WHERE `id` = :fi AND `admin_period` = :ap";
-        return $this->dm->getData($sql, array(":fi" => $form_id, ":ap" => $admin_period));
+        return $this->dm->getData("SELECT * FROM `form_price` WHERE `id` = :fi", array(":fi" => $form_id));
     }
 
-    public function getFormPrice(string $form_type, int $admin_period)
+    /*public function getFormPrice(string $form_type, int $admin_period)
     {
         $sql = "SELECT `amount` FROM `form_price` AS p, `form_type` AS t 
         WHERE t.`name` LIKE '%$form_type%' AND p.`admin_period` = :a AND p.`form_type` = t.`id`";
         return $this->dm->getData($sql, array(":a" => $admin_period));
-    }
+    }*/
 
     public function getAdminYearCode()
     {
@@ -220,17 +219,17 @@ class ExposeDataController
         return $this->dm->getData("SELECT * FROM `form_price`");
     }
 
-    public function getFormTypes()
+    /*public function getFormTypes()
     {
         return $this->dm->getData("SELECT * FROM `form_type`");
-    }
+    }*/
 
-    public function getPaymentMethods()
+    /*public function getPaymentMethods()
     {
         return $this->dm->getData("SELECT * FROM `payment_method`");
-    }
+    }*/
 
-    public function getPrograms($type)
+    /*public function getPrograms($type)
     {
         $sql = "SELECT * FROM `programs` WHERE `type` = :t";
         $param = array(":t" => $type);
@@ -240,7 +239,7 @@ class ExposeDataController
     public function getHalls()
     {
         return $this->dm->getData("SELECT * FROM `halls`");
-    }
+    }*/
 
     public function sendEmail($recipient_email, $subject, $message)
     {
@@ -307,6 +306,7 @@ class ExposeDataController
         $sql = "SELECT `country_code`, `phone_number` FROM `vendor_details` WHERE `id`=:i";
         return $this->dm->getData($sql, array(':i' => $vendor_id));
     }
+
     /**
      * @param int transaction_id //transaction_id
      */
@@ -337,13 +337,13 @@ class ExposeDataController
         return $this->dm->getID($str, array(':i' => $vendor_id));
     }
 
-    public function confirmVendorPurchase(int $vendor_id, int $transaction_id)
+    /*public function confirmVendorPurchase(int $vendor_id, int $transaction_id)
     {
         $payConfirm = new PaymentController();
         return $payConfirm->verifyVendorPurchase($vendor_id, $transaction_id);
-    }
+    }*/
 
-    public function verifyVendorLogin($username, $password)
+    /*public function verifyVendorLogin($username, $password)
     {
         $sql = "SELECT `vendor`, `password` FROM `vendor_login` WHERE `user_name` = :u";
         $data = $this->dm->getData($sql, array(':u' => sha1($username)));
@@ -355,14 +355,14 @@ class ExposeDataController
             }
         }
         return array("success" => false, "message" => "User does not exist!");
-    }
+    }*/
 
-    public function getApplicationInfo(int $transaction_id)
+    /*public function getApplicationInfo(int $transaction_id)
     {
         $sql = "SELECT p.`app_number`, p.`pin_number`, tp.`name`, fp.`amount`, v.`vendor_name`, a.`info` 
         FROM `purchase_detail` AS p, `form_type` AS tp, `form_price` AS fp, `vendor_details` AS v, `admission_period` AS a 
         WHERE p.`form_type` = tp.`id` AND p.vendor = v.`id` AND p.`admission_period` = a.`id` AND p.`id` = :i AND 
         fp.`form_type` = tp.`id` AND fp.`admin_period` = a.`id`";
         return $this->dm->getData($sql, array(':i' => $transaction_id));
-    }
+    }*/
 }
