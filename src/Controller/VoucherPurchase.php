@@ -192,9 +192,9 @@ class VoucherPurchase
             $ap_id = $data['admin_period'];
             $ft_id = $this->getFormTypeID($ft);
 
-            // For on premises purchases, generate app number and pin and send immediately
             $purchase_id = $this->saveVendorPurchaseData($trans_id, $vd, $ft_id, $ap_id, $pm, $am, $fn, $ln, $em, $cn, $cc, $pn);
             if ($purchase_id) {
+                // For on premises purchases, generate app number and pin and send immediately
                 if ($pm == "CASH") {
                     return $this->genLoginsAndSend($purchase_id);
                 } else {
@@ -236,7 +236,7 @@ class VoucherPurchase
 
         $app_type = 0;
 
-        if ($data[0]["form_type"] == 2 || $data[0]["form_type"] == 3 || $data[0]["form_type"] == 4) {
+        if ($data[0]["form_type"] >= 2) {
             $app_type = 1;
         } else if ($data[0]["form_type"] == 1) {
             $app_type = 2;
