@@ -162,9 +162,9 @@ class VoucherPurchase
         return $this->dm->getID($sql);
     }
 
-    /*private function getFormTypeID($form_type)
+    /*private function getFormTypeID($form_categor)
     {
-        $sql = "SELECT `id` FROM `form_type` WHERE `name` LIKE '%$form_type%'";
+        $sql = "SELECT `id` FROM `form_categories` WHERE `name` LIKE '%$form_categor%'";
         return $this->dm->getID($sql);
     }*/
 
@@ -212,8 +212,8 @@ class VoucherPurchase
 
     private function getAppPurchaseData(int $trans_id)
     {
-        // get form_type, country code, phone number
-        $sql = "SELECT f.`form_type`, pd.`country_code`, pd.`phone_number`, pd.`email_address` 
+        // get form_category, country code, phone number
+        $sql = "SELECT f.`form_category`, pd.`country_code`, pd.`phone_number`, pd.`email_address` 
                 FROM `purchase_detail` AS pd, forms AS f WHERE pd.`id` = :t AND f.`id` = pd.`form_id`";
         return $this->dm->getData($sql, array(':t' => $trans_id));
     }
@@ -226,9 +226,9 @@ class VoucherPurchase
 
         $app_type = 0;
 
-        if ($data[0]["form_type"] >= 2) {
+        if ($data[0]["form_category"] >= 2) {
             $app_type = 1;
-        } else if ($data[0]["form_type"] == 1) {
+        } else if ($data[0]["form_category"] == 1) {
             $app_type = 2;
         }
 
