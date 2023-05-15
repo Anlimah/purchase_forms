@@ -197,12 +197,12 @@ class ExposeDataController
 
     public function getFormPriceA(int $form_id)
     {
-        return $this->dm->getData("SELECT * FROM `form_price` WHERE `id` = :fi", array(":fi" => $form_id));
+        return $this->dm->getData("SELECT * FROM `forms` WHERE `id` = :fi", array(":fi" => $form_id));
     }
 
     /*public function getFormPrice(string $form_type, int $admin_period)
     {
-        $sql = "SELECT `amount` FROM `form_price` AS p, `form_type` AS t 
+        $sql = "SELECT `amount` FROM `forms` AS p, `form_type` AS t 
         WHERE t.`name` LIKE '%$form_type%' AND p.`admin_period` = :a AND p.`form_type` = t.`id`";
         return $this->dm->getData($sql, array(":a" => $admin_period));
     }*/
@@ -216,7 +216,7 @@ class ExposeDataController
 
     public function getAvailableForms()
     {
-        return $this->dm->getData("SELECT * FROM `form_price`");
+        return $this->dm->getData("SELECT * FROM `forms`");
     }
 
     /*public function getFormTypes()
@@ -360,7 +360,7 @@ class ExposeDataController
     /*public function getApplicationInfo(int $transaction_id)
     {
         $sql = "SELECT p.`app_number`, p.`pin_number`, tp.`name`, fp.`amount`, v.`vendor_name`, a.`info` 
-        FROM `purchase_detail` AS p, `form_type` AS tp, `form_price` AS fp, `vendor_details` AS v, `admission_period` AS a 
+        FROM `purchase_detail` AS p, `form_type` AS tp, `forms` AS fp, `vendor_details` AS v, `admission_period` AS a 
         WHERE p.`form_type` = tp.`id` AND p.vendor = v.`id` AND p.`admission_period` = a.`id` AND p.`id` = :i AND 
         fp.`form_type` = tp.`id` AND fp.`admin_period` = a.`id`";
         return $this->dm->getData($sql, array(':i' => $transaction_id));

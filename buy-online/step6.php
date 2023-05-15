@@ -139,7 +139,7 @@ $expose = new ExposeDataController();
                             $("#form-name").text(result.message[0]["name"]);
                             $("#form-cost").text(result.message[0]["amount"]);
                             $("#form_price").val(result.message[0]["amount"]);
-                            $("#form_type").val(result.message[0]["form_type"]);
+                            $("#form_type").val(result.message[0]["form_category"]);
                             $(':input[type="submit"]').prop('disabled', false);
                         }
                     },
