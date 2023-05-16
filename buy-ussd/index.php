@@ -1,23 +1,44 @@
 <?php
+//Password: RMULiveUSSDForms
+
+if ($_SERVER["REQUEST"] != "POST") die("END Invalid request!");
+
 //Reads the variables sent via POST
 $sessionId   = $_POST["sessionId"];
 $serviceCode = $_POST["serviceCode"];
-$text = $_POST["text"];
+$phoneNumber = $_POST["phoneNumber"];
+$text        = $_POST["text"];
 
 //This is the first menu screen
 if ($text == "") {
-    $response  = "CON Hi welcome, my name is Francis and I can help you with Event Reservation \n";
+    $response  = "CON Hi welcome to RMU Online Forms \n";
     $response .= "1. Enter 1 to continue";
 }
 // Menu for a user who selects '1' from the first menu
 // Will be brought to this second menu screen
 else if ($text == "1") {
-    $response  = "CON  Pick a table for reservation below \n";
-    $response .= "1. Table for 2 \n";
-    $response .= "2. Table for 4 \n";
-    $response .= "3. Table for 6 \n";
-    $response .= "4. Table for 8 \n";
-} //Menu for a user who selects '1' from the second menu above
+    $response  = "CON  Enter your first name \n";
+} else if ($text == "1") {
+    $response  = "CON  Enter your last name \n";
+} else if ($text == "1") {
+    $response  = "CON  Choose a form to buy \n";
+    $response  .= "1.  Masters \n";
+    $response  .= "2.  Degree \n";
+    $response  .= "3.  Diploma \n";
+    $response  .= "4.  MEM \n";
+    $response  .= "5.  CILT, DILT, ADILT \n";
+} else if ($text == "1") {
+    $response  = "CON  Mobile Money number to buy form \n";
+} else if ($text == "1") {
+    $response  = "CON  You're about to purchase Masters forms costing GHc250.00 \n";
+    $response .= "Enter 1 to continue";
+}
+
+// send details to appNMobile endpoint to initiate payment
+
+
+
+//Menu for a user who selects '1' from the second menu above
 // Will be brought to this third menu screen
 
 else if ($text == "1*1") {
