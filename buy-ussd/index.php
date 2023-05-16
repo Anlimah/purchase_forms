@@ -19,9 +19,7 @@ if ($text == "") {
     $response .= "4. {$text}\n";
     $response .= "5. {$networkCode}\n";
     //
-}
-
-if ($text == "1") {
+} elseif ($text == "1") {
     $response  = "CON Welcome to RMU Online Forms Purchse \n";
     $response .= "Choose an option:\n";
     $response .= "1. {$sessionId}\n";
@@ -30,9 +28,7 @@ if ($text == "1") {
     $response .= "4. {$text}\n";
     $response .= "5. {$networkCode}\n";
     //
-}
-
-if ($text == "2") {
+} elseif ($text == "2") {
     $response  = "CON Welcome to RMU Online Forms Purchse \n";
     $response .= "Choose an option:\n";
     $response .= "1. {$sessionId}\n";
@@ -41,9 +37,7 @@ if ($text == "2") {
     $response .= "4. {$text}\n";
     $response .= "5. {$networkCode}\n";
     //
-}
-
-if ($text == "3") {
+} elseif ($text == "3") {
     $response  = "CON Welcome to RMU Online Forms Purchse \n";
     $response .= "Choose an option:\n";
     $response .= "1. {$sessionId}\n";
