@@ -1,7 +1,7 @@
 <?php
 //Password: RMULiveUSSDForms
 
-if ($_SERVER["REQUEST"] != "POST") die("END Invalid request!");
+if ($_SERVER["REQUEST_METHOD"] != "POST") die("END Invalid request!");
 
 //Reads the variables sent via POST
 $session_id     = $_POST["session_id"];     // Session ID
