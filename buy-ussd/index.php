@@ -33,7 +33,7 @@ if (isset($text)) {
         foreach ($forms as $form) {
             $response .= "{$form['id']}." . " {$form['name']}\n";
         }
-    } elseif ($level[0] && $level[0] != "") {
+    } elseif ($level[0] && $level[0] != "" && !$level[1]) {
         $response = "CON Enter your first name {$level[0]}\n";
     } else if ($level[1] && $level[1] != "" && !$level[2]) {
         $response = "CON Please enter your ward name {$level[1]}\n";
@@ -48,7 +48,7 @@ if (isset($text)) {
         $response .= "3. {$phoneNumber}\n";
         $response .= "4. {$text}\n";
         $response .= "5. {$networkCode}\n";
-        $response = "END Thank you " . $level[0] . " for registering.\n";
+        $response = "END Thank you " . $level[3] . " for registering.\n";
     }
 }
 
