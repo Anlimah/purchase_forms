@@ -35,7 +35,7 @@ if (isset($text)) {
         }
     } elseif ($text == "1" || $text == "2" || $text == "3" || $text == "4" || $text == "5") {
         $response = "CON Enter your first name\n";
-    } else if (isset($level[2]) && $level[2] != "" && !isset($level[3])) {
+    } else if ($text != "") {
         $response = "CON Provide the Mobile Money Number to buy the forms\n";
     } else if (isset($level[3]) && $level[3] != "" && !isset($level[4])) {
         //Save data to database
@@ -46,13 +46,6 @@ if (isset($text)) {
         $response .= "3. {$phoneNumber}\n";
         $response .= "4. {$text}\n";
         $response .= "5. {$networkCode}\n";
-        /*$data = array(
-            'form_category' => $level[0],
-            'first_name' => $level[1],
-            'last_name' => $level[2],
-            'phone_number' => $level[3],
-            'national_id' => $level[2]
-        );*/
         $response = "END Thank you " . $level[0] . " for registering.\n";
     }
 }
