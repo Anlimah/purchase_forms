@@ -28,20 +28,19 @@ if (isset($text)) {
     if ($text == "") {
         $response  = "CON Welcome to RMU Online Forms Purchase paltform. Select a form to buy.\n";
         // Fetch and display all available forms
-        $forms = $expose->getAvailableForms();
+        $underAndPostFprms = $expose->getUndergradAndPostgradForms();
         $i = 1;
-        foreach ($forms as $form) {
-            $response .= "{$i}." . ucwords(strtolower($form['name'])) . "\n";
-            if ($i == 5) break;
+        foreach ($underAndPostFprms as $form) {
+            $response .= "{$i}. " . ucwords(strtolower($form['name'])) . "\n";
             $i += 1;
         }
         $response .= "99." . " More";
     } elseif ($level[0] != "" && !$level[1]) {
-        $response = "CON Enter your first name {$level[0]}.\n";
+        $response = "CON Enter your first name.\n";
     } else if ($level[1] != "" && !$level[2]) {
-        $response = "CON Please enter your ward name {$level[1]}.\n";
+        $response = "CON Enter your last name.\n";
     } else if ($level[2] != "" && !$level[3]) {
-        $response = "CON Provide the Mobile Money Number to buy the forms {$level[2]}.\n";
+        $response = "CON Enter the Mobile Money number to buy the form.\n";
     } else if ($level[3] != "" && !$level[4]) {
         //Save data to database
         $response = "END Thank you " . $level[3] . " for registering.\n";
