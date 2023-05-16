@@ -26,28 +26,24 @@ $level = explode("*", $text);
 if (isset($text)) {
 
     if ($text == "") {
-        $response  = "CON Welcome to RMU Online Forms Purchse \n";
-        $response .= "Choose an option:\n";
+        $response  = "CON Welcome to RMU Online Forms Purchase paltform. Select a form to buy.\n";
         // Fetch and display all available forms
         $forms = $expose->getAvailableForms();
+        $i = 1;
         foreach ($forms as $form) {
-            $response .= "{$form['id']}." . " {$form['name']}\n";
+            $response .= "{$i}." . ucwords(strtolower($form['name'])) . "\n";
+            if ($i == 5) break;
+            $i += 1;
         }
-    } elseif ($level[0] && $level[0] != "" && !$level[1]) {
-        $response = "CON Enter your first name {$level[0]}\n";
-    } else if ($level[1] && $level[1] != "" && !$level[2]) {
-        $response = "CON Please enter your ward name {$level[1]}\n";
-    } else if ($level[2] && $level[2] != "" && !$level[3]) {
-        $response = "CON Provide the Mobile Money Number to buy the forms {$level[2]}\n";
-    } else if ($level[3] && $level[3] != "" && !$level[4]) {
+        $response .= "99." . " More";
+    } elseif ($level[0] != "" && !$level[1]) {
+        $response = "CON Enter your first name {$level[0]}.\n";
+    } else if ($level[1] != "" && !$level[2]) {
+        $response = "CON Please enter your ward name {$level[1]}.\n";
+    } else if ($level[2] != "" && !$level[3]) {
+        $response = "CON Provide the Mobile Money Number to buy the forms {$level[2]}.\n";
+    } else if ($level[3] != "" && !$level[4]) {
         //Save data to database
-        $response  = "CON Welcome to RMU Online Forms Purchse \n";
-        $response .= "Choose an option:\n";
-        $response .= "1. {$sessionId}\n";
-        $response .= "2. {$serviceCode}\n";
-        $response .= "3. {$phoneNumber}\n";
-        $response .= "4. {$text}\n";
-        $response .= "5. {$networkCode}\n";
         $response = "END Thank you " . $level[3] . " for registering.\n";
     }
 }
