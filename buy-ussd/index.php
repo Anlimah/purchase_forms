@@ -1,23 +1,29 @@
 <?php
 //Password: RMULiveUSSDForms
 
-if ($_SERVER["REQUEST_METHOD"] != "POST") die("END Invalid request!");
+//if ($_SERVER["REQUEST_METHOD"] != "POST") die("END Invalid request!");
 
 //Reads the variables sent via POST
-$session_id     = $_POST["session_id"];     // Session ID
-$service_code   = $_POST["service_code"];   // Service code
-$phone_number   = $_POST["msisdn"];         // Phone number
-$ussd_body      = $_POST["ussd_body"];      // response text
-$nw_code      = $_POST["nw_code"];      // response text
+$sessionId      = $_POST["sessionId"];      // Session ID
+$serviceCode    = $_POST["serviceCode"];    // Service code
+$phoneNumber    = $_POST["phoneNumber"];    // Phone number
+$text           = $_POST["text"];           // response text
+$networkCode    = $_POST["networkCode"];    // network code
 
-if ($nw_code  == "03" && $nw_code  == "04") {
+$response = array(
+    "sessionId" => $sessionId, "serviceCode" => $serviceCode, "phoneNumber" => $phoneNumber, "text" => $text, "networkCode" => $networkCode
+);
+header('Content-type: text/plain');
+echo $response;
+
+/*if ($networkCode  == "03" && $networkCode  == "04") {
     $response  = "END Option not available for your network";
 } else {
 
-    $level = explode("*", $ussd_body);
-    if (isset($ussd_body)) {
+    $level = explode("*", $text);
+    if (isset($text)) {
 
-        if ($service_code == 0 && $ussd_body == "") {
+        if ($service_code == 0 && $text == "") {
             $response  = "CON Welcome to RMU Online Forms Purchse \n";
             $response .= "Choose an option:\n";
             //
@@ -47,4 +53,4 @@ if ($nw_code  == "03" && $nw_code  == "04") {
 }
 
 header('Content-type: application/json');
-echo $response;
+echo $response;*/
