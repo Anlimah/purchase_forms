@@ -39,9 +39,9 @@ if (isset($text)) {
         }
         $response .= "99." . " More";
     } elseif ($level[0] != "" && $level[0] != "99" && !$level[1]) {
-        //$formInfo = $expose->getFormPriceB();
-        //$response = "CON " . $formInfo["name"] . " forms cost GHc " . $formInfo["amount"] . ". Select an option.\n";
-        $response = "1. Buy {$formChosen[$level[0]]}\n";
+        $formInfo = $expose->getFormPriceB($formChosen[0][$level[0]]);
+        $response = "CON " . $formInfo["name"] . " forms cost GHc " . $formInfo["amount"] . ". Select an option.\n";
+        $response .= "1. Buy\n";
         $response .= "2. Cancel";
     } elseif ($level[0] >= 1 && $level[0] <= count($underAndPostFprms) && !$level[1]) {
         $formInfo = $expose->getFormPriceB($level[0]);
