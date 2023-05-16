@@ -31,7 +31,7 @@ if (isset($text)) {
         // Fetch and display all available forms
         $forms = $expose->getAvailableForms();
         foreach ($forms as $form) {
-            $response .= "{$form['id']}" . " {$form['name']}";
+            $response .= "{$form['id']}." . " {$form['name']}\n";
         }
     } elseif (isset($level[0]) && $level[0] != "" && $level[0] >= 1 && $level[0] <= count($forms) && !isset($level[1])) {
         $response = "CON Enter your first name\n";
