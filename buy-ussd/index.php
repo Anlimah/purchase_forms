@@ -25,6 +25,8 @@ $level = explode("*", $text);
 
 if (isset($text)) {
 
+    $formChosen = array();
+
     if ($text == "") {
         $response  = "CON Welcome to RMU Online Forms Purchase paltform. Select a form to buy.\n";
         // Fetch and display all available forms
@@ -32,18 +34,25 @@ if (isset($text)) {
         $i = 1;
         foreach ($underAndPostFprms as $form) {
             $response .= "{$i}. " . ucwords(strtolower($form['name'])) . "\n";
+            array_push($formChosen, array($i => $form['name']));
             $i += 1;
         }
         $response .= "99." . " More";
-    } elseif ($level[0] != "" && !$level[1]) {
-        $response = "CON Enter your first name.\n";
+    } elseif ($level[0] != "" && $level[0] >= 1 && $level[0] <= count($underAndPostFprms) && !$level[1]) {
+        $formInfo = $expose->getFormPriceB($level[0]);
+        $response = "CON " . $formInfo[0]["name"] . " forms cost GHc " . $formInfo[0]["amount"] . ". Select an option.";
+        $response = "1. Buy\n";
+        $response = "2. Cancel";
+    } elseif ($level[0] != "" && $level[0] >= 1 && $level[0] <= count($underAndPostFprms) && !$level[1]) {
+        $formInfo = $expose->getFormPriceB($level[0]);
+        $response = "CON Enter your first name.";
     } else if ($level[1] != "" && !$level[2]) {
-        $response = "CON Enter your last name.\n";
+        $response = "CON Enter your last name.";
     } else if ($level[2] != "" && !$level[3]) {
-        $response = "CON Enter the Mobile Money number to buy the form.\n";
+        $response = "CON Enter the Mobile Money number to buy the form.";
     } else if ($level[3] != "" && !$level[4]) {
         //Save data to database
-        $response = "END Thank you " . $level[3] . " for registering.\n";
+        $response = "END Thank you " . $level[3] . " for registering.";
     }
 }
 

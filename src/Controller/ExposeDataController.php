@@ -200,6 +200,11 @@ class ExposeDataController
         return $this->dm->getData("SELECT * FROM `forms` WHERE `id` = :fi", array(":fi" => $form_id));
     }
 
+    public function getFormPriceB($form_name)
+    {
+        return $this->dm->getData("SELECT * FROM `forms` WHERE `name` = :fn", array(":fn" => $form_name));
+    }
+
     /*public function getFormPrice(string $form_type, int $admin_period)
     {
         $sql = "SELECT `amount` FROM `forms` AS p, `form_type` AS t 
