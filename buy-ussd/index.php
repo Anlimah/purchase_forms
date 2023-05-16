@@ -1,13 +1,16 @@
 <?php
 session_start();
+$vendor_id = "1665605087";
 
 if (!isset($_SESSION["formChosen"])) $_SESSION["formChosen"] = array();
 
 require_once('../bootstrap.php');
 
 use Src\Controller\ExposeDataController;
+use Src\Controller\PaymentController;
 
 $expose = new ExposeDataController();
+$pay = new PaymentController();
 
 //Password: RMULiveUSSDForms
 
@@ -51,7 +54,20 @@ if (isset($text)) {
     } else if ($level[3] != "" && !$level[4]) {
         $response = "CON Enter the Mobile Money number to buy the form.";
     } else if ($level[4] != "" && !$level[5]) {
+        $data = array(
+            "first_name" => $level[2],
+            "last_name" => $level[3],
+            "email_address" => "",
+            "country_name" => $email_address,
+            "country_code" => '+233',
+            "phone_number" => $phone_number,
+            "amount" => $amount,
+            "form_id" => $level[0],
+            "vendor_id" => $vendor_id
+        );
+        //$pay->orchardPaymentControllerB();
         //Save data to database
+
         $response = "END Thank you " . $level[5] . " for registering.";
     }
 }

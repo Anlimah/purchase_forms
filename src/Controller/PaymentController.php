@@ -99,7 +99,7 @@ class PaymentController
                 "amount" => $data["amount"],
                 "callback_url" => $callback_url,
                 "exttrid" => $trans_id,
-                "reference" => "RMU Forms Purchase",
+                "reference" => "RMU Forms Online",
                 "service_id" => $service_id,
                 "trans_type" => "CTM",
                 "nickname" => "RMU",
@@ -128,6 +128,51 @@ class PaymentController
                 if (!$saved["success"]) return $saved;
                 return array("success" => true, "status" => $response->resp_code, "message" => $response->redirect_url);
             }
+            //echo $response->resp_desc;
+            return array("success" => false, "status" => $response->resp_code, "message" => $response->resp_desc);
+        }
+    }
+
+    public function orchardPaymentControllerB($data)
+    {
+        if (!empty($data)) {
+
+            $trans_id = time();
+            $service_id = getenv('ORCHARD_SERVID');
+
+            $callback_url = "https://forms.rmuictonline.com/buy-online/confirm.php";
+            $payload = json_encode(array(
+                "amount" => $data["amount"],
+                "callback_url" => $callback_url,
+                "exttrid" => $trans_id,
+                "reference" => "RMU Forms Online",
+                "service_id" => $service_id,
+                "trans_type" => "AUD",
+                "nw" => $data["network"],
+                "nickname" => "RMU",
+                "ts" => date("Y-m-d H:i:s"),
+                "payment_mode" => $data["pay_method"],
+                "currency_code" => "GHS",
+                "currency_val" => $data["amount"]
+            ));
+
+            $client_id = getenv('ORCHARD_CLIENT');
+            $client_secret = getenv('ORCHARD_SECRET');
+            $signature = hash_hmac("sha256", $payload, $client_secret);
+
+            $secretKey = $client_id . ":" . $signature;
+            $request_verb = 'POST';
+            $payUrl = "https://payments.anmgw.com/third_party_request";
+
+            $pay = new OrchardPaymentGateway($secretKey, $payUrl, $request_verb, $payload);
+            $response = json_decode($pay->initiatePayment());
+
+            if ($response->resp_code == "000" && $response->resp_desc == "Passed") {
+                //save Data to database
+                $saved = $this->voucher->SaveFormPurchaseData($data, $trans_id);
+                return $saved;
+            }
+
             //echo $response->resp_desc;
             return array("success" => false, "status" => $response->resp_code, "message" => $response->resp_desc);
         }
