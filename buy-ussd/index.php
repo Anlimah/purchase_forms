@@ -10,9 +10,27 @@ $phoneNumber    = $_POST["phoneNumber"];    // Phone number
 $text           = $_POST["text"];           // response text
 $networkCode    = $_POST["networkCode"];    // network code
 
-$response = array(
-    "sessionId" => $sessionId, "serviceCode" => $serviceCode, "phoneNumber" => $phoneNumber, "text" => $text, "networkCode" => $networkCode
-);
+if ($text == "") {
+    $response  = "CON Welcome to RMU Online Forms Purchse \n";
+    $response .= "Choose an option:\n";
+    $response .= "1. {$sessionId}\n";
+    $response .= "2. {$serviceCode}\n";
+    $response .= "3. {$phoneNumber}\n";
+    $response .= "4. {$text}\n";
+    $response .= "5. {$networkCode}\n";
+    //
+}
+
+if ($text == "1") {
+    $response  = "CON Welcome to RMU Online Forms Purchse \n";
+    $response .= "Choose an option:\n";
+    $response .= "1. {$sessionId}\n";
+    $response .= "2. {$serviceCode}\n";
+    $response .= "3. {$phoneNumber}\n";
+    $response .= "4. {$text}\n";
+    $response .= "5. {$networkCode}\n";
+    //
+}
 header('Content-type: text/plain');
 echo $response;
 
