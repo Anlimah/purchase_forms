@@ -43,18 +43,16 @@ if (isset($text)) {
         $formInfo = $expose->getFormPriceA($level[0]);
         $response = "CON " . $formInfo[0]["name"] . " forms cost GHc " . $formInfo[0]["amount"] . ". Select an option.\n";
         //$response = "CON " . $_SESSION["formChosen"][1] . ".\n";
-        $response .= "1. Buy\n";
-        $response .= "2. Cancel";
-    } elseif ($level[0] >= 1 && $level[0] <= count($underAndPostFprms) && !$level[1]) {
-        $formInfo = $expose->getFormPriceB($level[0]);
+        $response .= "1. Buy";
+    } elseif ($level[1] != "" && $level[1] == "1" && !$level[2]) {
         $response = "CON Enter your first name.";
-    } else if ($level[1] != "" && !$level[2]) {
-        $response = "CON Enter your last name.";
     } else if ($level[2] != "" && !$level[3]) {
-        $response = "CON Enter the Mobile Money number to buy the form.";
+        $response = "CON Enter your last name.";
     } else if ($level[3] != "" && !$level[4]) {
+        $response = "CON Enter the Mobile Money number to buy the form.";
+    } else if ($level[4] != "" && !$level[5]) {
         //Save data to database
-        $response = "END Thank you " . $level[3] . " for registering.";
+        $response = "END Thank you " . $level[5] . " for registering.";
     }
 }
 
