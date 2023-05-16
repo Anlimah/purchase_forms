@@ -8,7 +8,7 @@ $expose = new ExposeDataController();
 
 //Password: RMULiveUSSDForms
 
-//if ($_SERVER["REQUEST_METHOD"] != "POST") die("END Invalid request!");
+if ($_SERVER["REQUEST_METHOD"] != "POST") die("END Invalid request!");
 
 //Reads the variables sent via POST
 $sessionId      = $_POST["sessionId"];      // Session ID
