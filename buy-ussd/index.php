@@ -4,103 +4,47 @@
 if ($_SERVER["REQUEST"] != "POST") die("END Invalid request!");
 
 //Reads the variables sent via POST
-$sessionId   = $_POST["sessionId"];
-$serviceCode = $_POST["serviceCode"];
-$phoneNumber = $_POST["phoneNumber"];
-$text        = $_POST["text"];
+$session_id     = $_POST["session_id"];     // Session ID
+$service_code   = $_POST["service_code"];   // Service code
+$phone_number   = $_POST["msisdn"];         // Phone number
+$ussd_body      = $_POST["ussd_body"];      // response text
+$nw_code      = $_POST["nw_code"];      // response text
 
-//This is the first menu screen
-if ($text == "") {
-    $response  = "CON Hi welcome to RMU Online Forms \n";
-    $response .= "1. Enter 1 to continue";
-}
-// Menu for a user who selects '1' from the first menu
-// Will be brought to this second menu screen
-else if ($text == "1") {
-    $response  = "CON  Enter your first name \n";
-} else if ($text == "1") {
-    $response  = "CON  Enter your last name \n";
-} else if ($text == "1") {
-    $response  = "CON  Choose a form to buy \n";
-    $response  .= "1.  Masters \n";
-    $response  .= "2.  Degree \n";
-    $response  .= "3.  Diploma \n";
-    $response  .= "4.  MEM \n";
-    $response  .= "5.  CILT, DILT, ADILT \n";
-} else if ($text == "1") {
-    $response  = "CON  Mobile Money number to buy form \n";
-} else if ($text == "1") {
-    $response  = "CON  You're about to purchase Masters forms costing GHc250.00 \n";
-    $response .= "Enter 1 to continue";
+if ($nw_code  == "03" && $nw_code  == "04") {
+    $response  = "END Option not available for your network";
+} else {
+
+    $level = explode("*", $ussd_body);
+    if (isset($ussd_body)) {
+
+        if ($service_code == 0 && $ussd_body == "") {
+            $response  = "CON Welcome to RMU Online Forms Purchse \n";
+            $response .= "Choose an option:\n";
+            //
+        }
+
+        if (isset($level[0]) && $level[0] != "" && $level[0] >= 1 && $level[0] <= 5 && !isset($level[1])) {
+            $response = "CON Enter your first name\n";
+        } else if (isset($level[1]) && $level[1] != "" && !isset($level[2])) {
+            $response = "CON Please enter your ward name\n";
+        } else if (isset($level[2]) && $level[2] != "" && !isset($level[3])) {
+            $response = "CON Provide the Mobile Money Number to buy the forms\n";
+        } else if (isset($level[3]) && $level[3] != "" && !isset($level[4])) {
+            //Save data to database
+            $data = array(
+                'form_category' => $level[0],
+                'first_name' => $level[1],
+                'last_name' => $level[2],
+                'phone_number' => $level[3],
+                'national_id' => $level[2]
+            );
+
+
+
+            $response = "END Thank you " . $level[0] . " for registering.\nWe will keep you updated";
+        }
+    }
 }
 
-// send details to appNMobile endpoint to initiate payment
-
-
-
-//Menu for a user who selects '1' from the second menu above
-// Will be brought to this third menu screen
-
-else if ($text == "1*1") {
-    $response = "CON You are about to book a table for 2 \n";
-    $response .= "Please Enter 1 to confirm \n";
-} else if ($text == "1*1*1") {
-    $response = "CON Table for 2 cost -N- 50,000.00 \n";
-    $response .= "Enter 1 to continue \n";
-    $response .= "Enter 0 to cancel";
-} else if ($text == "1*1*1*1") {
-    $response = "END Your Table reservation for 2 has been booked";
-} else if ($text == "1*1*1*0") {
-    $response = "END Your Table reservation for 2 has been canceled";
-}
-// Menu for a user who selects "2" from the second menu above
-// Will be brought to this fourth menu screen
-else if ($text == "1*2") {
-    $response = "CON You are about to book a table for 4 \n";
-    $response .= "Please Enter 1 to confirm \n";
-}
-// Menu for a user who selects "1" from the fourth menu screen
-else if ($text == "1*2*1") {
-    $response = "CON Table for 4 cost -N- 150,000.00 \n";
-    $response .= "Enter 1 to continue \n";
-    $response .= "Enter 0 to cancel";
-} else if ($text == "1*2*1*1") {
-    $response = "END Your Table reservation for 4 has been booked";
-} else if ($text == "1*2*1*0") {
-    $response = "END Your Table reservation for 4 has been canceled";
-}
-// Menu for a user who enters "3" from the second menu above
-// Will be brought to this fifth menu screen
-else if ($text == "1*3") {
-    $response = "CON You are about to book a table for 6 \n";
-    $response .= "Please Enter 1 to confirm \n";
-}
-// Menu for a user who enters "1" from the fifth menu
-else if ($text == "1*3*1") {
-    $response = "CON Table for 6 cost -N- 250,000.00 \n";
-    $response .= "Enter 1 to continue \n";
-    $response .= "Enter 0 to cancel";
-} else if ($text == "1*3*1*1") {
-    $response = "END Your Table reservation for 6 has been booked";
-} else if ($text == "1*3*1*0") {
-    $response = "END Your Table reservation for 6 has been canceled";
-}
-// Menu for a user who enters "4" from the second menu above
-// Will be brought to this sixth menu screen
-else if ($text == "1*4") {
-    $response = "CON You are about to book a table for 8 \n";
-    $response .= "Please Enter 1 to confirm \n";
-}
-// Menu for a user who enters "1" from the sixth menu
-else if ($text == "1*4*1") {
-    $response = "CON Table for 8 cost -N- 250,000.00 \n";
-    $response .= "Enter 1 to continue \n";
-    $response .= "Enter 0 to cancel";
-} else if ($text == "1*4*1*1") {
-    $response = "END Your Table reservation for 8 has been booked";
-} else if ($text == "1*4*1*0") {
-    $response = "END Your Table reservation for 8 has been canceled";
-}
-//echo response
-header('Content-type: text/plain');
+header('Content-type: application/json');
 echo $response;
