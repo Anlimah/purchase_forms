@@ -33,10 +33,8 @@ if (isset($text)) {
         foreach ($forms as $form) {
             $response .= "{$form['id']}." . " {$form['name']}\n";
         }
-    } elseif (isset($level[0]) && $level[0] != "" && $level[0] >= 1 && $level[0] <= count($forms) && !isset($level[1])) {
+    } elseif ($text == "1" || $text == "2" || $text == "3" || $text == "4" || $text == "5") {
         $response = "CON Enter your first name\n";
-    } else if (isset($level[1]) && $level[1] != "" && !isset($level[2])) {
-        $response = "CON Please enter your ward name\n";
     } else if (isset($level[2]) && $level[2] != "" && !isset($level[3])) {
         $response = "CON Provide the Mobile Money Number to buy the forms\n";
     } else if (isset($level[3]) && $level[3] != "" && !isset($level[4])) {
