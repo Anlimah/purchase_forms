@@ -1,13 +1,4 @@
 <?php
-session_start();
-/*if (isset($_SESSION['step5Done']) && $_SESSION['step5Done'] == true && isset($_SESSION["vendor_id"]) && !empty($_SESSION["vendor_id"]) && $_SESSION["vendor_type"] == "ONLINE") {
-    if (!isset($_SESSION["_step6Token"])) {
-        $rstrong = true;
-        $_SESSION["_step6Token"] = hash('sha256', bin2hex(openssl_random_pseudo_bytes(64, $rstrong)));
-    }
-} else {
-    header('Location: step5.php');
-}*/
 
 require_once('../bootstrap.php');
 
@@ -18,6 +9,13 @@ $expose = new ExposeDataController();
 //Password: RMULiveUSSDForms
 
 //if ($_SERVER["REQUEST_METHOD"] != "POST") die("END Invalid request!");
+
+//Reads the variables sent via POST
+$sessionId      = $_POST["sessionId"];      // Session ID
+$serviceCode    = $_POST["serviceCode"];    // Service code
+$phoneNumber    = $_POST["phoneNumber"];    // Phone number
+$text           = $_POST["text"];           // response text
+$networkCode    = $_POST["networkCode"];    // network code
 
 /*if ($networkCode  == "03" && $networkCode  == "04") {
     $response  = "END Form purchase via USSD not available for your network.\nYou can visit https://forms.rmuictonline.com/buy-online/ to buy a form.";
