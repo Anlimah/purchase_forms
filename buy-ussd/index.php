@@ -33,11 +33,13 @@ if (isset($text)) {
         foreach ($forms as $form) {
             $response .= "{$form['id']}." . " {$form['name']}\n";
         }
-    } elseif ($text == "1" || $text == "2" || $text == "3" || $text == "4" || $text == "5") {
-        $response = "CON Enter your first name\n";
-    } else if ($text != "") {
-        $response = "CON Provide the Mobile Money Number to buy the forms\n";
-    } else if (isset($level[3]) && $level[3] != "" && !isset($level[4])) {
+    } elseif ($level[0] && $level[0] != "") {
+        $response = "CON Enter your first name {$level[0]}\n";
+    } else if ($level[1] && $level[1] != "" && !$level[2]) {
+        $response = "CON Please enter your ward name {$level[1]}\n";
+    } else if ($level[2] && $level[2] != "" && !$level[3]) {
+        $response = "CON Provide the Mobile Money Number to buy the forms {$level[2]}\n";
+    } else if ($level[3] && $level[3] != "" && !$level[4]) {
         //Save data to database
         $response  = "CON Welcome to RMU Online Forms Purchse \n";
         $response .= "Choose an option:\n";
