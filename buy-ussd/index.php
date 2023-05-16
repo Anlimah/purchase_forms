@@ -38,7 +38,7 @@ if (isset($text)) {
             $i += 1;
         }
         $response .= "99." . " More";
-    } elseif ((int) $level[0] >= 1 && (int) $level[0] <= count($underAndPostFprms) && !$level[1]) {
+    } elseif ($level[0] != "" && $level[0] != "99" && !$level[1]) {
         $formInfo = $expose->getFormPriceB($level[0]);
         $response = "CON " . $formInfo[0]["name"] . " forms cost GHc " . $formInfo[0]["amount"] . ". Select an option.";
         $response = "1. Buy\n";
