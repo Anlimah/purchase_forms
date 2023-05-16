@@ -32,17 +32,17 @@ if (isset($text)) {
         $response  = "CON Welcome to RMU Online Forms Purchase paltform. Select a form to buy.\n";
         // Fetch and display all available forms
         $underAndPostFprms = $expose->getUndergradAndPostgradForms();
-        $i = 1;
+        //$i = 1;
         foreach ($underAndPostFprms as $form) {
-            $response .= "{$i}. " . ucwords(strtolower($form['name'])) . "\n";
-            array_push($_SESSION["formChosen"], array($i => $form['name']));
-            $i += 1;
+            $response .= $form['id'] . ". " . ucwords(strtolower($form['name'])) . "\n";
+            //array_push($_SESSION["formChosen"], array($i => $form['name']));
+            //$i += 1;
         }
-        $response .= "99." . " More";
+        $response .= "99. More";
     } elseif ($level[0] != "" && $level[0] != "99" && !$level[1]) {
-        //$formInfo = $expose->getFormPriceB($formChosen[0][$level[0]]);
-        //$response = "CON " . $formInfo["name"] . " forms cost GHc " . $formInfo["amount"] . ". Select an option.\n";
-        $response = "CON " . $_SESSION["formChosen"][1] . ".\n";
+        $formInfo = $expose->getFormPriceA($level[0]);
+        $response = "CON " . $formInfo["name"] . " forms cost GHc " . $formInfo["amount"] . ". Select an option.\n";
+        //$response = "CON " . $_SESSION["formChosen"][1] . ".\n";
         $response .= "1. Buy\n";
         $response .= "2. Cancel";
     } elseif ($level[0] >= 1 && $level[0] <= count($underAndPostFprms) && !$level[1]) {
