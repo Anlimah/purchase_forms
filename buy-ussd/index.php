@@ -29,7 +29,6 @@ $networkCode    = $_POST["networkCode"];    // network code
 
 $level = explode("*", $text);
 $final = false;
-$phone_number = 0;
 
 if (isset($text)) {
 
@@ -54,13 +53,9 @@ if (isset($text)) {
     } else if ($level[4] != "" && !$level[5]) {
         $level[5] = true;
         $final = $level[5];
-        $phone_number = $level[4];
         $response = "END Thank you! Payment prompt will be sent to {$level[4]} shortly.";
     }
 }
-
-header('Content-type: text/plain');
-echo $response;
 
 if ($final) {
     $formInfo = $expose->getFormPriceA($level[0]);
@@ -71,7 +66,7 @@ if ($final) {
         "email_address" => "",
         "country_name" => "Ghana",
         "country_code" => '+233',
-        "phone_number" => $phone_number,
+        "phone_number" => $level[4],
         "form_id" => $level[0],
         "pay_method" => "USSD",
         "amount" => $formInfo[0]["amount"],
@@ -80,3 +75,6 @@ if ($final) {
     );
     $pay->orchardPaymentControllerB($data);
 }
+
+header('Content-type: text/plain');
+echo $response;
