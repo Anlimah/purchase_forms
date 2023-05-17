@@ -65,7 +65,7 @@ if (isset($text)) {
         );
         $result = $pay->orchardPaymentControllerB($data);
         if (!$result["success"]) {
-            $response = "END Process failed!";
+            $response = "END Process failed! {$result["status"]} {$result["message"]}";
         } else {
             $response = "END Thank you! Payment prompt will be sent to {$level[4]} shortly.";
         }
