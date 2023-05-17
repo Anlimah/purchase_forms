@@ -164,12 +164,12 @@ class PaymentController
 
             $secretKey = $client_id . ":" . $signature;
             $request_verb = 'POST';
-            $payUrl = "https://payments.anmgw.com/third_party_request";
+            $payUrl = "https://payments.anmgw.com/sendRequest";
 
             $pay = new OrchardPaymentGateway($secretKey, $payUrl, $request_verb, $payload);
             $response = json_decode($pay->initiatePayment());
 
-            if ($response->resp_code == "000" && $response->resp_desc == "Passed") {
+            if ($response->resp_code == "000" || $response->resp_code == "015") {
                 //save Data to database
                 $saved = $this->voucher->SaveFormPurchaseData($data, $trans_id);
                 return $saved;
