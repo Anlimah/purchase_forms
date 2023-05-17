@@ -147,15 +147,13 @@ class PaymentController
                 "exttrid" => $trans_id,
                 "reference" => "RMU Forms Online",
                 "service_id" => $service_id,
-                "trans_type" => "AUD",
+                "trans_type" => "CTM",
                 "nw" => $data["network"],
+                "payment_mode" => $data["pay_mode"],
                 "recipient_name" => $data["first_name"] . " " . $data["last_name"],
                 "customer_number" => $data["phone_number"],
                 "nickname" => "RMU",
-                "ts" => date("Y-m-d H:i:s"),
-                "payment_mode" => $data["pay_method"],
-                "currency_code" => "GHS",
-                "currency_val" => $data["amount"]
+                "ts" => date("Y-m-d H:i:s")
             ));
 
             $client_id = getenv('ORCHARD_CLIENT');

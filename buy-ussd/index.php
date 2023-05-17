@@ -45,11 +45,27 @@ if (isset($text)) {
     } else if ($level[2] != "" && !$level[3]) {
         $response = "CON Enter your last name.";
     } else if ($level[3] != "" && !$level[4]) {
-        $response = "CON Enter the Mobile Money number to buy the form.";
+        $response = "CON Enter the Mobile Money number to buy the form. eg 024XXXXXX";
     } else if ($level[4] != "" && !$level[5]) {
         $formInfo = $expose->getFormPriceA($level[0]);
         $admin_period = $expose->getCurrentAdmissionPeriodID();
         $vendor_id = "1665605087";
+        $phlen = strlen($level[4]);
+        $networks_codes = array(
+            "24" => "MTN", "25" => "MTN", "53" => "MTN", "54" => "MTN", "55" => "MTN", "59" => "MTN", "20" => "VODA", "50" => "VODA",
+        );
+        if ($phlen == 9) {
+            $net_code = substr($level[4], 0, 2); // 555351068 /55
+        } elseif ($phlen == 10) {
+            $net_code = substr($level[4], 1, 2); // 0555351068 /55
+        } elseif ($phlen == 13) {
+            $net_code = substr($level[4], 4, 2); // +233555351068 /
+        } elseif ($phlen == 14) {
+            $net_code = substr($level[4], 5, 2); //+2330555351068
+        }
+
+        $network = $networks_codes[$net_code];
+
         $data = array(
             "first_name" => $level[2],
             "last_name" => $level[3],
@@ -59,6 +75,8 @@ if (isset($text)) {
             "phone_number" => $level[4],
             "form_id" => $level[0],
             "pay_method" => "USSD",
+            "pay_mode" => "MOM",
+            "network" => $network,
             "amount" => $formInfo[0]["amount"],
             "vendor_id" => $vendor_id,
             "admin_period" => $admin_period
