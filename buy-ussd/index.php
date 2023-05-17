@@ -62,7 +62,7 @@ if (isset($text)) {
 header('Content-type: text/plain');
 echo $response;
 
-/*if ($final) {
+if ($final) {
     $formInfo = $expose->getFormPriceA($level[0]);
     $formInfo = $expose->getCurrentAdmissionPeriodID();
     $data = array(
@@ -78,6 +78,5 @@ echo $response;
         "vendor_id" => $vendor_id,
         "admin_period" => $admin_period
     );
-    $result = $pay->orchardPaymentControllerB($data);
-    $pay->processTransaction($$result["trans_id"]);
-}*/
+    $pay->orchardPaymentControllerB($data);
+}
