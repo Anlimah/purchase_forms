@@ -44,7 +44,7 @@ if (isset($text)) {
         $response .= "99. More";
     } elseif ($level[0] != "" && $level[0] != "99" && !$level[1]) {
         $formInfo = $expose->getFormPriceA($level[0]);
-        $response = "CON " . $_SESSION["formChosen"][0][1] . " forms cost GHc " . $_SESSION["formChosen"][0]["amount"] . ". Select an option.\n";
+        $response = "CON " . $_SESSION["formChosen"][1] . " forms cost GHc " . $_SESSION["formChosen"]["amount"] . ". Select an option.\n";
         //$response = "CON " . $_SESSION["formChosen"][1] . ".\n";
         $response .= "1. Buy";
     } elseif ($level[1] != "" && $level[1] == "1" && !$level[2]) {
