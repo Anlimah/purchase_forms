@@ -28,59 +28,56 @@ $networkCode    = $_POST["networkCode"];    // network code
 } else {*/
 
 $level = explode("*", $text);
+$final = false;
+$phone_number = 0;
 
 if (isset($text)) {
 
     if ($text == "") {
         $response  = "CON Welcome to RMU Online Forms Purchase paltform. Select a form to buy.\n";
         // Fetch and display all available forms
-        $underAndPostFprms = $expose->getUndergradAndPostgradForms();
-        //$i = 1;
-        foreach ($underAndPostFprms as $form) {
+        //$underAndPostFprms = $expose->getUndergradAndPostgradForms();
+        $allForms = $expose->getAvailableForms();
+        foreach ($allForms as $form) {
             $response .= $form['id'] . ". " . ucwords(strtolower($form['name'])) . "\n";
-            //array_push($_SESSION["formChosen"], array($i => $form['name']));
-            //$i += 1;
         }
-        $response .= "99. More";
-    } elseif ($level[0] != "" && $level[0] != "99" && !$level[1]) {
+    } elseif ($level[0] != "" && !$level[1]) {
         $formInfo = $expose->getFormPriceA($level[0]);
         $response = "CON " . $formInfo[0]["name"] . " forms cost GHc " . $formInfo[0]["amount"] . ".  Enter 1 to continue.\n";
-        //$response = "CON " . $_SESSION["formChosen"][1] . ".\n";
         $response .= "1. Buy";
-    } elseif (($level[0] != "" && $level[0] == "99" && !in_array($level[1], ["1", "2", "3"]))) {
-        $formInfo = $expose->getFormPriceA($level[1]);
-        $response = "CON " . $formInfo[1]["name"] . " forms cost GHc " . $formInfo[1]["amount"] . ". Enter 1 to continue.\n";
-        //$response = "CON " . $_SESSION["formChosen"][1] . ".\n";
-        $response .= "1. Buy";
-    } elseif ($level[1] != "" && $level[1] == "1" && !$level[2]) {
+    } elseif ($level[1] == "1" && !$level[2]) {
         $response = "CON Enter your first name.";
     } else if ($level[2] != "" && !$level[3]) {
         $response = "CON Enter your last name.";
     } else if ($level[3] != "" && !$level[4]) {
         $response = "CON Enter the Mobile Money number to buy the form.";
     } else if ($level[4] != "" && !$level[5]) {
-        $data = array(
-            "first_name" => $level[2],
-            "last_name" => $level[3],
-            "email_address" => "",
-            "country_name" => $email_address,
-            "country_code" => '+233',
-            "phone_number" => $phone_number,
-            "amount" => $amount,
-            "form_id" => $level[0],
-            "vendor_id" => $vendor_id
-        );
-        $pay->orchardPaymentControllerB($data);
-
-        //Save data to database
-
-        $response = "END Thank you " . $level[5] . " for registering.";
+        $level[5] = true;
+        $final = $level[5];
+        $phone_number = $level[4];
+        $response = "END Thank you! " . $level[5] . "Payment prompt will be sent to {$level[4]} shortly.";
     }
 }
 
 header('Content-type: text/plain');
 echo $response;
-/*}
 
-header('Content-type: application/json');
-echo $response;*/
+/*if ($final) {
+    $formInfo = $expose->getFormPriceA($level[0]);
+    $formInfo = $expose->getCurrentAdmissionPeriodID();
+    $data = array(
+        "first_name" => $level[2],
+        "last_name" => $level[3],
+        "email_address" => "",
+        "country_name" => "Ghana",
+        "country_code" => '+233',
+        "phone_number" => $phone_number,
+        "form_id" => $level[0],
+        "pay_method" => "USSD",
+        "amount" => $formInfo[0]["amount"],
+        "vendor_id" => $vendor_id,
+        "admin_period" => $admin_period
+    );
+    $result = $pay->orchardPaymentControllerB($data);
+    $pay->processTransaction($$result["trans_id"]);
+}*/

@@ -149,6 +149,8 @@ class PaymentController
                 "service_id" => $service_id,
                 "trans_type" => "AUD",
                 "nw" => $data["network"],
+                "recipient_name" => $data["first_name"] . " " . $data["last_name"],
+                "customer_number" => $data["phone_number"],
                 "nickname" => "RMU",
                 "ts" => date("Y-m-d H:i:s"),
                 "payment_mode" => $data["pay_method"],
