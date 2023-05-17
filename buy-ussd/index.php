@@ -55,7 +55,7 @@ if (isset($text)) {
         $level[5] = true;
         $final = $level[5];
         $phone_number = $level[4];
-        $response = "END Thank you! " . $level[5] . "Payment prompt will be sent to {$level[4]} shortly.";
+        $response = "END Thank you! Payment prompt will be sent to {$level[4]} shortly.";
     }
 }
 
