@@ -1,7 +1,4 @@
 <?php
-session_start();
-$vendor_id = "1665605087";
-
 if (!isset($_SESSION["formChosen"])) $_SESSION["formChosen"] = array();
 
 require_once('../bootstrap.php');
@@ -28,7 +25,6 @@ $networkCode    = $_POST["networkCode"];    // network code
 } else {*/
 
 $level = explode("*", $text);
-$final = false;
 
 if (isset($text)) {
 
@@ -51,29 +47,29 @@ if (isset($text)) {
     } else if ($level[3] != "" && !$level[4]) {
         $response = "CON Enter the Mobile Money number to buy the form.";
     } else if ($level[4] != "" && !$level[5]) {
-        $level[5] = true;
-        $final = $level[5];
-        $response = "END Thank you! Payment prompt will be sent to {$level[4]} shortly.";
+        $formInfo = $expose->getFormPriceA($level[0]);
+        $admin_period = $expose->getCurrentAdmissionPeriodID();
+        $vendor_id = "1665605087";
+        $data = array(
+            "first_name" => $level[2],
+            "last_name" => $level[3],
+            "email_address" => "",
+            "country_name" => "Ghana",
+            "country_code" => '+233',
+            "phone_number" => $level[4],
+            "form_id" => $level[0],
+            "pay_method" => "USSD",
+            "amount" => $formInfo[0]["amount"],
+            "vendor_id" => $vendor_id,
+            "admin_period" => $admin_period
+        );
+        $result = $pay->orchardPaymentControllerB($data);
+        if (!$result["success"]) {
+            $response = "END Process failed!";
+        } else {
+            $response = "END Thank you! Payment prompt will be sent to {$level[4]} shortly.";
+        }
     }
-}
-
-if ($final) {
-    $formInfo = $expose->getFormPriceA($level[0]);
-    $formInfo = $expose->getCurrentAdmissionPeriodID();
-    $data = array(
-        "first_name" => $level[2],
-        "last_name" => $level[3],
-        "email_address" => "",
-        "country_name" => "Ghana",
-        "country_code" => '+233',
-        "phone_number" => $level[4],
-        "form_id" => $level[0],
-        "pay_method" => "USSD",
-        "amount" => $formInfo[0]["amount"],
-        "vendor_id" => $vendor_id,
-        "admin_period" => $admin_period
-    );
-    $pay->orchardPaymentControllerB($data);
 }
 
 header('Content-type: text/plain');
