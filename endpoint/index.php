@@ -176,7 +176,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 	// verify step 6
 	elseif ($_GET["url"] == "verifyStep6") {
 		if (isset($_SESSION["_step6Token"]) && !empty($_SESSION["_step6Token"]) && isset($_POST["_v6Token"]) && !empty($_POST["_v6Token"]) && $_POST["_v6Token"] == $_SESSION["_step6Token"]) {
-
+			die(json_encode($_POST));
 			$form_id = $expose->validateInput($_POST["formSold"]);
 			//$amount = $expose->getFormPrice($form_id, $_SESSION["admin_period"])[0]["amount"];
 			$amount = $_POST["form_price"];
