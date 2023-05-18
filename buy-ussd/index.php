@@ -52,7 +52,7 @@ if (isset($text)) {
         $vendor_id = "1665605087";
         $phlen = strlen($level[4]);
         $networks_codes = array(
-            "24" => "MTN", "25" => "MTN", "53" => "MTN", "54" => "MTN", "55" => "MTN", "59" => "MTN", "20" => "VODA", "50" => "VODA",
+            "24" => "MTN", "25" => "MTN", "53" => "MTN", "54" => "MTN", "55" => "MTN", "59" => "MTN", "20" => "VOD", "50" => "VOD",
         );
         if ($phlen == 9) {
             $net_code = substr($level[4], 0, 2); // 555351068 /55
@@ -75,18 +75,17 @@ if (isset($text)) {
             "phone_number" => $level[4],
             "form_id" => $level[0],
             "pay_method" => "USSD",
-            "pay_mode" => "MOM",
             "network" => $network,
             "amount" => $formInfo[0]["amount"],
             "vendor_id" => $vendor_id,
             "admin_period" => $admin_period
         );
-        $result = $pay->orchardPaymentControllerB($data);
-        if (!$result["success"]) {
-            $response = "END Process failed! {$result["status"]} {$result["message"]}";
-        } else {
-            $response = "END Thank you! Payment prompt will be sent to {$level[4]} shortly.";
-        }
+        //$result = $pay->orchardPaymentControllerB($data);
+        //if (!$result["success"]) {
+        $response = "END Process failed! {$network} {$formInfo[0]["amount"]} {$result["status"]} {$result["message"]}";
+        //} else {
+        // $response = "END Thank you! Payment prompt will be sent to {$level[4]} shortly.";
+        //}
     }
 }
 
