@@ -82,7 +82,7 @@ if (isset($text)) {
         );
         //$result = $pay->orchardPaymentControllerB($data);
         //if (!$result["success"]) {
-        $response = "END Process failed! {$network} {$formInfo[0]["amount"]} {$result["status"]} {$result["message"]}";
+        $response = "END Process failed! FN: {$level[2]} LN: {$level[3]} PN: {$level[4]} FI: {$level[0]} NW: {$network} FP: {$formInfo[0]["amount"]} VI: {$vendor_id} AP: {$admin_period} => {$result["status"]} {$result["message"]}";
         //} else {
         // $response = "END Thank you! Payment prompt will be sent to {$level[4]} shortly.";
         //}
