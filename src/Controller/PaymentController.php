@@ -149,7 +149,6 @@ class PaymentController
                 "service_id" => $service_id,
                 "trans_type" => "CTM",
                 "nw" => $data["network"],
-                "payment_mode" => $data["pay_mode"],
                 "recipient_name" => $data["first_name"] . " " . $data["last_name"],
                 "customer_number" => $data["phone_number"],
                 "nickname" => "RMU",
@@ -167,11 +166,11 @@ class PaymentController
             $pay = new OrchardPaymentGateway($secretKey, $payUrl, $request_verb, $payload);
             $response = json_decode($pay->initiatePayment());
 
-            if ($response->resp_code == "000" || $response->resp_code == "015") {
+            /*if ($response->resp_code == "000" || $response->resp_code == "015") {
                 //save Data to database
                 $saved = $this->voucher->SaveFormPurchaseData($data, $trans_id);
                 return $saved;
-            }
+            }*/
 
             //echo $response->resp_desc;
             return array("success" => false, "status" => $response->resp_code, "message" => $response->resp_desc);
