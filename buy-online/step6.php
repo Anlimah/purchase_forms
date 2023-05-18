@@ -49,7 +49,7 @@ $expose = new ExposeDataController();
                         <form id="step1Form" method="post" enctype="multipart/form-data" style="margin: 0px 12%;">
                             <div class="mb-4">
                                 <label class="form-label" for="gender">Available Forms</label>
-                                <select name="available_forms" id="available_forms" title="Select the type of form you want to purchase." class="form-select form-select-sm" required>
+                                <select name="available_forms" id="available_forms" title="Select the type of form you want to purchase." class="form-select form-select-sm form-info" required>
                                     <option selected disabled value="">Choose...</option>
                                     <?php
                                     $data = $expose->getAvailableForms();
@@ -125,7 +125,7 @@ $expose = new ExposeDataController();
                 }
             });
 
-            $(".form-select").change("blur", function() {
+            $(".form-info").change("blur", function() {
                 $.ajax({
                     type: "POST",
                     url: "../endpoint/formInfo",
