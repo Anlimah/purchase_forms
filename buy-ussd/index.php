@@ -47,13 +47,12 @@ if (isset($text)) {
     } else if ($level[3] != "" && !$level[4]) {
         $response = "CON Enter the Mobile Money number to buy the form. eg 024XXXXXX";
     } else if ($level[4] != "" && !$level[5]) {
-        $formInfo = $expose->getFormPriceA($level[0]);
-        $admin_period = $expose->getCurrentAdmissionPeriodID();
-        $vendor_id = "1665605087";
+
         $phlen = strlen($level[4]);
         $networks_codes = array(
             "24" => "MTN", "25" => "MTN", "53" => "MTN", "54" => "MTN", "55" => "MTN", "59" => "MTN", "20" => "VOD", "50" => "VOD",
         );
+
         if ($phlen == 9) {
             $net_code = substr($level[4], 0, 2); // 555351068 /55
         } elseif ($phlen == 10) {
@@ -66,26 +65,35 @@ if (isset($text)) {
 
         $network = $networks_codes[$net_code];
 
-        $data = array(
-            "first_name" => $level[2],
-            "last_name" => $level[3],
-            "email_address" => "",
-            "country_name" => "Ghana",
-            "country_code" => '+233',
-            "phone_number" => $level[4],
-            "form_id" => $level[0],
-            "pay_method" => "USSD",
-            "network" => $network,
-            "amount" => $formInfo[0]["amount"],
-            "vendor_id" => $vendor_id,
-            "admin_period" => $admin_period
-        );
-        //$result = $pay->orchardPaymentControllerB($data);
-        //if (!$result["success"]) {
-        $response = "END Process failed! FN: {$level[2]} LN: {$level[3]} PN: {$level[4]} FI: {$level[0]} NW: {$network} FP: {$formInfo[0]["amount"]} VI: {$vendor_id} AP: {$admin_period} => {$result["status"]} {$result["message"]}";
-        //} else {
-        // $response = "END Thank you! Payment prompt will be sent to {$level[4]} shortly.";
-        //}
+        if (!$network) {
+            $response = "END Process failed! Invalid phone number entered.";
+        } else {
+            $formInfo = $expose->getFormPriceA($level[0]);
+            $admin_period = $expose->getCurrentAdmissionPeriodID();
+            $vendor_id = "1665605087";
+
+            $data = array(
+                "first_name" => $level[2],
+                "last_name" => $level[3],
+                "email_address" => "",
+                "country_name" => "Ghana",
+                "country_code" => '+233',
+                "phone_number" => $level[4],
+                "form_id" => $level[0],
+                "pay_method" => "USSD",
+                "network" => $network,
+                "amount" => $formInfo[0]["amount"],
+                "vendor_id" => $vendor_id,
+                "admin_period" => $admin_period
+            );
+
+            $result = $pay->orchardPaymentControllerB($data);
+            if (!$result["success"]) {
+                $response = "END Process failed! {$result["status"]} {$result["message"]}";
+            } else {
+                $response = "END Thank you! Payment prompt will be sent to {$level[4]} shortly.";
+            }
+        }
     }
 }
 
