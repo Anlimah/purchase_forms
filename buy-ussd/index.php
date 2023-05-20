@@ -66,7 +66,7 @@ if (isset($text)) {
         $network = $networks_codes[$net_code];
 
         if (!$network) {
-            $response = "END Process failed! Invalid phone number entered.";
+            $response = "END Process failed! Service is unavailable on your network. Please visit https:forms.rmuictonline.com to buy a form.";
         } else {
             $formInfo = $expose->getFormPriceA($level[0]);
             $admin_period = $expose->getCurrentAdmissionPeriodID();
