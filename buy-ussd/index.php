@@ -59,7 +59,7 @@ if (isset($text)) {
             $phone_number_start = 0;
         } elseif ($phlen == 10) {
             $net_code = substr($level[4], 1, 2); // 0555351068 /55
-            $phone_number_start = 0;
+            $phone_number_start = 1;
         } elseif ($phlen == 13) {
             $net_code = substr($level[4], 4, 2); // +233555351068 /55
             $phone_number_start = 4;
