@@ -144,36 +144,38 @@ class PaymentController
             $payload = json_encode(array(
                 "amount" => $data["amount"],
                 "callback_url" => $callback_url,
-                "customer_number" => $data["phone_number"],
                 "exttrid" => $trans_id,
-                "nw" => $data["network"],
                 "reference" => "RMU Forms Online",
+                "service_id" => $service_id,
+                "trans_type" => "CTM",
+                "nw" => $data["network"],
+                "recipient_name" => $data["first_name"] . " " . $data["last_name"],
+                "customer_number" => $data["phone_number"],
+                "nickname" => "RMU",
+                "ts" => date("Y-m-d H:i:s")
+            ));
+
+            $payload2 = json_encode(array(
+                "amount" => "10.00",
+                "callback_url" => "https://forms.rmuictonline.com/buy-online/confirm.php",
+                "customer_number" => "0555351068",
+                "exttrid" => $trans_id,
+                "nw" => "MTN",
+                "reference" => "Test payment",
                 "service_id" => $service_id,
                 "trans_type" => "CTM",
                 "ts" => date("Y-m-d H:i:s")
             ));
 
-            /*$payload2 = json_encode(array(
-                "amount" => $data["amount"],
-                "callback_url" => $callback_url,
-                "customer_number" => $data["phone_number"], 
-                "exttrid" => $trans_id, 
-                "nw" => $data["network"], 
-                "reference" => "RMU Forms Online", 
-                "service_id" => $service_id, 
-                "trans_type" => "CTM", 
-                "ts" => date("Y-m-d H:i:s")
-            ));*/
-
             $client_id = getenv('ORCHARD_CLIENT');
             $client_secret = getenv('ORCHARD_SECRET');
-            $signature = hash_hmac("sha256", $payload, $client_secret);
+            $signature = hash_hmac("sha256", $payload2, $client_secret);
 
             $secretKey = $client_id . ":" . $signature;
             $request_verb = 'POST';
             $payUrl = "https://payments.anmgw.com/sendRequest";
 
-            $pay = new OrchardPaymentGateway($secretKey, $payUrl, $request_verb, $payload);
+            $pay = new OrchardPaymentGateway($secretKey, $payUrl, $request_verb, $payload2);
             $response = json_decode($pay->initiatePayment());
 
             /*if ($response->resp_code == "000" || $response->resp_code == "015") {
