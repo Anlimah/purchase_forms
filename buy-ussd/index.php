@@ -71,12 +71,12 @@ if (isset($text)) {
         $network = $networks_codes[$net_code];
 
         if (!$network) {
-            $response = "END This service is only available on MTN and VODAFONE. You can visit https://forms.rmuictonline.com to buy a form with all networks.";
+            $response = "END This service is only available for MTN and VODAFONE users. To buy RMU forms with all networks, visit https://forms.rmuictonline.com";
         } else {
+            $vendor_id = "1665605087";
             $phone_number = "0" . substr($level[4], $phone_number_start, 9);
             $formInfo = $expose->getFormPriceA($level[0]);
             $admin_period = $expose->getCurrentAdmissionPeriodID();
-            $vendor_id = "1665605087";
 
             $data = array(
                 "first_name" => $level[2],
@@ -95,11 +95,13 @@ if (isset($text)) {
 
             $result = $pay->orchardPaymentControllerB($data);
             if (!$result["success"]) {
-                $response = "END Process failed! {$result["status"]} {$result["message"]} {$phone_number}";
+                $response = "END Process failed! {$result["status"]} {$result["message"]}";
             } else {
                 $response = "END Thank you! Payment prompt will be sent to {$level[4]} shortly.";
             }
         }
+    } else {
+        $response = "END Sorry, the input is not valid.";
     }
 }
 

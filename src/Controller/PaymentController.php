@@ -144,16 +144,26 @@ class PaymentController
             $payload = json_encode(array(
                 "amount" => $data["amount"],
                 "callback_url" => $callback_url,
+                "customer_number" => $data["phone_number"],
                 "exttrid" => $trans_id,
+                "nw" => $data["network"],
                 "reference" => "RMU Forms Online",
                 "service_id" => $service_id,
                 "trans_type" => "CTM",
-                "nw" => $data["network"],
-                "recipient_name" => $data["first_name"] . " " . $data["last_name"],
-                "customer_number" => $data["phone_number"],
-                "nickname" => "RMU",
                 "ts" => date("Y-m-d H:i:s")
             ));
+
+            /*$payload2 = json_encode(array(
+                "amount" => $data["amount"],
+                "callback_url" => $callback_url,
+                "customer_number" => $data["phone_number"], 
+                "exttrid" => $trans_id, 
+                "nw" => $data["network"], 
+                "reference" => "RMU Forms Online", 
+                "service_id" => $service_id, 
+                "trans_type" => "CTM", 
+                "ts" => date("Y-m-d H:i:s")
+            ));*/
 
             $client_id = getenv('ORCHARD_CLIENT');
             $client_secret = getenv('ORCHARD_SECRET');
