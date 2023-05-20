@@ -52,22 +52,28 @@ if (isset($text)) {
         $networks_codes = array(
             "24" => "MTN", "25" => "MTN", "53" => "MTN", "54" => "MTN", "55" => "MTN", "59" => "MTN", "20" => "VOD", "50" => "VOD",
         );
+        $phone_number = "";
 
         if ($phlen == 9) {
             $net_code = substr($level[4], 0, 2); // 555351068 /55
+            $phone_number_start = 0;
         } elseif ($phlen == 10) {
             $net_code = substr($level[4], 1, 2); // 0555351068 /55
+            $phone_number_start = 0;
         } elseif ($phlen == 13) {
-            $net_code = substr($level[4], 4, 2); // +233555351068 /
+            $net_code = substr($level[4], 4, 2); // +233555351068 /55
+            $phone_number_start = 4;
         } elseif ($phlen == 14) {
-            $net_code = substr($level[4], 5, 2); //+2330555351068
+            $net_code = substr($level[4], 5, 2); //+2330555351068 /55
+            $phone_number_start = 5;
         }
 
         $network = $networks_codes[$net_code];
 
         if (!$network) {
-            $response = "END Process failed! Service is unavailable on your network. Please visit https:forms.rmuictonline.com to buy a form.";
+            $response = "END This service is only available on MTN and VODAFONE. You can visit https://forms.rmuictonline.com to buy a form with all networks.";
         } else {
+            $phone_number = "0" . substr($level[4], $phone_number_start, 9);
             $formInfo = $expose->getFormPriceA($level[0]);
             $admin_period = $expose->getCurrentAdmissionPeriodID();
             $vendor_id = "1665605087";
@@ -78,7 +84,7 @@ if (isset($text)) {
                 "email_address" => "",
                 "country_name" => "Ghana",
                 "country_code" => '+233',
-                "phone_number" => $level[4],
+                "phone_number" => $phone_number,
                 "form_id" => $level[0],
                 "pay_method" => "USSD",
                 "network" => $network,
@@ -89,7 +95,7 @@ if (isset($text)) {
 
             $result = $pay->orchardPaymentControllerB($data);
             if (!$result["success"]) {
-                $response = "END Process failed! {$result["status"]} {$result["message"]}";
+                $response = "END Process failed! {$result["status"]} {$result["message"]} {$phone_number}";
             } else {
                 $response = "END Thank you! Payment prompt will be sent to {$level[4]} shortly.";
             }
