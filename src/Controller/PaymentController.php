@@ -144,24 +144,10 @@ class PaymentController
             $payload = json_encode(array(
                 "amount" => $data["amount"],
                 "callback_url" => $callback_url,
-                "exttrid" => $trans_id,
-                "reference" => "RMU Forms Online",
-                "service_id" => $service_id,
-                "trans_type" => "CTM",
-                "nw" => $data["network"],
-                "recipient_name" => $data["first_name"] . " " . $data["last_name"],
                 "customer_number" => $data["phone_number"],
-                "nickname" => "RMU",
-                "ts" => date("Y-m-d H:i:s")
-            ));
-
-            $payload2 = json_encode(array(
-                "amount" => "10.00",
-                "callback_url" => "https://forms.rmuictonline.com/buy-online/confirm.php",
-                "customer_number" => "0555351068",
                 "exttrid" => $trans_id,
-                "nw" => "MTN",
-                "reference" => "Test payment",
+                "nw" => $data["network"],
+                "reference" => "RMU Forms Online",
                 "service_id" => $service_id,
                 "trans_type" => "CTM",
                 "ts" => date("Y-m-d H:i:s")
@@ -169,20 +155,20 @@ class PaymentController
 
             $client_id = getenv('ORCHARD_CLIENT');
             $client_secret = getenv('ORCHARD_SECRET');
-            $signature = hash_hmac("sha256", $payload2, $client_secret);
+            $signature = hash_hmac("sha256", $payload, $client_secret);
 
             $secretKey = $client_id . ":" . $signature;
             $request_verb = 'POST';
             $payUrl = "https://payments.anmgw.com/sendRequest";
 
-            $pay = new OrchardPaymentGateway($secretKey, $payUrl, $request_verb, $payload2);
+            $pay = new OrchardPaymentGateway($secretKey, $payUrl, $request_verb, $payload);
             $response = json_decode($pay->initiatePayment());
 
-            /*if ($response->resp_code == "000" || $response->resp_code == "015") {
+            if ($response->resp_code == "000" || $response->resp_code == "015") {
                 //save Data to database
                 $saved = $this->voucher->SaveFormPurchaseData($data, $trans_id);
                 return $saved;
-            }*/
+            }
 
             //echo $response->resp_desc;
             return array("success" => false, "status" => $response->resp_code, "message" => $response->resp_desc);
