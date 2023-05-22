@@ -34,7 +34,7 @@ class USSDHandler
         $this->msgType      = $msgType;
         $this->ussdBody      = $ussdBody;
         $this->networkCode  = $networkCode;
-        // Fetch and display all available forms
+
         $this->expose = new ExposeDataController();
         $this->dm = new DatabaseMethods();
     }
@@ -229,7 +229,7 @@ class USSDHandler
         return false;
     }
 
-    private function activityLogger()
+    public function activityLogger()
     {
         $query = "INSERT INTO `ussd_activity_logs` (`session_id`, `service_code`, `msisdn`, `msg_type`, `ussd_body`, `nw_code`) 
                     VALUES(:si, :sc, :ms, :mt, :ub, :nc)";
