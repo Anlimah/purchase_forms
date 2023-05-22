@@ -19,4 +19,4 @@ $ussd = new USSDHandler($sessionId, $serviceCode, $phoneNumber, $ussdBody, $netw
 $response = $ussd->control();
 
 header("Content-Type: application/json");
-die($response);
+die(json_encode($response));
