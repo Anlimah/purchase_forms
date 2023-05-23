@@ -1,28 +1,26 @@
 <?php
 session_start();
-if (isset($_SESSION['step1Done']) && $_SESSION['step1Done'] == true && isset($_SESSION["vendor_id"]) && !empty($_SESSION["vendor_id"]) && $_SESSION["vendor_type"] == "ONLINE") {
-    if (!isset($_SESSION["_step2Token"])) {
-        $rstrong = true;
-        $_SESSION["_step2Token"] = hash('sha256', bin2hex(openssl_random_pseudo_bytes(64, $rstrong)));
-    }
-} else {
-    header('Location: index.php');
-}
 
+if (!isset($_SESSION["_step1Token"])) {
+    $rstrong = true;
+    $_SESSION["_step1Token"] = hash('sha256', bin2hex(openssl_random_pseudo_bytes(64, $rstrong)));
+    $_SESSION["vendor_type"] = "ONLINE";
+    $_SESSION["vendor_id"] = "1665605087";
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <?php require_once("../inc/head-section.php"); ?>
-    <title>Form Purchase | Step 2</title>
+    <?php require_once("inc/head-section.php"); ?>
+    <title>Form Purchase | Step 1</title>
 </head>
 
 <body class="fluid-container">
 
     <div id="wrapper">
 
-        <?php require_once("../inc/page-nav.php"); ?>
+        <?php require_once("inc/page-nav.php"); ?>
 
         <div id="flashMessage" class="alert text-center" role="alert"></div>
 
@@ -30,41 +28,50 @@ if (isset($_SESSION['step1Done']) && $_SESSION['step1Done'] == true && isset($_S
             <div class="flex-card">
                 <div class="form-card card">
                     <div class="purchase-card-header">
-                        <h1 class="h1">Provide Email Address</h1>
+                        <h1>Personal Information</h1>
                     </div>
 
                     <div class="purchase-card-step-info">
-                        <span class="step-capsule">Step 2 of 6</span>
+                        <span class="step-capsule">Step 1 of 6</span>
                     </div>
 
                     <hr style="color:#999">
 
                     <div class="purchase-card-body">
-                        <form action="#" id="step1Form" method="post" enctype="multipart/form-data" style="margin: 0px 12%;">
+                        <form id="step1Form" method="post" enctype="multipart/form-data">
                             <div class="mb-4">
-                                <label class="form-label" for="email_addr">Email Address</label>
-                                <input title="Provide your email address" class="form-control" type="email" name="email_address" id="email_address" placeholder="surname@gmail.com" required>
+                                <label class="form-label" for="first_name">First Name</label>
+                                <input title="Provide your first name" class="form-control" type="text" name="first_name" id="first_name" placeholder="Type your first name" required>
                             </div>
-                            <button class="btn btn-primary" type="submit" id="submitBtn" style="padding: 10px 10px; width:100%">Continue</button>
-                            <input class="form-control" type="hidden" name="_v2Token" value="<?= $_SESSION["_step2Token"]; ?>">
+
+                            <div class="mb-4">
+                                <label class="form-label" for="last_name">Last Name</label>
+                                <input style="width:100% !important" title="Provide your last name" class="form-control" type="text" name="last_name" id="last_name" placeholder="Type your last name" required>
+                            </div>
+
+                            <button class="btn btn-primary" type="submit" id="submitBtn" style="padding: 8px; width:100%">Continue</button>
+                            <input type="hidden" name="_v1Token" value="<?= $_SESSION["_step1Token"]; ?>">
                         </form>
                     </div>
                 </div>
             </div>
         </main>
 
-        <?php require_once("../inc/page-footer.php"); ?>
+        <?php require_once("inc/page-footer.php"); ?>
     </div>
 
-    <script src="../js/jquery-3.6.0.min.js"></script>
-    <script src="../js/main.js"></script>
+
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/main.js"></script>
     <script>
         $(document).ready(function() {
+
             $("#step1Form").on("submit", function(e) {
                 e.preventDefault();
+                //window.location.href = "purchase_step2.php";
                 $.ajax({
                     type: "POST",
-                    url: "../endpoint/verifyStep2",
+                    url: "endpoint/verifyStep1",
                     data: new FormData(this),
                     contentType: false,
                     cache: false,

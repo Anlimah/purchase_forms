@@ -11,13 +11,13 @@ if (isset($_SESSION['step3Done']) && $_SESSION['step3Done'] == true && isset($_S
 
 ?>
 <?php
-require_once('../inc/page-data.php');
+require_once('inc/page-data.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <?php require_once("../inc/head-section.php"); ?>
+    <?php require_once("inc/head-section.php"); ?>
     <title>Form Purchase | Step 4</title>
 </head>
 
@@ -25,7 +25,7 @@ require_once('../inc/page-data.php');
 
     <div id="wrapper">
 
-        <?php require_once("../inc/page-nav.php"); ?>
+        <?php require_once("inc/page-nav.php"); ?>
 
         <div id="flashMessage" class="alert text-center" style="display: none" role="alert"></div>
 
@@ -72,18 +72,18 @@ require_once('../inc/page-data.php');
             </div>
         </main>
 
-        <?php require_once("../inc/page-footer.php"); ?>
+        <?php require_once("inc/page-footer.php"); ?>
     </div>
 
-    <script src="../js/jquery-3.6.0.min.js"></script>
-    <script src="../js/main.js"></script>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/main.js"></script>
     <script>
         $(document).ready(function() {
             $("#step1Form").on("submit", function(e) {
                 e.preventDefault();
                 $.ajax({
                     type: "POST",
-                    url: "../endpoint/verifyStep4",
+                    url: "endpoint/verifyStep4",
                     data: new FormData(this),
                     contentType: false,
                     cache: false,

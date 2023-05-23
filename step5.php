@@ -14,7 +14,7 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
 <html lang="en">
 
 <head>
-    <?php require_once("../inc/head-section.php"); ?>
+    <?php require_once("inc/head-section.php"); ?>
     <title>Form Purchase | Step 5</title>
 </head>
 
@@ -22,7 +22,7 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
 
     <div id="wrapper">
 
-        <?php require_once("../inc/page-nav.php"); ?>
+        <?php require_once("inc/page-nav.php"); ?>
 
         <div id="flashMessage" class="alert text-center" style="margin-bottom: 0 !important;" role="alert"></div>
         <div class="clearfix"></div>
@@ -59,11 +59,11 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
             </div>
         </main>
 
-        <?php require_once("../inc/page-footer.php"); ?>
+        <?php require_once("inc/page-footer.php"); ?>
     </div>
 
-    <script src="../js/jquery-3.6.0.min.js"></script>
-    <script src="../js/main.js"></script>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/main.js"></script>
     <script>
         $(document).ready(function() {
             var triggeredBy = 0;
@@ -90,7 +90,7 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
 
                 $.ajax({
                     type: "POST",
-                    url: "../endpoint/resend-code",
+                    url: "endpoint/resend-code",
                     data: data,
                     success: function(result) {
                         console.log(result);
@@ -127,7 +127,7 @@ if (isset($_SESSION['step4Done']) && $_SESSION['step4Done'] == true && isset($_S
                 triggeredBy = 2;
                 $.ajax({
                     type: "POST",
-                    url: "../endpoint/verifyStep5",
+                    url: "endpoint/verifyStep5",
                     data: new FormData(this),
                     contentType: false,
                     cache: false,

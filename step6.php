@@ -9,7 +9,7 @@ if (isset($_SESSION['step5Done']) && $_SESSION['step5Done'] == true && isset($_S
     header('Location: step5.php');
 }
 
-require_once('../bootstrap.php');
+require_once('bootstrap.php');
 
 use Src\Controller\ExposeDataController;
 
@@ -20,7 +20,7 @@ $expose = new ExposeDataController();
 <html lang="en">
 
 <head>
-    <?php require_once("../inc/head-section.php"); ?>
+    <?php require_once("inc/head-section.php"); ?>
     <title>Form Purchase | Step 6</title>
 </head>
 
@@ -28,7 +28,7 @@ $expose = new ExposeDataController();
 
     <div id="wrapper">
 
-        <?php require_once("../inc/page-nav.php"); ?>
+        <?php require_once("inc/page-nav.php"); ?>
 
         <div id="flashMessage" class="alert text-center" role="alert"></div>
 
@@ -86,18 +86,18 @@ $expose = new ExposeDataController();
             </div>
         </main>
 
-        <?php require_once("../inc/page-footer.php"); ?>
+        <?php require_once("inc/page-footer.php"); ?>
     </div>
 
-    <script src="../js/jquery-3.6.0.min.js"></script>
-    <script src="../js/main.js"></script>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/main.js"></script>
     <script>
         $(document).ready(function() {
             $("#step1Form").on("submit", function(e) {
                 e.preventDefault();
                 $.ajax({
                     type: "POST",
-                    url: "../endpoint/verifyStep6",
+                    url: "endpoint/verifyStep6",
                     data: new FormData(this),
                     contentType: false,
                     cache: false,
@@ -128,7 +128,7 @@ $expose = new ExposeDataController();
             $(".form-info").change("blur", function() {
                 $.ajax({
                     type: "POST",
-                    url: "../endpoint/formInfo",
+                    url: "endpoint/formInfo",
                     data: {
                         form_id: this.value,
                     },
