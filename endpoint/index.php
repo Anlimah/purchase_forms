@@ -327,9 +327,9 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
                     </p>',
                 default => '
                         <p class="mb-4" style="text-align: justify !important; width: 100%; margin:0; padding:0">
-                        <b class="text-success">Form purchase failed!</b><br> 
+                        <b class="text-danger">Form purchase failed!</b><br> 
                         This might be due to:
-                        <ul>
+                        <ul style="list-style: disc !important;">
                             <li>Insufficient funds in your Mobile Money wallet.</li>
                             <li>Delayed in processing payment, hence session expired.</li>
                         </ul>
