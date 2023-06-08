@@ -90,7 +90,7 @@ class PaymentController
     {
         if (!empty($data)) {
 
-            $callback_url = "https://ussd.rmuictonline.com/confirm.php";
+            $callback_url = "https://forms.rmuictonline.com/confirm.php";
             $landing_page = "https://forms.rmuictonline.com/confirm.php";
             $trans_id = time();
             $service_id = getenv('ORCHARD_SERVID');
