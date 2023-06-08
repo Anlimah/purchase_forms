@@ -264,7 +264,7 @@ class ExposeDataController
         $mail = new PHPMailer(true); //Argument true in constructor enables exceptions
         //From email address and name
         $mail->From = "rmuicton@rmuictonline.com";
-        $mail->FromName = "rmuicton";
+        $mail->FromName = "RMU Forms Online";
 
         //To address and name
         $mail->addAddress($recipient_email);
