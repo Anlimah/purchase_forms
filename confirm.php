@@ -13,7 +13,7 @@ if (isset($_GET['exttrid']) && empty($_GET['exttrid'])) header('Location: index.
 <html lang="en">
 
 <head>
-    <?php require_once("../inc/head-section.php"); ?>
+    <?php require_once("inc/head-section.php"); ?>
     <title>Form Purchase | Confirm Payment</title>
 </head>
 
@@ -21,7 +21,7 @@ if (isset($_GET['exttrid']) && empty($_GET['exttrid'])) header('Location: index.
 
     <div id="wrapper">
 
-        <?php require_once("../inc/page-nav.php"); ?>
+        <?php require_once("inc/page-nav.php"); ?>
 
         <main class="container flex-container" style="margin-bottom: 100px;">
             <div class="flex-card">
@@ -50,10 +50,10 @@ if (isset($_GET['exttrid']) && empty($_GET['exttrid'])) header('Location: index.
             </div>
         </main>
 
-        <?php require_once("../inc/page-footer.php"); ?>
+        <?php require_once("inc/page-footer.php"); ?>
     </div>
 
-    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script src="js/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
             //get variable(parameters) from url
@@ -79,14 +79,14 @@ if (isset($_GET['exttrid']) && empty($_GET['exttrid'])) header('Location: index.
 
             if (getUrlVars()["status"] != "" || getUrlVars()["status"] != undefined) {
                 if (getUrlVars()["exttrid"] != "" || getUrlVars()["exttrid"] != undefined) {
-                    let connect = 15000;
-                    let init = 15000;
+                    let connect = 17500;
+                    let init = 17500;
                     setTimeout(function() {
                         $("#status-out").text("Initializing...");
                         setTimeout(function() {
                             $.ajax({
                                 type: "POST",
-                                url: "../endpoint/confirm",
+                                url: "endpoint/confirm",
                                 data: {
                                     status: getUrlVars()["status"],
                                     exttrid: getUrlVars()["exttrid"],
