@@ -79,8 +79,8 @@ if (isset($_GET['exttrid']) && empty($_GET['exttrid'])) header('Location: index.
 
             if (getUrlVars()["status"] != "" || getUrlVars()["status"] != undefined) {
                 if (getUrlVars()["exttrid"] != "" || getUrlVars()["exttrid"] != undefined) {
-                    let connect = 17500;
-                    let init = 17500;
+                    let connect = 1500;
+                    let init = 1500;
                     setTimeout(function() {
                         $("#status-out").text("Initializing...");
                         setTimeout(function() {
