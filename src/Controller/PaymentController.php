@@ -65,9 +65,9 @@ class PaymentController
 
         if (empty($data)) return array("success" => false, "message" => "Invalid transaction ID! Code: -1");
 
-        if (strtoupper($data[0]["status"]) != "FAILED") return array("success" => false, "message" => "Sorry, your transaction failed!");
-        if (strtoupper($data[0]["status"]) != "PENDING") return array("success" => false, "message" => "Sorry, transaction is pending! This might be due to insufficient fund in your mobile wallet or your payment session expired.");
-        if (strtoupper($data[0]["status"]) != "COMPLETED") {
+        if (strtoupper($data[0]["status"]) == "FAILED") return array("success" => false, "message" => "Sorry, your transaction failed!");
+        if (strtoupper($data[0]["status"]) == "PENDING") return array("success" => false, "message" => "Sorry, transaction is pending! This might be due to insufficient fund in your mobile wallet or your payment session expired.");
+        if (strtoupper($data[0]["status"]) == "COMPLETED") {
 
             $browser_mg = '
             <p class="mb-4" style="text-align: justify !important; width: 100%; margin:0; padding:0">
