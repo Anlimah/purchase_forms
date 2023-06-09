@@ -333,7 +333,6 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
                             <li>Insufficient funds in your Mobile Money wallet.</li>
                             <li>Delayed in processing payment, hence session expired.</li>
                         </ul>
-                        <p>Contact us for support</p>
                     </p>'
             };
         } else {
