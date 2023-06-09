@@ -309,32 +309,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
         if (isset($_POST["status"]) && !empty($_POST["status"]) && isset($_POST["exttrid"]) && !empty($_POST["exttrid"])) {
             $status = $expose->validateInput($_POST["status"]);
             $transaction_id = $expose->validatePhone($_POST["exttrid"]);
-
-            if ($status == "000") {
-                $data["success"] = true;
-            } else {
-                $data["success"] = false;
-            }
-
-            $data["message"] = match ($status) {
-                "000" => '<p class="mb-4" style="text-align: justify !important; width: 100%; margin:0; padding:0">
-                        <b class="text-success">Form purchase successful!</b><br> 
-                        An email and SMS with your <b>Application Number</b> and <b>PIN</b> 
-                        to access application portal, has been sent to you!<br> 
-                        Please confirm and proceed to the <a href="https://admissions.rmuictonline.com/apply/"> 
-                        <b>online application portal</b></a> 
-                        to complete your application process.
-                    </p>',
-                default => '
-                        <p class="mb-4" style="text-align: justify !important; width: 100%; margin:0; padding:0">
-                        <b class="text-danger">Form purchase failed!</b><br> 
-                        This might be due to:
-                        <ul style="list-style: disc !important;">
-                            <li>Insufficient funds in your Mobile Money wallet.</li>
-                            <li>Delayed in processing payment, hence session expired.</li>
-                        </ul>
-                    </p>'
-            };
+            die(json_encode($expose->confirmPurchase($transaction_id)));
         } else {
             $data["success"] = false;
             $data["message"] = "Invalid request!";
