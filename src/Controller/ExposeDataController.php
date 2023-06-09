@@ -264,7 +264,7 @@ class ExposeDataController
         $mail = new PHPMailer(true); //Argument true in constructor enables exceptions
         //From email address and name
         $mail->From = "rmuicton@rmuictonline.com";
-        $mail->FromName = "rmuicton";
+        $mail->FromName = "RMU Forms Online";
 
         //To address and name
         $mail->addAddress($recipient_email);
@@ -352,6 +352,13 @@ class ExposeDataController
     {
         $str = "SELECT `id` FROM `vendor_details` WHERE `id`=:i";
         return $this->dm->getID($str, array(':i' => $vendor_id));
+    }
+
+    public function requestLogger($request)
+    {
+        $query = "INSERT INTO `ussd_request_logs` (`request`) VALUES(:nc)";
+        $params = array(":nc" => $request);
+        $this->dm->inputData($query, $params);
     }
 
     /*public function confirmVendorPurchase(int $vendor_id, int $transaction_id)
