@@ -213,7 +213,7 @@ class VoucherPurchase
     private function getAppPurchaseData(int $trans_id)
     {
         // get form_id, country code, phone number
-        $sql = "SELECT f.`form_id`, pd.`country_code`, pd.`phone_number`, pd.`email_address` 
+        $sql = "SELECT pd.`first_name`, pd.`last_name`, f.`form_id`, pd.`country_code`, pd.`phone_number`, pd.`email_address` 
                 FROM `purchase_detail` AS pd, forms AS f WHERE pd.`id` = :t AND f.`id` = pd.`form_id`";
         return $this->dm->getData($sql, array(':t' => $trans_id));
     }
@@ -246,7 +246,7 @@ class VoucherPurchase
                 "Vendor {$vendor_id} sold form with transaction ID {$trans_id}"
             );
 
-            $message = 'Your RMU Online Application login details. ';
+            $message = 'Your RMU Forms Online application login details. \n';
             $message .= 'APPLICATION NUMBER: RMU-' . $login_details['app_number'];
             $message .= '    PIN: ' . $login_details['pin_number'] . ".";
             $message .= ' Follow the link, https://admissions.rmuictonline.com to start application process.';
@@ -256,7 +256,17 @@ class VoucherPurchase
 
             if (!$response->status) {
                 if (!empty($data[0]["email_address"])) {
-                    $this->expose->sendEmail($data[0]["email_address"], 'ONLINE APPLICATION PORTAL LOGIN INFORMATION', $message);
+                    // Prepare email
+                    $emailMsg = "<p>Hello " . $data["first_name"] . " " . $data["last_name"] . ", </p></br>";
+                    $emailMsg .= "<p>Thank you for choosing Regional Maritime University.</p>";
+                    $emailMsg .= "<p>Find below your Login details to access the online application portal.</p></br>";
+                    $emailMsg .= "<p style='font-weight: bold;'>Application Number: " . $login_details['app_number'] . "</p>";
+                    $emailMsg .= "<p style='font-weight: bold;'>PIN: " . $login_details['pin_number'] . "</p></br>";
+                    $emailMsg .= "<div>Please note this: <span>DO NOT share your login details with anyone.</span></div>";
+                    $emailMsg .= "<p><a href='office.rmuictonline.com'>Click here</a> to access the online application portal and start the application process.</p>";
+                    $emailMsg .= "<p></p><p>Thank you.</p>";
+                    $emailMsg .= "<p>REGIONAL MARITIME UNIVERSITY</p>";
+                    $this->expose->sendEmail($data[0]["email_address"], 'RMU FORMS ONLINE - LOGIN INFORMATION', $emailMsg);
                 }
                 return array("success" => true, "exttrid" => $trans_id);
             } else {
