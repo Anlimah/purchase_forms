@@ -26,8 +26,27 @@ class PaymentController
         }
     }
 
-    public function verifyVendorPurchase(int $vendor_id, int $transaction_id)
+    public function verifyPurchaseStatus(int $transaction_id)
     {
+        // Fetch transaction ID AND STATUS from DB
+        $data = $this->voucher->getTransactionStatusFromDB($transaction_id);
+
+        if (empty($data)) return array("success" => false, "message" => "Invalid transaction ID! Code: -1");
+        if (strtoupper($data[0]["status"]) == "FAILED") return array("success" => false, "message" => "Sorry, your transaction failed!");
+        if (strtoupper($data[0]["status"]) == "PENDING") return array("success" => false, "message" => "Sorry, transaction is pending! This might be due to insufficient fund in your mobile wallet or your payment session expired.");
+        if (strtoupper($data[0]["status"]) == "COMPLETED") {
+            $browser_mg = '
+            <p class="mb-4" style="text-align: justify !important; width: 100%; margin:0; padding:0">
+                <b class="text-success">Form purchase successful!</b><br> 
+                An email and SMS with your <b>Application Number</b> and <b>PIN</b> 
+                to access application portal, has been sent to you!<br> 
+                Please confirm and proceed to the <a href="https://admissions.rmuictonline.com/apply/"> 
+                <b>online application portal</b></a> 
+                to complete your application process.
+            </p>';
+            return array("success" => true, "message" => $browser_mg);
+        }
+        return array("success" => true, "message" => "Invalid transaction ID");
     }
 
     /**
@@ -60,28 +79,13 @@ class PaymentController
 
     public function processTransaction(int $transaction_id)
     {
-        // Fetch transaction ID AND STATUS from DB
         $data = $this->voucher->getTransactionStatusFromDB($transaction_id);
 
         if (empty($data)) return array("success" => false, "message" => "Invalid transaction ID! Code: -1");
 
-        if (strtoupper($data[0]["status"]) == "FAILED") return array("success" => false, "message" => "Sorry, your transaction failed!");
-        if (strtoupper($data[0]["status"]) == "PENDING") return array("success" => false, "message" => "Sorry, transaction is pending! This might be due to insufficient fund in your mobile wallet or your payment session expired.");
-        if (strtoupper($data[0]["status"]) == "COMPLETED") {
+        if (strtoupper($data[0]["status"]) != "PENDING") return array("success" => false, "message" => "Transaction already performed! Check mail and/or SMS inbox for login details. Code: 1");
 
-            $browser_mg = '
-            <p class="mb-4" style="text-align: justify !important; width: 100%; margin:0; padding:0">
-                <b class="text-success">Form purchase successful!</b><br> 
-                An email and SMS with your <b>Application Number</b> and <b>PIN</b> 
-                to access application portal, has been sent to you!<br> 
-                Please confirm and proceed to the <a href="https://admissions.rmuictonline.com/apply/"> 
-                <b>online application portal</b></a> 
-                to complete your application process.
-            </p>';
-            return array("success" => false, "message" => $browser_mg);
-        }
-
-        /*$response = json_decode($this->getTransactionStatusFromOrchard($transaction_id));
+        $response = json_decode($this->getTransactionStatusFromOrchard($transaction_id));
 
         if (empty($response)) return array("success" => false, "message" => "Invalid transaction Parameters! Code: -2");
 
@@ -93,11 +97,11 @@ class PaymentController
         } elseif (isset($response->resp_code)) {
             if ($response->resp_code == '084') return array(
                 "success" => false,
-                "message" => " Code: " . $response->resp_code
+                "message" => "Payment pending! This might be due to insufficient fund in your mobile wallet or your payment session expired. Code: " . $response->resp_code
             );
             return array("success" => false, "message" => "Payment process failed! Code: " . $response->resp_code);
         }
-        return array("success" => false, "message" => "Bad request: Payment process failed!");*/
+        return array("success" => false, "message" => "Bad request: Payment process failed!");
     }
 
     public function orchardPaymentController($data)

@@ -309,7 +309,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
         if (isset($_POST["status"]) && !empty($_POST["status"]) && isset($_POST["exttrid"]) && !empty($_POST["exttrid"])) {
             $status = $expose->validateInput($_POST["status"]);
             $transaction_id = $expose->validatePhone($_POST["exttrid"]);
-            die(json_encode($expose->confirmPurchase($transaction_id)));
+            die(json_encode($expose->verifyPurchaseStatus($transaction_id)));
         } else {
             $data["success"] = false;
             $data["message"] = "Invalid request!";

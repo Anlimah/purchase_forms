@@ -348,6 +348,12 @@ class ExposeDataController
         return $payConfirm->vendorPaymentProcess($data);
     }
 
+    public function verifyPurchaseStatus($data)
+    {
+        $payConfirm = new PaymentController();
+        return $payConfirm->verifyPurchaseStatus($data);
+    }
+
     public function vendorExist($vendor_id)
     {
         $str = "SELECT `id` FROM `vendor_details` WHERE `id`=:i";
