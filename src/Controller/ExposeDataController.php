@@ -274,11 +274,10 @@ class ExposeDataController
         $mail->Body = $message;
 
         try {
-            if ($mail->send()) return 1;
+            if ($mail->send()) return array("success" => true);
         } catch (Exception $e) {
-            echo "Mailer Error: " . $mail->ErrorInfo;
+            return array("success" => false, "message" => "Mailer Error: " . $mail->ErrorInfo);
         }
-        return 0;
     }
 
     public function sendHubtelSMS($url, $payload)
@@ -301,7 +300,7 @@ class ExposeDataController
 
     public function sendOTP($to)
     {
-        $otp_code = $this->genCode(4);
+        $otp_code = $this->genCode(6);
         $message = 'Your OTP verification code: ' . $otp_code;
         $response = json_decode($this->sendSMS($to, $message), true);
         if (!$response["status"]) $response["otp_code"] = $otp_code;
@@ -311,11 +310,17 @@ class ExposeDataController
     public function sendEmailVerificationCode($email)
     {
         $v_code = $this->genCode(6);
-        $subject = 'VERIFICATION CODE';
-        $message = "Your verification code: " . $v_code;
 
-        if (!$this->sendEmail($email, $subject, $message)) return 0;
-        return $v_code;
+        $subject = 'RMU Forms Online Verification Code';
+        $message = "Hi,";
+        $message .= "<p>This is your verification code <b style='font-size: 20px'>" . $v_code . ".</b></p>";
+        $message .= "<p>Codes expires after 30 minutes.</p>";
+        $message .= "<p>Thank you.</p>";
+
+        $response = $this->sendEmail($email, $subject, $message);
+        if (!$response["success"]) return $response;
+        $response["otp_code"] = $v_code;
+        return $response;
     }
 
     public function getVendorPhone($vendor_id)
@@ -366,33 +371,4 @@ class ExposeDataController
         $params = array(":nc" => $request);
         $this->dm->inputData($query, $params);
     }
-
-    /*public function confirmVendorPurchase(int $vendor_id, int $transaction_id)
-    {
-        $payConfirm = new PaymentController();
-        return $payConfirm->verifyVendorPurchase($vendor_id, $transaction_id);
-    }*/
-
-    /*public function verifyVendorLogin($username, $password)
-    {
-        $sql = "SELECT `vendor`, `password` FROM `vendor_login` WHERE `user_name` = :u";
-        $data = $this->dm->getData($sql, array(':u' => sha1($username)));
-        if (!empty($data)) {
-            if (password_verify($password, $data[0]["password"])) {
-                return array("success" => true, "message" => $data[0]["vendor"]);
-            } else {
-                return array("success" => false, "message" => "No match found!");
-            }
-        }
-        return array("success" => false, "message" => "User does not exist!");
-    }*/
-
-    /*public function getApplicationInfo(int $transaction_id)
-    {
-        $sql = "SELECT p.`app_number`, p.`pin_number`, tp.`name`, fp.`amount`, v.`vendor_name`, a.`info` 
-        FROM `purchase_detail` AS p, `form_type` AS tp, `forms` AS fp, `vendor_details` AS v, `admission_period` AS a 
-        WHERE p.`form_type` = tp.`id` AND p.vendor = v.`id` AND p.`admission_period` = a.`id` AND p.`id` = :i AND 
-        fp.`form_type` = tp.`id` AND fp.`admin_period` = a.`id`";
-        return $this->dm->getData($sql, array(':i' => $transaction_id));
-    }*/
 }

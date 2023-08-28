@@ -174,20 +174,19 @@ class VoucherPurchase
 
         $fn = $data['first_name'];
         $ln = $data['last_name'];
-        $em = $data['email_address'];
-        $cn = $data['country_name'];
-        $cc = $data['country_code'];
-        $pn = $data['phone_number'];
+        $em = $data["email_address"];
+        $cn = $data["country_name"];
+        $cc = $data["country_code"];
+        $pn = $data["phone_number"];
         $am = $data['amount'];
         $fi = $data['form_id'];
         $vd = $data['vendor_id'];
+        $ap_id = $data['admin_period'];
 
         if ($data['pay_method'] == 'MOM') $pay_method = "MOMO";
         else if ($data['pay_method'] == 'CRD') $pay_method = "CARD";
         else $pay_method = $data['pay_method'];
         $pm = $pay_method;
-
-        $ap_id = $data['admin_period'];
         //$ft_id = $this->getFormTypeID($ft);
 
         $purchase_id = $this->saveVendorPurchaseData($trans_id, $vd, $fi, $ap_id, $pm, $am, $fn, $ln, $em, $cn, $cc, $pn);
@@ -213,8 +212,8 @@ class VoucherPurchase
     private function getAppPurchaseData(int $trans_id)
     {
         // get form_id, country code, phone number
-        $sql = "SELECT pd.`first_name`, pd.`last_name`, f.`form_id`, pd.`country_code`, pd.`phone_number`, pd.`email_address` 
-                FROM `purchase_detail` AS pd, forms AS f WHERE pd.`id` = :t AND f.`id` = pd.`form_id`";
+        $sql = "SELECT `first_name`, `last_name`, `form_id`, `country_code`, `phone_number`, `email_address` 
+                FROM `purchase_detail` WHERE `id` = :t";
         return $this->dm->getData($sql, array(':t' => $trans_id));
     }
 
@@ -246,31 +245,34 @@ class VoucherPurchase
                 "Vendor {$vendor_id} sold form with transaction ID {$trans_id}"
             );
 
-            $message = 'Your RMU Forms Online application login details. \n';
-            $message .= 'APPLICATION NUMBER: RMU-' . $login_details['app_number'];
-            $message .= '    PIN: ' . $login_details['pin_number'] . ".";
-            $message .= ' Follow the link, https://admissions.rmuictonline.com to start application process.';
-            $to = $data[0]["country_code"] . $data[0]["phone_number"];
+            if (!empty($data[0]["phone_number"])) {
+                $message = 'Your RMU Online Application login details. ';
+                $message .= 'APPLICATION NUMBER: RMU-' . $login_details['app_number'];
+                $message .= '    PIN: ' . $login_details['pin_number'] . ".";
+                $message .= ' Follow the link, https://admissions.rmuictonline.com to start application process.';
+                $to = $data[0]["country_code"] . $data[0]["phone_number"];
 
-            $response = json_decode($this->expose->sendSMS($to, $message));
+                $response = json_decode($this->expose->sendSMS($to, $message));
 
-            if (!$response->status) {
-                if (!empty($data[0]["email_address"])) {
-                    // Prepare email
-                    $emailMsg = "<p>Hello " . $data["first_name"] . " " . $data["last_name"] . ", </p></br>";
-                    $emailMsg .= "<p>Thank you for choosing Regional Maritime University.</p>";
-                    $emailMsg .= "<p>Find below your Login details to access the online application portal.</p></br>";
-                    $emailMsg .= "<p style='font-weight: bold;'>Application Number: " . $login_details['app_number'] . "</p>";
-                    $emailMsg .= "<p style='font-weight: bold;'>PIN: " . $login_details['pin_number'] . "</p></br>";
-                    $emailMsg .= "<div>Please note this: <span>DO NOT share your login details with anyone.</span></div>";
-                    $emailMsg .= "<p><a href='office.rmuictonline.com'>Click here</a> to access the online application portal and start the application process.</p>";
-                    $emailMsg .= "<p></p><p>Thank you.</p>";
-                    $emailMsg .= "<p>REGIONAL MARITIME UNIVERSITY</p>";
-                    $this->expose->sendEmail($data[0]["email_address"], 'RMU FORMS ONLINE - LOGIN INFORMATION', $emailMsg);
+                if (!$response->status) {
+                    return array("success" => true, "exttrid" => $trans_id);
+                } else {
+                    return array("success" => false, "message" => "Failed sending login details via SMS!");
                 }
+            }
+
+            if (!empty($data[0]["email_address"])) {
+                // Prepare email
+                $emailMsg = "<p>Hello " . $data["first_name"] . " " . $data["last_name"] . ", </p></br>";
+                $emailMsg .= "<p>Find below your Login details to access the online application portal.</p></br>";
+                $emailMsg .= "<p style='font-weight: bold;'>Application Number: " . $login_details['app_number'] . "</p>";
+                $emailMsg .= "<p style='font-weight: bold;'>PIN Code: " . $login_details['pin_number'] . "</p></br>";
+                $emailMsg .= "<div>Please note this: <span>DO NOT share your login details with anyone.</span></div>";
+                $emailMsg .= "<p><a href='https://admissions.rmuictonline.com'>Click here</a> to access the online application portal and start the application process.</p>";
+                $emailMsg .= "<p>Thank you for choosing Regional Maritime University.</p>";
+                $emailMsg .= "<p>REGIONAL MARITIME UNIVERSITY</p>";
+                $this->expose->sendEmail($data[0]["email_address"], 'RMU Forms Online - Form Purchase Information', $emailMsg);
                 return array("success" => true, "exttrid" => $trans_id);
-            } else {
-                return array("success" => false, "message" => "Failed sending login details via SMS!");
             }
         } else {
             return array("success" => false, "message" => "Failed saving login details!");
