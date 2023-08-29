@@ -186,7 +186,7 @@ class VoucherPurchase
         if ($data['pay_method'] == 'MOM') $pay_method = "MOMO";
         else if ($data['pay_method'] == 'CRD') $pay_method = "CARD";
         else $pay_method = $data['pay_method'];
-        $pm = $pay_method;
+        $pm = $pay_method;git
         //$ft_id = $this->getFormTypeID($ft);
 
         $purchase_id = $this->saveVendorPurchaseData($trans_id, $vd, $fi, $ap_id, $pm, $am, $fn, $ln, $em, $cn, $cc, $pn);
@@ -206,7 +206,7 @@ class VoucherPurchase
     public function updateTransactionStatusInDB($status, $trans_id)
     {
         $sql = "UPDATE `purchase_detail` SET `status` = :s WHERE `id` = :t";
-        return $this->dm->getData($sql, array(':s' => $status, ':t' => $trans_id));
+        return $this->dm->inputData($sql, array(':s' => $status, ':t' => $trans_id));
     }
 
     private function getAppPurchaseData(int $trans_id)
