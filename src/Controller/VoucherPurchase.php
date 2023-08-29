@@ -60,7 +60,7 @@ class VoucherPurchase
     private function updateVendorPurchaseData(int $trans_id, int $app_number, $pin_number, $status)
     {
         $sql = "UPDATE `purchase_detail` SET `app_number`= :a,`pin_number`= :p, `status` = :s WHERE `id` = :t";
-        return $this->dm->getData($sql, array(':a' => $app_number, ':p' => $pin_number, ':s' => $status, ':t' => $trans_id));
+        return $this->dm->inputData($sql, array(':a' => $app_number, ':p' => $pin_number, ':s' => $status, ':t' => $trans_id));
     }
 
     private function registerApplicantPersI($user_id)
@@ -186,7 +186,7 @@ class VoucherPurchase
         if ($data['pay_method'] == 'MOM') $pay_method = "MOMO";
         else if ($data['pay_method'] == 'CRD') $pay_method = "CARD";
         else $pay_method = $data['pay_method'];
-        $pm = $pay_method;git
+        $pm = $pay_method;
         //$ft_id = $this->getFormTypeID($ft);
 
         $purchase_id = $this->saveVendorPurchaseData($trans_id, $vd, $fi, $ap_id, $pm, $am, $fn, $ln, $em, $cn, $cc, $pn);
