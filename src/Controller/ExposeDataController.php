@@ -302,10 +302,11 @@ class ExposeDataController
     {
         $otp_code = $this->genCode(6);
         $message = 'Your OTP verification code: ' . $otp_code;
-        $response = json_decode($this->sendSMS($to, $message), true);
+        $response = $this->sendSMS($to, $message);
         $this->requestLogger($response);
-        if (!$response["status"]) $response["otp_code"] = $otp_code;
-        return $response;
+        $res = json_decode($response, true);
+        if (!$res["status"]) $res["otp_code"] = $otp_code;
+        return $res;
     }
 
     public function sendEmailVerificationCode($email)
