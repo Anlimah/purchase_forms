@@ -6,7 +6,7 @@ class OrchardPaymentGateway
 {
     private $curl_array = array();
 
-    public function __construct($secret, $url, $payload)
+    public function __construct($url, $httpHeader, $payload)
     {
         $this->curl_array = array(
             CURLOPT_URL => $url,
@@ -18,10 +18,7 @@ class OrchardPaymentGateway
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_POSTFIELDS => $payload,
-            CURLOPT_HTTPHEADER => array(
-                "Authorization: " . $secret,
-                "Content-Type: application/json"
-            ),
+            CURLOPT_HTTPHEADER => $httpHeader,
         );
     }
 

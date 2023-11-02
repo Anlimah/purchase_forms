@@ -2,7 +2,7 @@
 
 namespace Src\Controller;
 
-use Src\Gateway\OrchardPaymentGateway;
+use Src\Gateway\CurlGatewayAccess;
 use Src\Controller\VoucherPurchase;
 
 class PaymentController
@@ -41,11 +41,14 @@ class PaymentController
         $client_id = getenv('ORCHARD_CLIENT');
         $client_secret = getenv('ORCHARD_SECRET');
         $signature = hash_hmac("sha256", $payload, $client_secret);
-
         $secretKey = $client_id . ":" . $signature;
+        $httpHeader = array(
+            "Authorization: " . $secretKey,
+            "Content-Type: application/json"
+        );
         try {
-            $pay = new OrchardPaymentGateway($secretKey, $endpointUrl, $payload);
-            return $pay->initiatePayment();
+            $pay = new CurlGatewayAccess($endpointUrl, $httpHeader, $payload);
+            return $pay->initiateProcess();
         } catch (\Exception $e) {
             throw $e;
             return "Error: " . $e;
