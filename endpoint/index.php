@@ -202,7 +202,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
             case 'sms':
                 $to = $_SESSION["verification"]["data"]["country_code"] . $_SESSION["verification"]["data"]["phone_number"];
                 $response = $expose->sendOTP($to);
-
+                die(json_encode($response));
                 if (!isset($response["otp_code"])) {
                     $_SESSION["verification"]['sms_code'] = "";
                     $_SESSION["verification"]['sentStatus'] = false;
