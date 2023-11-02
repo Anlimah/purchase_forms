@@ -174,7 +174,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
 
         $data = $expose->callOrchardGateway($_SESSION["customerData"]);
 
-        session_unset();
+        /*session_unset();
         session_destroy();
         $_SESSION = array();
 
@@ -189,7 +189,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
                 $params["secure"],
                 $params["httponly"]
             );
-        }
+        }*/
 
         die(json_encode($data));
     }

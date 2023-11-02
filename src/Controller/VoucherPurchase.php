@@ -281,8 +281,7 @@ class VoucherPurchase
 
     public function requestLogger($request)
     {
-        $query = "INSERT INTO `ussd_request_logs` (`request`) VALUES(:nc)";
-        $params = array(":nc" => $request);
-        $this->dm->inputData($query, $params);
+        $query = "INSERT INTO `ussd_request_logs`(`request`) VALUES(:r)";
+        return $this->dm->inputData($query, array(":r" => $request));
     }
 }

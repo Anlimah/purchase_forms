@@ -25,45 +25,36 @@ class DatabaseMethods
     }
 
     //Get raw data from db
-    public function getID($str, $params = array())
+    final public function getID($str, $params = array())
     {
         try {
             $result = $this->query($str, $params);
-            if (!empty($result)) {
-                return $result[0]["id"];
-            } else {
-                return 0;
-            }
+            if (!empty($result))  return $result[0]["id"];
+            return 0;
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
     }
 
     //Get raw data from db
-    public function getData($str, $params = array())
+    final public function getData($str, $params = array())
     {
         try {
             $result = $this->query($str, $params);
-            if (!empty($result)) {
-                return $result;
-            } else {
-                return 0;
-            }
+            if (!empty($result)) return $result;
+            return 0;
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
     }
 
     //Insert, Upadate or Delete Data
-    public function inputData($str, $params = array())
+    final public function inputData($str, $params = array())
     {
         try {
             $result = $this->query($str, $params);
-            if (!empty($result)) {
-                return $result;
-            } else {
-                return 0;
-            }
+            if (!empty($result)) return $result;
+            return 0;
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
