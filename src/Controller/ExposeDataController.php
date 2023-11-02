@@ -303,6 +303,7 @@ class ExposeDataController
         $otp_code = $this->genCode(6);
         $message = 'Your OTP verification code: ' . $otp_code;
         $response = $this->sendSMS($to, $message);
+        return $response;
         $this->requestLogger($response);
         $res = json_decode($response, true);
         if (!$res["status"]) $res["otp_code"] = $otp_code;
