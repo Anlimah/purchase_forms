@@ -278,4 +278,11 @@ class VoucherPurchase
             return array("success" => false, "message" => "Failed saving login details!");
         }
     }
+
+    public function requestLogger($request)
+    {
+        $query = "INSERT INTO `ussd_request_logs` (`request`) VALUES(:nc)";
+        $params = array(":nc" => $request);
+        $this->dm->inputData($query, $params);
+    }
 }
