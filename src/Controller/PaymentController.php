@@ -119,8 +119,9 @@ class PaymentController
         ));
 
         $endpointUrl = "https://payments.anmgw.com/third_party_request";
-        $response = json_decode($this->setOrchardPaymentGatewayParams($payload, $endpointUrl));
-        $this->voucher->requestLogger($response);
+        $res = $this->setOrchardPaymentGatewayParams($payload, $endpointUrl);
+        $this->voucher->requestLogger($res);
+        $response = json_decode($res);
 
         if (isset($response->resp_code) && isset($response->resp_desc)) {
             if ($response->resp_code == "000" && $response->resp_desc == "Passed") {
