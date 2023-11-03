@@ -28,6 +28,14 @@ class CurlGatewayAccess
         curl_setopt_array($curl, $this->curl_array);
         $response = curl_exec($curl);
         curl_close($curl);
-        return $response;
+
+        if ($response === false) {
+            // An error occurred during the cURL request
+            $error_code = curl_errno($curl);
+            $error_message = curl_error($curl);
+            return "cURL Error: $error_message (Error code: $error_code)";
+        } else {
+            return $response;
+        }
     }
 }
