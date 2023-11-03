@@ -47,8 +47,8 @@ class PaymentController
             "Content-Type: application/json"
         );
         try {
-            $pay = new CurlGatewayAccess($endpointUrl, $httpHeader, $payload);
-            return $pay->initiateProcess();
+            $gateAccess = new CurlGatewayAccess($endpointUrl, $httpHeader, $payload);
+            return $gateAccess->initiateProcess();
         } catch (\Exception $e) {
             throw $e;
             return "Error: " . $e;
@@ -120,15 +120,18 @@ class PaymentController
 
         $endpointUrl = "https://payments.anmgw.com/third_party_request";
         $response = json_decode($this->setOrchardPaymentGatewayParams($payload, $endpointUrl));
-        return array("success" => false, "message" => $response);
-        //return $this->voucher->requestLogger($response);
-        /*if ($response->resp_code == "000" && $response->resp_desc == "Passed") {
-            //save Data to database
-            $saved = $this->voucher->SaveFormPurchaseData($data, $trans_id);
-            if (!$saved["success"]) return $saved;
-            return array("success" => true, "status" => $response->resp_code, "message" => $response->redirect_url);
+        $this->voucher->requestLogger($response);
+
+        if (isset($response->resp_code) && isset($response->resp_desc)) {
+            if ($response->resp_code == "000" && $response->resp_desc == "Passed") {
+                $saved = $this->voucher->SaveFormPurchaseData($data, $trans_id);
+                if (!$saved["success"]) return $saved;
+                return array("success" => true, "status" => $response->resp_code, "message" => $response->redirect_url);
+            } else {
+                return array("success" => false, "status" => $response->resp_code, "message" => $response->resp_desc);
+            }
         }
-        //echo $response->resp_desc;
-        return array("success" => false, "status" => $response->resp_code, "message" => $response->resp_desc);*/
+
+        return array("success" => false, "message" => "Error: process couldn't complete!");
     }
 }

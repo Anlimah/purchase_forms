@@ -285,7 +285,6 @@ class ExposeDataController
         $client = getenv('HUBTEL_CLIENT');
         $secret = getenv('HUBTEL_SECRET');
         $secret_key = base64_encode($client . ":" . $secret);
-
         $httpHeader = array("Authorization: Basic " . $secret_key, "Content-Type: application/json");
         $gateAccess = new CurlGatewayAccess($url, $httpHeader, $payload);
         return $gateAccess->initiateProcess();
@@ -303,8 +302,7 @@ class ExposeDataController
         $otp_code = $this->genCode(6);
         $message = 'Your OTP verification code: ' . $otp_code;
         $response = $this->sendSMS($to, $message);
-        //return $response;
-        //$this->requestLogger($response);
+        $this->requestLogger($response);
         $res = json_decode($response, true);
         if (!$res["status"]) $res["otp_code"] = $otp_code;
         return $res;
@@ -313,13 +311,11 @@ class ExposeDataController
     public function sendEmailVerificationCode($email)
     {
         $v_code = $this->genCode(6);
-
         $subject = 'RMU Forms Online Verification Code';
         $message = "Hi,";
         $message .= "<p>This is your verification code <b style='font-size: 20px'>" . $v_code . ".</b></p>";
         $message .= "<p>Codes expires after 30 minutes.</p>";
         $message .= "<p>Thank you.</p>";
-
         $response = $this->sendEmail($email, $subject, $message);
         if (!$response["success"]) return $response;
         $response["otp_code"] = $v_code;

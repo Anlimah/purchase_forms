@@ -30,7 +30,6 @@ class CurlGatewayAccess
         curl_close($curl);
 
         if ($response === false) {
-            // An error occurred during the cURL request
             $error_code = curl_errno($curl);
             $error_message = curl_error($curl);
             return "cURL Error: $error_message (Error code: $error_code)";
