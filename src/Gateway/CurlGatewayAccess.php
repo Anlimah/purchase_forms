@@ -28,6 +28,6 @@ class CurlGatewayAccess
         curl_setopt_array($curl, $this->curl_array);
         $response = curl_exec($curl);
         curl_close($curl);
-        return "OK";
+        return $response;
     }
 }
