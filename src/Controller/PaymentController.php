@@ -105,7 +105,7 @@ class PaymentController
         $trans_id = time();
         $payload = json_encode(array(
             "amount" => $data["amount"],
-            "callback_url" => "https://forms.rmuictonline.com/confirm.php",
+            "callback_url" => "https://pay.rmuictonline.com/confirm",
             "exttrid" => $trans_id,
             "reference" => "RMU Forms Online",
             "service_id" => getenv('ORCHARD_SERVID'),
