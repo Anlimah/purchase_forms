@@ -1,3 +1,10 @@
+<?php
+    require_once("bootstrap.com");
+    use Src\Controller\ExposeDataController;
+    $expose = new ExposeDataController();
+    
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
